@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "es6",
+    "jsx": "preserve",
+    "sourceMap": true,
+    "allowJs": true,
+    "target": "es6",
+    "watch": true, 
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "rootDir": "src", 
+     "moduleResolution": "node"
+  }
+}
