@@ -65,6 +65,46 @@ export let TableTest: Table = {
       Editable: true,
       Visible: true,
       Width: 20
+    },
+    CustomerFirstName: {
+      Pos: 1,
+      Type: TableFieldTypes.string,
+      Name: "First Name",
+      Editable: true,
+      Visible: true,
+      Width: 30
+    },
+    CustomerLastName: {
+      Pos: 2,
+      Type: TableFieldTypes.string,
+      Name: "Last Name",
+      Editable: true,
+      Visible: true,
+      Width: 30
+    },
+    DeliveryDate: {
+      Pos: 3,
+      Name: "Delivery Date",
+      Type: TableFieldTypes.date,
+      Editable: true,
+      Visible: true,
+      Width: 10
+    },
+    A_ProvisionTotal: {
+      Pos: 4,
+      Type: TableFieldTypes.decimal,
+      Name: "Provision",
+      Editable: true,
+      Visible: true,
+      Width: 20
+    },
+    A_ProvisionFactor: {
+      Pos: 4,
+      Type: TableFieldTypes.decimal,
+      Name: "Provision Factor",
+      Editable: true,
+      Visible: true,
+      Width: 20
     }
   }
 }

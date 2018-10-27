@@ -1,20 +1,26 @@
 import { app } from "../index"
 import { render, TemplateResult } from "lit-html"
 import { App } from "overmind"
+import { Table } from "../state"
 
 export class OvlBaseElement extends HTMLElement {
   trackId: number
   mutationListener: any
   state: App["state"]
+  //  child comps should implement getUI to render a htm template
+  //  its tracked
   getUI(): TemplateResult {
     return null
   }
+  // for preparing stuff which is not tracked
+  prepare() {}
   constructor() {
     super()
     this.state = app.state
     console.log("base constructor")
   }
   doRender() {
+    this.prepare()
     this.trackId = app.trackState()
     let res = this.getUI()
     let paths = app.clearTrackState(this.trackId)
@@ -55,4 +61,8 @@ export class OvlSimpleElement extends OvlBaseElement {
   static getPropsTemplate(): ISimpleProps {
     return { Key: "" }
   }
+}
+
+export class OvlTableHeaderElement extends OvlBaseElement {
+  props: Table
 }
