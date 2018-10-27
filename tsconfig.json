@@ -5,12 +5,10 @@
     "sourceMap": true,
     "allowJs": true,
     "target": "es6",
-    "watch": true, 
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "rootDir": "src", 
-     "moduleResolution": "node"
-  }
+
+    "lib": ["es6", "dom"],
+    "rootDir": "src",
+    "moduleResolution": "node"
+  },
+  "exclude": ["node_modules", "dist"]
 }
