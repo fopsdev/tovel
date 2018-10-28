@@ -62,7 +62,10 @@ export class OvlSimpleElement extends OvlBaseElement {
     return { Key: "" }
   }
 }
+export interface IOvlTableHeaderElementProps {
+  table: Table
+}
 
 export class OvlTableHeaderElement extends OvlBaseElement {
-  props: Table
+  props: IOvlTableHeaderElementProps
 }

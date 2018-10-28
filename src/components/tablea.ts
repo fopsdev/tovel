@@ -5,7 +5,7 @@ export class TableA extends OvlTableHeaderElement {
   getUI() {
     return html`
     <div>tableheader->yeah!</div>
-    <div>${this.props.Entity}</div>
+    <div>${this.props.table.Entity}</div>
     `
   }
 }

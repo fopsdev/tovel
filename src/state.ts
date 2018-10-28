@@ -15,7 +15,7 @@ export type TablePaging = {
 }
 export type TableFieldTypes = "int" | "decimal" | "string" | "date"
 
-type TableTestColumns =
+export type TableTestColumns =
   | "IDTransaction"
   | "CustomerFirstName"
   | "CustomerLastName"
@@ -51,16 +51,6 @@ export let posts: Post[] = []
 
 export const foo: string = "bar"
 
-// enum TableTestColumns {
-//   IDTransaction = "IDTransaction",
-//   CustomerFirstName = "CustomerFirstName",
-//   CustomerLastName = "CustomerLastName",
-//   DeliveryDate = "DeliveryDate",
-//   A_ProvisionTotal = "A_ProvisionTotal",
-//   A_ProvisionFactor = "A_ProvisionFactor"
-// }
-// let t = TableTestColumns.IDTransaction
-// console.log(t)
 export let TableTest: Table = {
   Filter: "",
   Sort: { Ascending: true, Field: "" },
