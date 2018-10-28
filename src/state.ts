@@ -13,14 +13,18 @@ export type TablePaging = {
   Page: number
   Size: number
 }
-export enum TableFieldTypes {
-  int,
-  decimal,
-  string,
-  date
-}
+export type TableFieldTypes = "int" | "decimal" | "string" | "date"
+
+type TableTestColumns =
+  | "IDTransaction"
+  | "CustomerFirstName"
+  | "CustomerLastName"
+  | "DeliveryDate"
+  | "A_ProvisionTotal"
+  | "A_ProvisionFactor"
+
 export type TableFields = {
-  [key: string]: {
+  [key in TableTestColumns]: {
     Pos: number
     Type: TableFieldTypes
     Name: string
@@ -47,6 +51,16 @@ export let posts: Post[] = []
 
 export const foo: string = "bar"
 
+// enum TableTestColumns {
+//   IDTransaction = "IDTransaction",
+//   CustomerFirstName = "CustomerFirstName",
+//   CustomerLastName = "CustomerLastName",
+//   DeliveryDate = "DeliveryDate",
+//   A_ProvisionTotal = "A_ProvisionTotal",
+//   A_ProvisionFactor = "A_ProvisionFactor"
+// }
+// let t = TableTestColumns.IDTransaction
+// console.log(t)
 export let TableTest: Table = {
   Filter: "",
   Sort: { Ascending: true, Field: "" },
@@ -60,7 +74,7 @@ export let TableTest: Table = {
   Fields: {
     IDTransaction: {
       Pos: 0,
-      Type: TableFieldTypes.int,
+      Type: "int",
       Name: "IDTransaction",
       Editable: true,
       Visible: true,
@@ -68,7 +82,7 @@ export let TableTest: Table = {
     },
     CustomerFirstName: {
       Pos: 1,
-      Type: TableFieldTypes.string,
+      Type: "string",
       Name: "First Name",
       Editable: true,
       Visible: true,
@@ -76,7 +90,7 @@ export let TableTest: Table = {
     },
     CustomerLastName: {
       Pos: 2,
-      Type: TableFieldTypes.string,
+      Type: "string",
       Name: "Last Name",
       Editable: true,
       Visible: true,
@@ -85,14 +99,14 @@ export let TableTest: Table = {
     DeliveryDate: {
       Pos: 3,
       Name: "Delivery Date",
-      Type: TableFieldTypes.date,
+      Type: "date",
       Editable: true,
       Visible: true,
       Width: 10
     },
     A_ProvisionTotal: {
       Pos: 4,
-      Type: TableFieldTypes.decimal,
+      Type: "decimal",
       Name: "Provision",
       Editable: true,
       Visible: true,
@@ -100,7 +114,7 @@ export let TableTest: Table = {
     },
     A_ProvisionFactor: {
       Pos: 4,
-      Type: TableFieldTypes.decimal,
+      Type: "decimal",
       Name: "Provision Factor",
       Editable: true,
       Visible: true,

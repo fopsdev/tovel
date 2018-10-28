@@ -2,7 +2,7 @@ import { Overmind, TApp } from "overmind"
 import * as state from "./state"
 import * as actions from "./action"
 import { CompA } from "./components/compa"
-import { TableA } from "./components/tableheader"
+import { TableA } from "./components/tablea"
 if (customElements.get("comp-a")) window.location.reload()
 customElements.define("comp-a", CompA)
 customElements.define("table-a", TableA)
