@@ -1,7 +1,6 @@
 import { app } from "../index"
 import { render, TemplateResult } from "lit-html"
 import { App } from "overmind"
-import { Table } from "../state"
 
 export class OvlBaseElement extends HTMLElement {
   trackId: number
@@ -62,10 +61,37 @@ export class OvlSimpleElement extends OvlBaseElement {
     return { Key: "" }
   }
 }
-export interface IOvlTableHeaderElementProps {
-  table: Table
+
+//#####################TableHeaderElement##########################
+export type TableSort = {
+  Ascending: boolean
+  Field: string
 }
 
-export class OvlTableHeaderElement extends OvlBaseElement {
-  props: IOvlTableHeaderElementProps
+export type TablePaging = {
+  Page: number
+  Size: number
 }
+export type TableFieldTypes = "int" | "decimal" | "string" | "date"
+
+export type TableField = {
+  Pos: number
+  Type: TableFieldTypes
+  Name: string
+  Editable: boolean
+  Visible: boolean
+  Width: number
+}
+
+export type Table = {
+  Filter: string
+  Sort: TableSort
+  ThisPath: string
+  Entity: string
+  IDField: string
+  Path: string
+  Paging: TablePaging
+  Selected: string[]
+}
+
+export class OvlTableHeaderElement extends OvlBaseElement {}

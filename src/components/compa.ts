@@ -1,12 +1,12 @@
 import { OvlSimpleElement } from "../library/index"
-import { TableA } from "./tablea"
+import { TableA, UserTable, TableTest } from "./tablea"
 import { app } from "../index"
-import { Table } from "../state"
+
 //import * as untrackedState from "../state"
 import { html } from "lit-html"
 
 export class CompA extends OvlSimpleElement {
-  tableProps: Table
+  tableProps: UserTable
   constructor() {
     super()
     this.onclick = e => {
@@ -14,7 +14,7 @@ export class CompA extends OvlSimpleElement {
     }
   }
   prepare() {
-    this.tableProps = this.state.TableTest
+    this.tableProps = TableTest
   }
   getUI() {
     return html`
