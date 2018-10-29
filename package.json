@@ -12,7 +12,9 @@
     "start2": "run-p tsc parcelstart",
     "startNotUsed": "npm run start1 && npm run start2",
     "buildNotUsed": "npm run tsc && npm run parcelbuild",
+    "dev" : "overmind-devtools",
     "start": "parcel index.html --open",
+    "devstart": "run-p dev start",
     "build": "parcel build index.html"
   },
   "dependencies": {
@@ -22,6 +24,7 @@
   },
   "devDependencies": {
     "npm-run-all": "^4.1.3",
+    "overmind-devtools": "^4.0.1",
     "parcel-bundler": "^1.10.3",
     "rimraf": "^2.6.2"
   }

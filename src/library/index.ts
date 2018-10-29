@@ -1,5 +1,5 @@
 import { app } from "../index"
-import { render, TemplateResult } from "lit-html"
+import { render, TemplateResult, html } from "lit-html"
 import { App } from "overmind"
 
 export class OvlBaseElement extends HTMLElement {
@@ -8,9 +8,7 @@ export class OvlBaseElement extends HTMLElement {
   state: App["state"]
   //  child comps should implement getUI to render a htm template
   //  its tracked
-  getUI(): TemplateResult {
-    return null
-  }
+
   // for preparing stuff which is not tracked
   prepare() {}
   constructor() {
@@ -45,6 +43,9 @@ export class OvlBaseElement extends HTMLElement {
     if (this.mutationListener) {
       this.mutationListener.dispose()
     }
+  }
+  getUI(): TemplateResult {
+    return null
   }
 }
 
@@ -94,4 +95,10 @@ export type Table = {
   Selected: string[]
 }
 
-export class OvlTableHeaderElement extends OvlBaseElement {}
+export class OvlTableHeaderElement extends OvlBaseElement {
+  getUI(): TemplateResult {
+    // a default implementation of rendering the column headers
+    let fn = this.state.TableTest.Fields.CustomerFirstName.Name
+    return html`<h1>Column ${fn}</h1>`
+  }
+}
