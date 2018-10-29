@@ -1,9 +1,4 @@
-import {
-  OvlTableHeaderElement,
-  Table,
-  TableField,
-  TableFieldTypes
-} from "../library/index"
+import { OvlTableHeaderElement, Table, TableField } from "../library/index"
 import { Derive } from "overmind"
 import { html } from "lit-html"
 
@@ -99,14 +94,13 @@ export let TableTest: UserTable = {
 
 export class TableA extends OvlTableHeaderElement {
   props: UserTable
-  constructor() {
-    super()
-  }
+
   getUI() {
+    let fields: TableFields = <TableFields>(<unknown>this.props.Fields)
     // sample of adjusting column headers dynamically
     return html`
     <div>tableheader->yeah!</div>
-    <div>${this.props.IDField}</div>
+    <div>${fields.CustomerFirstName.Name}</div>
     `
   }
 }

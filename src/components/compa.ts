@@ -6,21 +6,17 @@ import { app } from "../index"
 import { html } from "lit-html"
 
 export class CompA extends OvlSimpleElement {
-  tableProps: UserTable
   constructor() {
     super()
     this.onclick = e => {
       app.actions.changeFoo()
     }
   }
-  prepare() {
-    this.tableProps = TableTest
-  }
   getUI() {
     return html`
     <div>${this.state.foo}</div>
     <div>${this.props.Key}</div>
-    <table-a .props=${this.tableProps}></table-a>
+    <table-a .props=${this.state.TableTest}></table-a>
     `
   }
 }

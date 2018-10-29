@@ -1,7 +1,18 @@
-export const setLoadingPosts = ({ state }) => (state.isLoadingPosts = true);
-export const changeFoo = ({ state }) => (state.foo = "hoho");
-export const unsetLoadingPosts = ({ state }) => (state.isLoadingPosts = false);
-export const setPosts = ({ state, value: posts }) => {
+"use strict";
+exports.__esModule = true;
+exports.setLoadingPosts = function (_a) {
+    var state = _a.state;
+    return (state.isLoadingPosts = true);
+};
+exports.changeFoo = function (_a) {
+    var state = _a.state;
+    return (state.foo = "hoho");
+};
+exports.unsetLoadingPosts = function (_a) {
+    var state = _a.state;
+    return (state.isLoadingPosts = false);
+};
+exports.setPosts = function (_a) {
+    var state = _a.state, posts = _a.value;
     state.posts = posts;
 };
-//# sourceMappingURL=mutations.js.map
