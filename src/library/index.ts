@@ -11,6 +11,8 @@ export class OvlBaseElement extends HTMLElement {
 
   // for preparing stuff which is not tracked
   prepare() {}
+  // initialising tracked props
+  initProps() {}
   constructor() {
     super()
     this.state = app.state
@@ -19,6 +21,7 @@ export class OvlBaseElement extends HTMLElement {
   doRender() {
     this.prepare()
     this.trackId = app.trackState()
+    this.initProps()
     let res = this.getUI()
     let paths = app.clearTrackState(this.trackId)
     console.log(paths)
@@ -84,18 +87,21 @@ export type TableField = {
   Width: number
 }
 
+type TableFields = { [key: string]: TableField }
+
 export type Table = {
   Filter: string
   Sort: TableSort
-  ThisPath: string
   Entity: string
   IDField: string
-  Path: string
   Paging: TablePaging
   Selected: string[]
 }
 
 export class OvlTableHeaderElement extends OvlBaseElement {
+  table: Table
+  fields: TableFields
+
   getUI(): TemplateResult {
     // a default implementation of rendering the column headers
     let fn = this.state.TableTest.Fields.CustomerFirstName.Name

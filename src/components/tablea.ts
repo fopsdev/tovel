@@ -1,8 +1,8 @@
 import { OvlTableHeaderElement, Table, TableField } from "../library/index"
 import { Derive } from "overmind"
 import { html } from "lit-html"
+import { TableTestData } from "../state"
 
-const columns = ["IDTransaction"]
 type TableTestColumns =
   | "IDTransaction"
   | "CustomerFirstName"
@@ -83,24 +83,27 @@ const derivedTableFields: Derive<TableFields> = state => {
 export let TableTest: UserTable = {
   Filter: "",
   Sort: { Ascending: true, Field: "" },
-  ThisPath: "TableTest",
   Entity: "tblTransactions",
   IDField: "IDTransaction",
-  Path: "Transactions",
   Paging: { Page: 1, Size: 50 },
   Selected: [],
   Fields: derivedTableFields
 }
 
 export class TableA extends OvlTableHeaderElement {
-  props: UserTable
+  table: UserTable
+  fields: TableFields
+  data: TableTestData
+
+  initProps() {
+    this.fields = <TableFields>(<unknown>this.table.Fields)
+  }
 
   getUI() {
-    let fields: TableFields = <TableFields>(<unknown>this.props.Fields)
-    // sample of adjusting column headers dynamically
     return html`
-    <div>tableheader->yeah!</div>
-    <div>${fields.CustomerFirstName.Name}</div>
+    <div>${this.table.IDField}</div>
+    <div>${this.fields.CustomerFirstName.Name}</div>
+    <div>${this.data["1"].CustomerFirstName}</div>
     `
   }
 }
