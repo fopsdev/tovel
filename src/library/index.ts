@@ -87,7 +87,7 @@ export type TableField = {
   Width: number
 }
 
-type TableFields = { [key: string]: TableField }
+export type BaseFields = { [key: string]: TableField }
 
 export type Table = {
   Filter: string
@@ -100,11 +100,13 @@ export type Table = {
 
 export class OvlTableHeaderElement extends OvlBaseElement {
   table: Table
-  fields: TableFields
-
+  fields: BaseFields
+  initProps() {
+    this.fields = <BaseFields>(<unknown>(<any>this.table).Fields)
+  }
   getUI(): TemplateResult {
     // a default implementation of rendering the column headers
-    let fn = this.state.TableTest.Fields.CustomerFirstName.Name
+    let fn = this.fields.CustomerFirstName.Name
     return html`<h1>Column ${fn}</h1>`
   }
 }

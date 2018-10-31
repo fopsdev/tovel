@@ -1,4 +1,9 @@
-import { OvlTableHeaderElement, Table, TableField } from "../library/index"
+import {
+  OvlTableHeaderElement,
+  Table,
+  TableField,
+  BaseFields
+} from "../library/index"
 import { Derive } from "overmind"
 import { html } from "lit-html"
 import { TableTestData } from "../state"
@@ -91,19 +96,13 @@ export let TableTest: UserTable = {
 }
 
 export class TableA extends OvlTableHeaderElement {
-  table: UserTable
-  fields: TableFields
+  tableFields: TableFields
   data: TableTestData
-
   initProps() {
-    this.fields = <TableFields>(<unknown>this.table.Fields)
+    super.initProps()
+    this.tableFields = <TableFields>this.fields
   }
-
   getUI() {
-    return html`
-    <div>${this.table.IDField}</div>
-    <div>${this.fields.CustomerFirstName.Name}</div>
-    <div>${this.data["1"].CustomerFirstName}</div>
-    `
+    return html`<div>${this.tableFields.CustomerFirstName.Name}</div>`
   }
 }
