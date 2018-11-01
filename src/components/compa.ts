@@ -1,12 +1,11 @@
-import { OvlSimpleElement } from "../library/index"
-import { TableA, UserTable, TableTest } from "./tablea"
+import { OvlSimpleElement, TableData } from "../library/index"
 import { app } from "../index"
 
 //import * as untrackedState from "../state"
 import { html } from "lit-html"
 
 export class CompA extends OvlSimpleElement {
-  parentData
+  parentData: TableData
   constructor() {
     super()
 
@@ -26,7 +25,10 @@ export class CompA extends OvlSimpleElement {
     <div>${this.props.Key}</div>
     <table-a 
       .table=${this.parentData.table} 
-      .data=${this.parentData.data}></table-a>
+      .data=${this.parentData.data}>
+   
+    </table-a>
+    
     `
   }
 }

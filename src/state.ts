@@ -32,6 +32,14 @@ export let tblTableTestData: TableTestData = {
     CustomerFirstName: "Paul",
     CustomerLastName: "Meier",
     DeliveryDate: "20181011"
+  },
+  3: {
+    IDTransaction: 3,
+    A_ProvisionFactor: 30,
+    A_ProvisionTotal: 300,
+    CustomerFirstName: "Piotr",
+    CustomerLastName: "Saslic",
+    DeliveryDate: "20181022"
   }
 }
 

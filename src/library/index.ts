@@ -1,5 +1,6 @@
 import { app } from "../index"
 import { render, TemplateResult, html } from "lit-html"
+import { repeat } from "lit-html/directives/repeat"
 import { App } from "overmind"
 
 export class OvlBaseElement extends HTMLElement {
@@ -23,6 +24,8 @@ export class OvlBaseElement extends HTMLElement {
     this.trackId = app.trackState()
     this.initProps()
     let res = this.getUI()
+
+    render(res, this)
     let paths = app.clearTrackState(this.trackId)
     console.log(paths)
     if (paths.size > 0) {
@@ -34,7 +37,6 @@ export class OvlBaseElement extends HTMLElement {
         this.mutationListener.update(paths)
       }
     }
-    render(res, this)
   }
 
   connectedCallback() {
@@ -89,7 +91,11 @@ export type TableField = {
 
 export type BaseFields = { [key: string]: TableField }
 
-export type Table = {
+export type BaseData = { [key: string]: any }
+
+export type TableData = { table: BaseTable; data: BaseData }
+
+export type BaseTable = {
   Filter: string
   Sort: TableSort
   Entity: string
@@ -98,15 +104,51 @@ export type Table = {
   Selected: string[]
 }
 
-export class OvlTableHeaderElement extends OvlBaseElement {
-  table: Table
+export class OvlTableElement extends OvlBaseElement {
+  table: BaseTable
   fields: BaseFields
+  data: BaseData
+  sortedFieldKeys: string[]
   initProps() {
+    console.log("init props header")
     this.fields = <BaseFields>(<unknown>(<any>this.table).Fields)
+    this.sortedFieldKeys = this.getSortedFieldKeys()
   }
   getUI(): TemplateResult {
     // a default implementation of rendering the column headers
-    let fn = this.fields.CustomerFirstName.Name
-    return html`<h1>Column ${fn}</h1>`
+    // let fn = this.fields.CustomerFirstName.Name
+    // return html`<h1>Column ${fn}</h1>`
+
+    return html`<div class="c-table c-table--striped">
+  <div class="c-table__caption">Test Table</div>
+  <div class="c-table__row c-table__row--heading">
+    ${this.sortedFieldKeys.map(
+      k => html`<span class="c-table__cell" >${this.fields[k].Name}</span>`
+    )}
+  </div>
+
+  ${repeat(
+    this.getSortedDataKeys(),
+    i => i,
+    (i, index) => html`<div class="c-table__row">
+   ${repeat(
+     this.sortedFieldKeys,
+     f => f,
+     (f, findex) => {
+       //console.log(this.data.1.IDTransaction)
+       return html`<span class="c-table__cell">${this.data[i][f]}</span>`
+     }
+   )}
+    </div>`
+  )}
+  </div>`
+  }
+  getSortedFieldKeys(): string[] {
+    return Object.keys(this.fields).sort(
+      (a, b) => this.fields[a].Pos - this.fields[b].Pos
+    )
+  }
+  getSortedDataKeys(): string[] {
+    return Object.keys(this.data)
   }
 }

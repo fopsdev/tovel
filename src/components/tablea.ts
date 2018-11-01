@@ -1,9 +1,4 @@
-import {
-  OvlTableHeaderElement,
-  Table,
-  TableField,
-  BaseFields
-} from "../library/index"
+import { OvlTableElement, BaseTable, TableField } from "../library/index"
 import { Derive } from "overmind"
 import { html } from "lit-html"
 import { TableTestData } from "../state"
@@ -18,7 +13,7 @@ type TableTestColumns =
 
 type TableFields = { [key in TableTestColumns]: TableField }
 
-export interface UserTable extends Table {
+export interface UserTable extends BaseTable {
   Fields: Derive<TableFields>
 }
 
@@ -95,14 +90,28 @@ export let TableTest: UserTable = {
   Fields: derivedTableFields
 }
 
-export class TableA extends OvlTableHeaderElement {
-  tableFields: TableFields
-  data: TableTestData
-  initProps() {
-    super.initProps()
-    this.tableFields = <TableFields>this.fields
-  }
-  getUI() {
-    return html`<div>${this.tableFields.CustomerFirstName.Name}</div>`
-  }
+export class TableA extends OvlTableElement {
+  // tableFields: TableFields
+  // tableData: TableTestData
+  // initProps() {
+  //   super.initProps()
+  //   this.tableFields = <TableFields>this.fields
+  //   this.tableData = this.data
+  // }
+  // getUI() {
+  //   return html`<div>${this.tableFields.CustomerFirstName.Name}</div>`
+  // }
 }
+
+// export class RowA extends OvlTableRowElement {
+//   // tableFields: TableFields
+//   // tableData: TableTestData
+//   // initProps() {
+//   //   super.initProps()
+//   //   this.tableFields = <TableFields>this.fields
+//   //   this.tableData = this.data
+//   // }
+//   // getUI() {
+//   //   return html`<div>${this.tableFields.CustomerFirstName.Name}</div>`
+//   // }
+// }
