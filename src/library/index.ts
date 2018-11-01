@@ -147,7 +147,35 @@ export class OvlTableElement extends OvlBaseElement {
     )
   }
   getSortedDataKeys(): string[] {
-    return Object.keys(this.data)
+    let sortfield = this.table.Sort.Field
+    if (!sortfield) {
+      return Object.keys(this.data)
+    }
+    let ascending = this.table.Sort.Ascending ? 1 : -1
+    let res: number = 0
+    return Object.keys(this.data).sort((a, b) => {
+      const valB = this.data[b][sortfield]
+      const valA = this.data[a][sortfield]
+      switch (this.fields[sortfield].Type) {
+        case "date":
+          const aDate = new Date(valA).getTime()
+          const bDate = new Date(valB).getTime()
+          res = aDate - bDate
+          break
+        case "string":
+          if (valA < valB) {
+            res = -1
+          } else if (valA > valB) {
+            res = 1
+          }
+          break
+        case "decimal":
+        case "int":
+          res = valA - valB
+          break
+      }
+      return res * ascending
+    })
   }
 }
 
@@ -166,3 +194,6 @@ export class OvlTableRow extends OvlBaseElement {
   `
   }
 }
+
+customElements.define("ovl-table", OvlTableElement)
+customElements.define("ovl-row", OvlTableRow)

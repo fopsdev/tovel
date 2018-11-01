@@ -13,7 +13,8 @@ export class CompA extends OvlSimpleElement {
       app.actions.changeFoo()
     }
   }
-  prepare() {
+  initProps() {
+    // init the props we will submit to the parent
     this.parentData = {
       table: this.state.TableTest,
       data: this.state.tblTableTestData
@@ -23,10 +24,10 @@ export class CompA extends OvlSimpleElement {
     return html`
     <div>${this.state.foo}</div>
     <div>${this.props.Key}</div>
-    <table-a 
+    <ovl-table 
       .table=${this.parentData.table} 
       .data=${this.parentData.data}>
-    </table-a>
+  </ovl-table>
     <custom-table-a 
       .table=${this.parentData.table} 
       .data=${this.parentData.data}>
@@ -35,3 +36,4 @@ export class CompA extends OvlSimpleElement {
     `
   }
 }
+customElements.define("comp-a", CompA)

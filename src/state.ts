@@ -23,7 +23,7 @@ export let tblTableTestData: TableTestData = {
     A_ProvisionTotal: 100,
     CustomerFirstName: "Peter",
     CustomerLastName: "Müller",
-    DeliveryDate: "20181010"
+    DeliveryDate: "2017-03-06T00:00:00+00:00"
   },
   2: {
     IDTransaction: 2,
@@ -31,7 +31,7 @@ export let tblTableTestData: TableTestData = {
     A_ProvisionTotal: 200,
     CustomerFirstName: "Paul",
     CustomerLastName: "Meier",
-    DeliveryDate: "20181011"
+    DeliveryDate: "2016-03-07T00:00:00+00:00"
   },
   3: {
     IDTransaction: 3,
@@ -39,7 +39,7 @@ export let tblTableTestData: TableTestData = {
     A_ProvisionTotal: 300,
     CustomerFirstName: "Piotr",
     CustomerLastName: "Saslic",
-    DeliveryDate: "20181022"
+    DeliveryDate: "2017-03-03T00:00:00+00:00"
   }
 }
 

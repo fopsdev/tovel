@@ -87,14 +87,13 @@ const derivedTableFields: Derive<TableFields> = state => {
 
 export let TableTest: UserTable = {
   Filter: "",
-  Sort: { Ascending: true, Field: "" },
+  Sort: { Ascending: true, Field: <TableTestColumns>"CustomerFirstName" },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
   Selected: [],
   Fields: derivedTableFields
 }
-export class TableA extends OvlTableElement {}
 
 export class CustomTableA extends OvlTableElement {
   getUI() {
@@ -141,3 +140,5 @@ export class CustomRowA extends OvlTableRow {
   `
   }
 }
+customElements.define("custom-table-a", CustomTableA)
+customElements.define("custom-row-a", CustomRowA)
