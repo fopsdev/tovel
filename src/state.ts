@@ -1,4 +1,5 @@
 import { TableTest } from "./components/tablea"
+import { Derive } from "overmind"
 export type Post = {
   id: number
   title: string
@@ -13,10 +14,11 @@ export type TableTestData = {
     DeliveryDate: string
     A_ProvisionTotal: number
     A_ProvisionFactor: number
+    CustomerFullName: Derive<string>
   }
 }
 
-export let tblTableTestData: TableTestData = {
+let tblTableTestData0 = {
   1: {
     IDTransaction: 1,
     A_ProvisionFactor: 10,
@@ -42,6 +44,19 @@ export let tblTableTestData: TableTestData = {
     DeliveryDate: "2017-03-03T00:00:00+00:00"
   }
 }
+export let tblTableTestData: TableTestData = <TableTestData>(
+  (<unknown>tblTableTestData0)
+)
+
+Object.keys(tblTableTestData).forEach(k => {
+  tblTableTestData[k].CustomerFullName = state => {
+    return (
+      state.tblTableTestData[k].CustomerFirstName +
+      " " +
+      state.tblTableTestData[k].CustomerLastName
+    )
+  }
+})
 
 export let isLoadingPosts: boolean = false
 

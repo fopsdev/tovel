@@ -12,6 +12,7 @@ type TableTestColumns =
   | "IDTransaction"
   | "CustomerFirstName"
   | "CustomerLastName"
+  | "CustomerFullName"
   | "DeliveryDate"
   | "A_ProvisionTotal"
   | "A_ProvisionFactor"
@@ -50,6 +51,15 @@ const derivedTableFields: Derive<TableFields> = state => {
     Width: 30
   }
 
+  let customerFullNameField: TableField = {
+    Pos: 7,
+    Name: "Full Name",
+    Type: "string",
+    Editable: false,
+    Visible: true,
+    Width: 30
+  }
+
   let deliveryDateField: TableField = {
     Pos: 3,
     Name: "Delivery",
@@ -78,6 +88,7 @@ const derivedTableFields: Derive<TableFields> = state => {
     IDTransaction: idField,
     CustomerFirstName: customerFirstNameField,
     CustomerLastName: customerLastNameField,
+    CustomerFullName: customerFullNameField,
     DeliveryDate: deliveryDateField,
     A_ProvisionTotal: provisionTotalField,
     A_ProvisionFactor: provisionFactorField
@@ -87,7 +98,7 @@ const derivedTableFields: Derive<TableFields> = state => {
 
 export let TableTest: UserTable = {
   Filter: "",
-  Sort: { Ascending: true, Field: <TableTestColumns>"CustomerFirstName" },
+  Sort: { Ascending: true, Field: <TableTestColumns>"" },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
