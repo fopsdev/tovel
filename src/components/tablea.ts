@@ -1,7 +1,12 @@
-import { OvlTableElement, BaseTable, TableField } from "../library/index"
+import {
+  OvlTableElement,
+  OvlTableRow,
+  BaseTable,
+  TableField
+} from "../library/index"
 import { Derive } from "overmind"
 import { html } from "lit-html"
-import { TableTestData } from "../state"
+import { repeat } from "lit-html/directives/repeat"
 
 type TableTestColumns =
   | "IDTransaction"
@@ -89,29 +94,50 @@ export let TableTest: UserTable = {
   Selected: [],
   Fields: derivedTableFields
 }
+export class TableA extends OvlTableElement {}
 
-export class TableA extends OvlTableElement {
-  // tableFields: TableFields
-  // tableData: TableTestData
-  // initProps() {
-  //   super.initProps()
-  //   this.tableFields = <TableFields>this.fields
-  //   this.tableData = this.data
-  // }
-  // getUI() {
-  //   return html`<div>${this.tableFields.CustomerFirstName.Name}</div>`
-  // }
+export class CustomTableA extends OvlTableElement {
+  getUI() {
+    return html`<div class="c-table c-table--striped">
+  <div class="c-table__caption">Custom UI Table</div>
+  <div class="c-table__row c-table__row--heading">
+    ${this.sortedFieldKeys.map(
+      k => html`
+    <span class="c-table__cell">${this.fields[k].Name}</span>`
+    )}
+  </div>
+
+  ${repeat(
+    this.getSortedDataKeys(),
+    i => i,
+    (i, index) => html`
+  <div class="c-table__row">
+    <custom-row-a class="c-table__cell" .rowData=${{
+      id: i,
+      data: this.data,
+      sortedFieldKeys: this.sortedFieldKeys
+    }}> </custom-row-a>
+  </div>`
+  )}
+</div>`
+  }
 }
 
-// export class RowA extends OvlTableRowElement {
-//   // tableFields: TableFields
-//   // tableData: TableTestData
-//   // initProps() {
-//   //   super.initProps()
-//   //   this.tableFields = <TableFields>this.fields
-//   //   this.tableData = this.data
-//   // }
-//   // getUI() {
-//   //   return html`<div>${this.tableFields.CustomerFirstName.Name}</div>`
-//   // }
-// }
+export class CustomRowA extends OvlTableRow {
+  getUI() {
+    return html`
+    ${repeat(
+      this.rowData.sortedFieldKeys,
+      f => f,
+      (f: TableTestColumns, findex) => {
+        let c = ""
+        if (f == "CustomerLastName") {
+          c = "HeyHeyHey"
+        }
+        return html`<span class="c-table__cell">${c +
+          this.rowData.data[this.rowData.id][f]}</span>`
+      }
+    )}
+  `
+  }
+}

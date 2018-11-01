@@ -109,10 +109,12 @@ export class OvlTableElement extends OvlBaseElement {
   fields: BaseFields
   data: BaseData
   sortedFieldKeys: string[]
+  sortedDataKeys: string[]
   initProps() {
     console.log("init props header")
     this.fields = <BaseFields>(<unknown>(<any>this.table).Fields)
     this.sortedFieldKeys = this.getSortedFieldKeys()
+    this.sortedDataKeys = this.getSortedDataKeys()
   }
   getUI(): TemplateResult {
     // a default implementation of rendering the column headers
@@ -130,16 +132,12 @@ export class OvlTableElement extends OvlBaseElement {
   ${repeat(
     this.getSortedDataKeys(),
     i => i,
-    (i, index) => html`<div class="c-table__row">
-   ${repeat(
-     this.sortedFieldKeys,
-     f => f,
-     (f, findex) => {
-       //console.log(this.data.1.IDTransaction)
-       return html`<span class="c-table__cell">${this.data[i][f]}</span>`
-     }
-   )}
-    </div>`
+    (i, index) =>
+      html`<div class="c-table__row"><ovl-row class="c-table__cell" .rowData=${{
+        id: i,
+        data: this.data,
+        sortedFieldKeys: this.sortedFieldKeys
+      }}> </ovl-row></div>`
   )}
   </div>`
   }
@@ -150,5 +148,21 @@ export class OvlTableElement extends OvlBaseElement {
   }
   getSortedDataKeys(): string[] {
     return Object.keys(this.data)
+  }
+}
+
+export class OvlTableRow extends OvlBaseElement {
+  rowData: { id: string; sortedFieldKeys: string[]; data: BaseData }
+  getUI(): TemplateResult {
+    return html`
+    ${repeat(
+      this.rowData.sortedFieldKeys,
+      f => f,
+      (f, findex) =>
+        html`<span class="c-table__cell">${
+          this.rowData.data[this.rowData.id][f]
+        }</span>`
+    )}
+  `
   }
 }
