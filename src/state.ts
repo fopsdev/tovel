@@ -44,11 +44,10 @@ let tblTableTestData0 = {
     DeliveryDate: "2017-03-03T00:00:00+00:00"
   }
 }
-export let tblTableTestData: TableTestData = <TableTestData>(
-  (<unknown>tblTableTestData0)
-)
+export let tblTableTestData: TableTestData = {}
 
-Object.keys(tblTableTestData).forEach(k => {
+Object.keys(tblTableTestData0).forEach(k => {
+  tblTableTestData[k] = tblTableTestData0[k]
   tblTableTestData[k].CustomerFullName = state => {
     return (
       state.tblTableTestData[k].CustomerFirstName +

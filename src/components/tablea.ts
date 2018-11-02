@@ -97,6 +97,9 @@ const derivedTableFields: Derive<TableFields> = state => {
 }
 
 export let TableTest: UserTable = {
+  TableStatePath: "TableTest",
+  DataStatePath: "tblTableTestData",
+  Id: "TableTest",
   Filter: "",
   Sort: { Ascending: true, Field: <TableTestColumns>"" },
   Entity: "tblTransactions",
@@ -117,13 +120,15 @@ export class CustomTableA extends OvlTableElement {
     )}
   </div>
 
-  ${repeat(
+  ${this.repeat(
     this.getSortedDataKeys(),
     i => i,
     (i, index) => html`
   <div class="c-table__row">
     <custom-row-a class="c-table__cell" .rowData=${{
-      id: i,
+      id: this.table.Id + i,
+      dataStatePath: this.table.DataStatePath,
+      rowKey: i,
       data: this.data,
       sortedFieldKeys: this.sortedFieldKeys
     }}> </custom-row-a>
@@ -134,9 +139,12 @@ export class CustomTableA extends OvlTableElement {
 }
 
 export class CustomRowA extends OvlTableRow {
+  initProps() {
+    this.id = this.rowData.id
+  }
   getUI() {
     return html`
-    ${repeat(
+    ${this.repeat(
       this.rowData.sortedFieldKeys,
       f => f,
       (f: TableTestColumns, findex) => {
@@ -145,11 +153,13 @@ export class CustomRowA extends OvlTableRow {
           c = "HeyHeyHey"
         }
         return html`<span class="c-table__cell">${c +
-          this.rowData.data[this.rowData.id][f]}</span>`
+          this.rowData.data[this.rowData.rowKey][f]}</span>`
       }
     )}
   `
   }
 }
-customElements.define("custom-table-a", CustomTableA)
-customElements.define("custom-row-a", CustomRowA)
+if (!customElements.get("custom-table-a")) {
+  customElements.define("custom-table-a", CustomTableA)
+  customElements.define("custom-row-a", CustomRowA)
+}
