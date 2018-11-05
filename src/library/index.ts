@@ -37,7 +37,7 @@ export class OvlBaseElement extends HTMLElement {
     this.state = app.state
     console.log("base id " + this.id)
   }
-  prepare() {}
+  //prepare() {}
   // initialising props
   initProps() {
     this.id = this.getAttribute("id")
@@ -96,7 +96,6 @@ export class OvlBaseElement extends HTMLElement {
   }
   doRender() {
     console.log("render: " + this.componentName)
-    this.prepare()
     let trackId = this.trackState()
 
     this.prepareUI()
@@ -230,10 +229,16 @@ export class OvlTableElement extends OvlBaseElement {
     let ascending = this.table.Sort.Ascending ? 1 : -1
     let res: number = 0
     return Object.keys(this.data).sort((a, b) => {
-      const valB = this.data[b][sortfield]
-      const valA = this.data[a][sortfield]
+      let valB = this.data[b][sortfield]
+      let valA = this.data[a][sortfield]
       switch (this.fields[sortfield].Type) {
         case "date":
+          if (valA === undefined || valA === null) {
+            valA = new Date(-8640000000000000)
+          }
+          if (valB === undefined || valB === null) {
+            valB = new Date(-8640000000000000)
+          }
           const aDate = new Date(valA).getTime()
           const bDate = new Date(valB).getTime()
           res = aDate - bDate
@@ -247,6 +252,13 @@ export class OvlTableElement extends OvlBaseElement {
           break
         case "decimal":
         case "int":
+          if (valA === undefined || valA === null) {
+            valA = Number.MIN_SAFE_INTEGER
+          }
+          if (valB === undefined || valB === null) {
+            valB = Number.MIN_SAFE_INTEGER
+          }
+
           res = valA - valB
           break
       }
