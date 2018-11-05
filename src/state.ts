@@ -63,4 +63,5 @@ export let posts: Post[] = []
 
 export const foo: string = "bar"
 
-export { TableTest }
+let myState = { myTable: TableTest }
+export { myState }

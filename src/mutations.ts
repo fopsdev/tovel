@@ -5,7 +5,7 @@ export const setLoadingPosts: Operation.Mutate = ({ state }) =>
   (state.isLoadingPosts = true)
 
 export const changeFoo: Operation.Mutate = ({ state }) =>
-  (state.tblTableTestData["2"].A_ProvisionTotal = 3333)
+  (state.tblTableTestData["2"].CustomerFirstName = "Anton")
 
 export const unsetLoadingPosts: Operation.Mutate = ({ state }) =>
   (state.isLoadingPosts = false)

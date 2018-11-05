@@ -1,36 +1,30 @@
-import { OvlSimpleElement, TableData } from "../library/index"
+import { OvlBaseElement, TableData } from "../library/index"
 import { app } from "../index"
+import { html } from "lit-html"
 
-//import * as untrackedState from "../state"
-import { html, TemplateResult } from "lit-html"
-
-export class CompA extends OvlSimpleElement {
+export class CompA extends OvlBaseElement {
   parentData: TableData
   constructor() {
     super()
-
     this.onclick = e => {
       app.actions.changeFoo()
     }
   }
-  prepare() {
+  initProps() {
     //prepare the props we will hand over to the table comp
+    super.initProps()
+    console.log("compa initprops")
     this.parentData = {
-      table: this.state.TableTest,
+      table: this.state.myState.myTable,
       data: this.state.tblTableTestData
     }
-
-    // this.parentComp = html`<ovl-table
-    //   .table=${this.state.TableTest}
-    //   .data = ${this.state.tblTableTestData}>
-    //   </ovl-table>`
   }
   getUI() {
+    console.log("ui compa")
     return html`
     <div>${this.state.foo}</div>
-    <div>${this.props.Key}</div>
 
-    <custom-table-a 
+    <custom-table-a id="tabletest" 
     .getData=${() => ({
       table: this.parentData.table,
       data: this.parentData.data
@@ -41,4 +35,3 @@ export class CompA extends OvlSimpleElement {
     `
   }
 }
-customElements.define("comp-a", CompA)

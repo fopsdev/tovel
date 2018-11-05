@@ -4,12 +4,14 @@ import { repeat, KeyFn, ItemTemplate } from "lit-html/directives/repeat"
 import { App, EventType } from "overmind"
 
 export class OvlBaseElement extends HTMLElement {
-  componentId: string
+  // each element should at least have an id
   mutationListener: any
+  paths: Set<string>
   state: App["state"]
+  componentName: string
   id: string
   _id: number
-  static counter: number = 0
+  static _counter: number = 0
 
   repeat<T>(
     items: Iterable<T>,
@@ -18,9 +20,9 @@ export class OvlBaseElement extends HTMLElement {
   ): Directive<NodePart> {
     //let trackId = app.trackState()
     const myFn = (i, ix) => {
-      let trackId = this.trackState()
+      //let trackId = this.trackState()
       let res = template(i, ix)
-      this.clearTrackState(trackId)
+      //this.clearTrackState(trackId)
       return res
     }
     return repeat(items, keyFnOrTemplate, myFn)
@@ -28,10 +30,21 @@ export class OvlBaseElement extends HTMLElement {
   //  child comps should implement getUI to render a htm template
   //  its tracked
   // for preparing stuff which is not tracked
+  constructor() {
+    console.log("base constructor")
+    super()
+    this._id = ++OvlBaseElement._counter
+    this.state = app.state
+    console.log("base id " + this.id)
+  }
   prepare() {}
-  // initialising tracked props
+  // initialising props
   initProps() {
-    this.componentId = this.tagName + "_" + this._id.toString()
+    this.id = this.getAttribute("id")
+    if (!this.id || this.id === "null") {
+      throw Error("Ovl Base: id attribute is mandatory")
+    }
+    this.componentName = this.tagName + "_" + this.id.toString()
   }
   // add manual state tracking paths
   addTracking(paths: Set<string>) {}
@@ -39,19 +52,13 @@ export class OvlBaseElement extends HTMLElement {
   removeTracking(paths: Set<string>) {}
 
   prepareUI() {}
-  constructor() {
-    super()
-    this.state = app.state
-    this._id = ++OvlBaseElement.counter
-    console.log("base constructor id " + this.id)
-  }
   trackState(): number {
     let trackId = app.trackState()
-    console.log(this.componentId + " start tracking. trackid:" + trackId)
+    console.log(this.componentName + " start tracking. trackid:" + trackId)
     return trackId
   }
   clearTrackState(trackId: number) {
-    console.log(this.componentId + " finish tracking. trackid:" + trackId)
+    console.log(this.componentName + " finish tracking. trackid:" + trackId)
     let paths = app.clearTrackState(trackId)
     //console.log(this.mutationListener)
     if (paths.size > 0) {
@@ -61,19 +68,19 @@ export class OvlBaseElement extends HTMLElement {
         if (app.devtools) {
           app.eventHub.emitAsync(EventType.COMPONENT_ADD, {
             componentId: this._id,
-            componentInstanceId: OvlBaseElement.counter,
-            name: this.componentId,
+            componentInstanceId: this._id,
+            name: this.componentName,
             paths: Array.from(paths)
           })
         }
-        console.log(this.componentId + " adding paths:")
+        console.log(this.componentName + " adding paths:")
         console.log(paths)
         this.mutationListener = app.addMutationListener(paths, flushId => {
           if (app.devtools) {
             app.eventHub.emitAsync(EventType.COMPONENT_UPDATE, {
               componentId: this._id,
-              componentInstanceId: OvlBaseElement.counter,
-              name: this.componentId,
+              componentInstanceId: this._id,
+              name: this.componentName,
               paths: Array.from(paths),
               flushId
             })
@@ -81,20 +88,22 @@ export class OvlBaseElement extends HTMLElement {
           this.doRender()
         })
       } else {
-        console.log(this.componentId + " updating paths:")
+        console.log(this.componentName + " updating paths:")
         console.log(paths)
         this.mutationListener.update(paths)
       }
     }
   }
   doRender() {
+    console.log("render: " + this.componentName)
     this.prepare()
-
     let trackId = this.trackState()
+
     this.prepareUI()
     let res = this.getUI()
-    this.clearTrackState(trackId)
+
     render(res, this)
+    this.clearTrackState(trackId)
   }
 
   connectedCallback() {
@@ -109,11 +118,10 @@ export class OvlBaseElement extends HTMLElement {
       this.mutationListener = null
     }
     if (app.devtools) {
-      let componentId = this.tagName + "_" + this._id.toString()
       app.eventHub.emitAsync(EventType.COMPONENT_REMOVE, {
         componentId: this._id,
-        componentInstanceId: OvlBaseElement.counter,
-        name: componentId
+        componentInstanceId: this._id,
+        name: this.componentName
       })
     }
   }
@@ -124,17 +132,6 @@ export class OvlBaseElement extends HTMLElement {
 
 // philosophy: use the class which fits the most. its props interface should give an idea for what it is used for
 // that said, implementing a getPropsTemplate method helps because then the interfaces doen't need to be referenced by the outer components
-
-export interface ISimpleProps {
-  Key: string
-}
-
-export class OvlSimpleElement extends OvlBaseElement {
-  props: ISimpleProps
-  static getPropsTemplate(): ISimpleProps {
-    return { Key: "" }
-  }
-}
 
 //#####################TableHeaderElement##########################
 export type TableSort = {
@@ -166,7 +163,6 @@ export type TableData = { table: BaseTable; data: BaseData }
 export type BaseTable = {
   TableStatePath: string
   DataStatePath: string
-  Id: string
   Filter: string
   Sort: TableSort
   Entity: string
@@ -182,15 +178,14 @@ export class OvlTableElement extends OvlBaseElement {
   data: BaseData
   sortedFieldKeys: string[]
   sortedDataKeys: string[]
-  addTracking(paths: Set<string>) {
-    paths.add(this.table.TableStatePath)
-  }
+  // addTracking(paths: Set<string>) {
+  //   paths.add(this.table.TableStatePath)
+  // }
   initProps() {
+    super.initProps()
     console.log("init props header")
     this.table = this.getData().table
     this.data = this.getData().data
-    this.id = this.table.Id
-    this.componentId = this.tagName + "_" + this.id
   }
   prepareUI() {
     this.fields = <BaseFields>(<unknown>(<any>this.table).Fields)
@@ -201,7 +196,6 @@ export class OvlTableElement extends OvlBaseElement {
     // a default implementation of rendering the column headers
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
-
     return html`<div class="c-table c-table--striped">
   <div class="c-table__caption">Test Table</div>
   <div class="c-table__row c-table__row--heading">
@@ -212,9 +206,9 @@ export class OvlTableElement extends OvlBaseElement {
 
   ${this.getSortedDataKeys().map(
     i =>
-      html`<div class="c-table__row"><ovl-row class="c-table__cell" 
+      html`<div class="c-table__row"><ovl-row id="${this.id +
+        i}" class="c-table__cell" 
       .getData=${() => ({
-        id: this.table.Id + i,
         dataStatePath: this.table.DataStatePath,
         rowKey: i,
         data: this.data,
@@ -264,7 +258,6 @@ export class OvlTableElement extends OvlBaseElement {
 export class OvlTableRow extends OvlBaseElement {
   getData: any
   rowData: {
-    id: string
     dataStatePath: string
     rowKey: string
     sortedFieldKeys: string[]
@@ -274,9 +267,8 @@ export class OvlTableRow extends OvlBaseElement {
     paths.delete(this.rowData.dataStatePath)
   }
   initProps() {
+    super.initProps()
     this.rowData = this.getData()
-    this.id = this.rowData.id
-    this.componentId = this.tagName + "_" + this.id
   }
   getUI(): TemplateResult {
     return html`
@@ -289,7 +281,5 @@ export class OvlTableRow extends OvlBaseElement {
   `
   }
 }
-if (!customElements.get("ovl-table")) {
-  customElements.define("ovl-table", OvlTableElement)
-  customElements.define("ovl-row", OvlTableRow)
-}
+customElements.define("ovl-table", OvlTableElement)
+customElements.define("ovl-row", OvlTableRow)
