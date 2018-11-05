@@ -31,8 +31,10 @@ export class CompA extends OvlSimpleElement {
     <div>${this.props.Key}</div>
 
     <custom-table-a 
-    .table=${this.parentData.table} 
-    .data=${this.parentData.data}>
+    .getData=${() => ({
+      table: this.parentData.table,
+      data: this.parentData.data
+    })}>
     </custom-table-a>
 
     

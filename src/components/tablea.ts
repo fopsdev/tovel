@@ -109,6 +109,50 @@ export let TableTest: UserTable = {
   Fields: derivedTableFields
 }
 
+// export class CustomTableA extends OvlTableElement {
+//   getUI() {
+//     console.log("getUI Called")
+//     return html`<div class="c-table c-table--striped">
+//   <div class="c-table__caption">Custom UI Table</div>
+//   <div class="c-table__row c-table__row--heading">
+//     ${this.sortedFieldKeys.map(
+//       k => html`
+//     <span class="c-table__cell">${this.fields[k].Name}</span>`
+//     )}
+//   </div>
+
+//   ${this.getSortedDataKeys().map(i => {
+//     console.log("repeatRow called...")
+//     return html`
+//   <div class="c-table__row">
+//     <custom-row-a class="c-table__cell" .getData=${() => ({
+//       id: this.table.Id + i,
+//       dataStatePath: this.table.DataStatePath,
+//       rowKey: i,
+//       data: this.data,
+//       sortedFieldKeys: this.sortedFieldKeys
+//     })}> </custom-row-a>
+//   </div>`
+//   })}
+// </div>`
+//   }
+// }
+
+// export class CustomRowA extends OvlTableRow {
+//   getUI() {
+//     return html`
+//     ${this.rowData.sortedFieldKeys.map(f => {
+//       let c = ""
+//       if (f == "CustomerLastName") {
+//         c = "HeyHeyHey"
+//       }
+//       return html`<span class="c-table__cell">${c +
+//         this.rowData.data[this.rowData.rowKey][f]}</span>`
+//     })}
+//   `
+//   }
+// }
+// an implementation of the repeat directive... but it creates
 export class CustomTableA extends OvlTableElement {
   getUI() {
     return html`<div class="c-table c-table--striped">
@@ -125,13 +169,13 @@ export class CustomTableA extends OvlTableElement {
     i => i,
     (i, index) => html`
   <div class="c-table__row">
-    <custom-row-a class="c-table__cell" .rowData=${{
+    <custom-row-a class="c-table__cell" .getData=${() => ({
       id: this.table.Id + i,
       dataStatePath: this.table.DataStatePath,
       rowKey: i,
       data: this.data,
       sortedFieldKeys: this.sortedFieldKeys
-    }}> </custom-row-a>
+    })}> </custom-row-a>
   </div>`
   )}
 </div>`
@@ -139,26 +183,25 @@ export class CustomTableA extends OvlTableElement {
 }
 
 export class CustomRowA extends OvlTableRow {
-  initProps() {
-    this.id = this.rowData.id
-  }
   getUI() {
     return html`
-    ${this.repeat(
-      this.rowData.sortedFieldKeys,
-      f => f,
-      (f: TableTestColumns, findex) => {
-        let c = ""
-        if (f == "CustomerLastName") {
-          c = "HeyHeyHey"
-        }
-        return html`<span class="c-table__cell">${c +
-          this.rowData.data[this.rowData.rowKey][f]}</span>`
-      }
-    )}
+     ${this.repeat(
+       this.rowData.sortedFieldKeys,
+       f => f,
+       (f: TableTestColumns, findex) => {
+         let c = ""
+         if (f == "CustomerLastName") {
+           c = "HeyHeyHey"
+         }
+         return html`
+    <span class="c-table__cell">${c + this.rowData.data[this.rowData.rowKey][f]}
+    </span>`
+       }
+     )}
   `
   }
 }
+
 if (!customElements.get("custom-table-a")) {
   customElements.define("custom-table-a", CustomTableA)
   customElements.define("custom-row-a", CustomRowA)

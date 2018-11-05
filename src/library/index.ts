@@ -4,6 +4,7 @@ import { repeat, KeyFn, ItemTemplate } from "lit-html/directives/repeat"
 import { App, EventType } from "overmind"
 
 export class OvlBaseElement extends HTMLElement {
+  componentId: string
   mutationListener: any
   state: App["state"]
   id: string
@@ -29,7 +30,9 @@ export class OvlBaseElement extends HTMLElement {
   // for preparing stuff which is not tracked
   prepare() {}
   // initialising tracked props
-  initProps() {}
+  initProps() {
+    this.componentId = this.tagName + "_" + this._id.toString()
+  }
   // add manual state tracking paths
   addTracking(paths: Set<string>) {}
   // remove manual state tracking paths
@@ -43,9 +46,12 @@ export class OvlBaseElement extends HTMLElement {
     console.log("base constructor id " + this.id)
   }
   trackState(): number {
-    return app.trackState()
+    let trackId = app.trackState()
+    console.log(this.componentId + " start tracking. trackid:" + trackId)
+    return trackId
   }
   clearTrackState(trackId: number) {
+    console.log(this.componentId + " finish tracking. trackid:" + trackId)
     let paths = app.clearTrackState(trackId)
     //console.log(this.mutationListener)
     if (paths.size > 0) {
@@ -53,23 +59,21 @@ export class OvlBaseElement extends HTMLElement {
       this.removeTracking(paths)
       if (!this.mutationListener) {
         if (app.devtools) {
-          let componentId = this.tagName + "_" + this.id
           app.eventHub.emitAsync(EventType.COMPONENT_ADD, {
             componentId: this._id,
             componentInstanceId: OvlBaseElement.counter,
-            name: componentId,
+            name: this.componentId,
             paths: Array.from(paths)
           })
         }
-        console.log("Comp: " + this.tagName + "_" + this.id + " adding paths:")
+        console.log(this.componentId + " adding paths:")
         console.log(paths)
         this.mutationListener = app.addMutationListener(paths, flushId => {
           if (app.devtools) {
-            let componentId = this.tagName + "_" + this._id.toString()
             app.eventHub.emitAsync(EventType.COMPONENT_UPDATE, {
               componentId: this._id,
               componentInstanceId: OvlBaseElement.counter,
-              name: componentId,
+              name: this.componentId,
               paths: Array.from(paths),
               flushId
             })
@@ -77,9 +81,7 @@ export class OvlBaseElement extends HTMLElement {
           this.doRender()
         })
       } else {
-        console.log(
-          "Comp: " + this.tagName + "_" + this.id + " updating paths:"
-        )
+        console.log(this.componentId + " updating paths:")
         console.log(paths)
         this.mutationListener.update(paths)
       }
@@ -87,6 +89,7 @@ export class OvlBaseElement extends HTMLElement {
   }
   doRender() {
     this.prepare()
+
     let trackId = this.trackState()
     this.prepareUI()
     let res = this.getUI()
@@ -173,6 +176,7 @@ export type BaseTable = {
 }
 
 export class OvlTableElement extends OvlBaseElement {
+  getData: any
   table: BaseTable
   fields: BaseFields
   data: BaseData
@@ -183,7 +187,10 @@ export class OvlTableElement extends OvlBaseElement {
   }
   initProps() {
     console.log("init props header")
+    this.table = this.getData().table
+    this.data = this.getData().data
     this.id = this.table.Id
+    this.componentId = this.tagName + "_" + this.id
   }
   prepareUI() {
     this.fields = <BaseFields>(<unknown>(<any>this.table).Fields)
@@ -206,13 +213,13 @@ export class OvlTableElement extends OvlBaseElement {
   ${this.getSortedDataKeys().map(
     i =>
       html`<div class="c-table__row"><ovl-row class="c-table__cell" 
-      .rowData=${{
+      .getData=${() => ({
         id: this.table.Id + i,
         dataStatePath: this.table.DataStatePath,
         rowKey: i,
         data: this.data,
         sortedFieldKeys: this.sortedFieldKeys
-      }}> </ovl-row></div>`
+      })}> </ovl-row></div>`
   )}
   </div>`
   }
@@ -255,6 +262,7 @@ export class OvlTableElement extends OvlBaseElement {
 }
 
 export class OvlTableRow extends OvlBaseElement {
+  getData: any
   rowData: {
     id: string
     dataStatePath: string
@@ -266,7 +274,9 @@ export class OvlTableRow extends OvlBaseElement {
     paths.delete(this.rowData.dataStatePath)
   }
   initProps() {
+    this.rowData = this.getData()
     this.id = this.rowData.id
+    this.componentId = this.tagName + "_" + this.id
   }
   getUI(): TemplateResult {
     return html`
