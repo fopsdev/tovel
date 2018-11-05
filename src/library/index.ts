@@ -13,20 +13,6 @@ export class OvlBaseElement extends HTMLElement {
   _id: number
   static _counter: number = 0
 
-  repeat<T>(
-    items: Iterable<T>,
-    keyFnOrTemplate: KeyFn<T> | ItemTemplate<T>,
-    template?: ItemTemplate<T>
-  ): Directive<NodePart> {
-    //let trackId = app.trackState()
-    const myFn = (i, ix) => {
-      //let trackId = this.trackState()
-      let res = template(i, ix)
-      //this.clearTrackState(trackId)
-      return res
-    }
-    return repeat(items, keyFnOrTemplate, myFn)
-  }
   //  child comps should implement getUI to render a htm template
   //  its tracked
   // for preparing stuff which is not tracked
@@ -37,7 +23,7 @@ export class OvlBaseElement extends HTMLElement {
     this.state = app.state
     console.log("base id " + this.id)
   }
-  prepare() {}
+
   // initialising props
   initProps() {
     this.id = this.getAttribute("id")
@@ -96,7 +82,7 @@ export class OvlBaseElement extends HTMLElement {
   }
   doRender() {
     console.log("render: " + this.componentName)
-    this.prepare()
+
     let trackId = this.trackState()
 
     this.prepareUI()
