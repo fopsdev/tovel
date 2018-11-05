@@ -164,7 +164,7 @@ export class CustomTableA extends OvlTableElement {
     )}
   </div>
 
-  ${repeat(
+  ${this.repeat(
     this.getSortedDataKeys(),
     i => i,
     i => html`
@@ -184,7 +184,7 @@ export class CustomTableA extends OvlTableElement {
 export class CustomRowA extends OvlTableRow {
   getUI() {
     return html`
-     ${repeat(
+     ${this.repeat(
        this.rowData.sortedFieldKeys,
        f => f,
        (f: TableTestColumns, findex) => {

@@ -6,6 +6,7 @@ import { App, EventType } from "overmind"
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
   mutationListener: any
+  trackId: number
   paths: Set<string>
   state: App["state"]
   componentName: string
@@ -27,7 +28,7 @@ export class OvlBaseElement extends HTMLElement {
     }
     return repeat(items, keyFnOrTemplate, myFn)
   }
-  //  child comps should implement getUI to render a htm template
+  // //  child comps should implement getUI to render a htm template
   //  its tracked
   // for preparing stuff which is not tracked
   constructor() {
@@ -37,7 +38,7 @@ export class OvlBaseElement extends HTMLElement {
     this.state = app.state
     console.log("base id " + this.id)
   }
-  //prepare() {}
+
   // initialising props
   initProps() {
     this.id = this.getAttribute("id")
@@ -96,13 +97,13 @@ export class OvlBaseElement extends HTMLElement {
   }
   doRender() {
     console.log("render: " + this.componentName)
-    let trackId = this.trackState()
+    this.trackId = this.trackState()
 
     this.prepareUI()
     let res = this.getUI()
 
     render(res, this)
-    this.clearTrackState(trackId)
+    this.clearTrackState(this.trackId)
   }
 
   connectedCallback() {
@@ -224,7 +225,7 @@ export class OvlTableElement extends OvlBaseElement {
   getSortedDataKeys(): string[] {
     let sortfield = this.table.Sort.Field
     if (!sortfield) {
-      return Object.keys(this.data)
+      sortfield = this.table.IDField
     }
     let ascending = this.table.Sort.Ascending ? 1 : -1
     let res: number = 0
