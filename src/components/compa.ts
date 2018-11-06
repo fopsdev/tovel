@@ -1,5 +1,5 @@
 import { OvlBaseElement, TableData } from "../library/index"
-import { app } from "../index"
+import { app, state as untracked } from "../index"
 import { html } from "lit-html"
 
 export class CompA extends OvlBaseElement {
@@ -15,7 +15,8 @@ export class CompA extends OvlBaseElement {
     super.initProps()
     this.parentData = {
       table: this.state.myState.myTable,
-      data: this.state.tblTableTestData
+      data: this.state.tblTableTestData,
+      untrackedData: untracked.tblTableTestData
     }
   }
   getUI() {
@@ -25,7 +26,8 @@ export class CompA extends OvlBaseElement {
     <custom-table-a id="tabletest" 
     .getData=${() => ({
       table: this.parentData.table,
-      data: this.parentData.data
+      data: this.parentData.data,
+      untrackedData: this.parentData.untrackedData
     })}>
     </custom-table-a>
 

@@ -23,6 +23,8 @@ export const app = new Overmind(config, {
   devtools: "localhost:3031"
 })
 
+export { state }
+
 render(
   html`lala3<comp-a id="maincomp"></comp-a>`,
   document.getElementById("app")

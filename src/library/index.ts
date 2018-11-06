@@ -1,11 +1,10 @@
-import { app } from "../index"
-import { render, TemplateResult, html, Directive, NodePart } from "lit-html"
+import { app, state } from "../index"
+import { render, TemplateResult, html } from "lit-html"
 import { App, EventType } from "overmind"
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
   mutationListener: any
-
   paths: Set<string>
   state: App["state"]
   componentName: string
@@ -43,7 +42,6 @@ export class OvlBaseElement extends HTMLElement {
   clearTrackState(trackId: number) {
     console.log(this.componentName + " finish tracking. trackid:" + trackId)
     let paths = app.clearTrackState(trackId)
-    //console.log(this.mutationListener)
     if (paths.size > 0) {
       this.addTracking(paths)
       this.removeTracking(paths)
@@ -135,7 +133,11 @@ export type BaseFields = { [key: string]: TableField }
 
 export type BaseData = { [key: string]: any }
 
-export type TableData = { table: BaseTable; data: BaseData }
+export type TableData = {
+  table: BaseTable
+  data: BaseData
+  untrackedData: BaseData
+}
 
 export type BaseTable = {
   TableStatePath: string
@@ -153,6 +155,7 @@ export class OvlTableElement extends OvlBaseElement {
   table: BaseTable
   fields: BaseFields
   data: BaseData
+  untrackedData: BaseData
   sortedFieldKeys: string[]
   sortedDataKeys: string[]
 
@@ -161,6 +164,7 @@ export class OvlTableElement extends OvlBaseElement {
     console.log("init props header")
     this.table = this.getData().table
     this.data = this.getData().data
+    this.untrackedData = this.getData().untrackedData
   }
 
   prepareUI() {
@@ -204,14 +208,14 @@ export class OvlTableElement extends OvlBaseElement {
   getSortedDataKeys(): string[] {
     let sortfield = this.table.Sort.Field
     if (!sortfield) {
-      //sortfield = this.table.IDField
-      return Object.keys(this.data)
+      sortfield = this.table.IDField
+      //return Object.keys(this.data)
     }
     let ascending = this.table.Sort.Ascending ? 1 : -1
     let res: number = 0
-    return Object.keys(this.data).sort((a, b) => {
-      let valB = this.data[b][sortfield]
-      let valA = this.data[a][sortfield]
+    return Object.keys(this.untrackedData).sort((a, b) => {
+      let valB = this.untrackedData[b][sortfield]
+      let valA = this.untrackedData[a][sortfield]
       switch (this.fields[sortfield].Type) {
         case "date":
           // if (valA === undefined || valA === null) {
