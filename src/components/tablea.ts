@@ -101,7 +101,7 @@ export let TableTest: UserTable = {
   DataStatePath: "tblTableTestData",
 
   Filter: "",
-  Sort: { Ascending: true, Field: <TableTestColumns>"" },
+  Sort: { Ascending: false, Field: <TableTestColumns>"" },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },

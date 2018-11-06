@@ -13,14 +13,12 @@ export class CompA extends OvlBaseElement {
   initProps() {
     //prepare the props we will hand over to the table comp
     super.initProps()
-    console.log("compa initprops")
     this.parentData = {
       table: this.state.myState.myTable,
       data: this.state.tblTableTestData
     }
   }
   getUI() {
-    console.log("ui compa")
     return html`
     <div>${this.state.foo}</div>
 

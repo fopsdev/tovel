@@ -225,7 +225,8 @@ export class OvlTableElement extends OvlBaseElement {
   getSortedDataKeys(): string[] {
     let sortfield = this.table.Sort.Field
     if (!sortfield) {
-      sortfield = this.table.IDField
+      //sortfield = this.table.IDField
+      return Object.keys(this.data)
     }
     let ascending = this.table.Sort.Ascending ? 1 : -1
     let res: number = 0
