@@ -6,9 +6,9 @@ export class CompA extends OvlBaseElement {
   parentData: TableData
   constructor() {
     super()
-    this.onclick = e => {
-      app.actions.changeFoo()
-    }
+    // this.onclick = e => {
+    //   app.actions.changeFoo()
+    // }
   }
   initProps() {
     //prepare the props we will hand over to the table comp
@@ -23,15 +23,13 @@ export class CompA extends OvlBaseElement {
     return html`
     <div>${this.state.foo}</div>
 
-    <custom-table-a id="tabletest" 
+    <ovl-table id="tabletest" 
     .getData=${() => ({
       table: this.parentData.table,
       data: this.parentData.data,
       untrackedData: this.parentData.untrackedData
     })}>
-    </custom-table-a>
-
-    
+    </ovl-table>
     `
   }
 }

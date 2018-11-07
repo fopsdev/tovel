@@ -99,9 +99,8 @@ const derivedTableFields: Derive<TableFields> = state => {
 export let TableTest: UserTable = {
   TableStatePath: "myState.TableTest",
   DataStatePath: "tblTableTestData",
-
   Filter: "",
-  Sort: { Ascending: false, Field: <TableTestColumns>"" },
+  Sort: { Ascending: true, Field: <TableTestColumns>"" },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
