@@ -50,9 +50,9 @@ Object.keys(tblTableTestData0).forEach(k => {
   tblTableTestData[k] = tblTableTestData0[k]
   tblTableTestData[k].CustomerFullName = state => {
     return (
-      state.tblTableTestData[k].CustomerFirstName +
+      tblTableTestData[k].CustomerFirstName +
       " " +
-      state.tblTableTestData[k].CustomerLastName
+      tblTableTestData[k].CustomerLastName
     )
   }
 })

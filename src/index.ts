@@ -7,7 +7,6 @@ customElements.define("comp-a", CompA)
 import { Overmind, TApp } from "overmind"
 import * as state from "./state"
 import * as actions from "./action"
-
 import { html, render } from "lit-html"
 
 const config = {
