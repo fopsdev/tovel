@@ -1,6 +1,6 @@
 import { app, state } from "../index"
 import { render, TemplateResult, html } from "lit-html"
-import { IApp, EventType, Action, Derive } from "overmind"
+import { IApp, EventType, Action, Derive, forEach } from "overmind"
 import { repeat } from "lit-html/directives/repeat"
 import { TableTest } from "../components/tablea"
 import { isFunction } from "util"
@@ -21,7 +21,6 @@ export class OvlBaseElement extends HTMLElement {
     super()
     this._id = ++OvlBaseElement._counter
     this.state = app.state
-    this.untrackedState = state
   }
 
   // initialising props
@@ -36,7 +35,9 @@ export class OvlBaseElement extends HTMLElement {
   // add manual state tracking paths
   addTracking(paths: Set<string>) {}
   // remove manual state tracking paths
-  removeTracking(paths: Set<string>) {}
+  removeTracking(): Set<string> {
+    return undefined
+  }
 
   prepareUI() {}
   trackState(): number {
@@ -49,7 +50,25 @@ export class OvlBaseElement extends HTMLElement {
     let paths = app.clearTrackState(trackId)
     if (paths.size > 0) {
       this.addTracking(paths)
-      this.removeTracking(paths)
+      let pathsToRemove: Set<string> = this.removeTracking()
+      pathsToRemove.forEach(v => {
+        let searchVal = v
+        let pathsToDelete: string[] = []
+        if (searchVal.endsWith("*")) {
+          //debugger
+          searchVal = searchVal.substring(0, searchVal.length - 1)
+          paths.forEach(pv => {
+            if (pv.startsWith(searchVal)) {
+              pathsToDelete.push(pv)
+            }
+          })
+        } else {
+          pathsToDelete.push(v)
+        }
+        pathsToDelete.forEach(p => {
+          paths.delete(p)
+        })
+      })
       if (!this.mutationListener) {
         if (app.devtools) {
           app.eventHub.emitAsync(EventType.COMPONENT_ADD, {
@@ -249,6 +268,12 @@ export class OvlTableElement extends OvlBaseElement {
     paths.add(OvlTableElement.table.DataStatePath)
   }
 
+  removeTracking() {
+    let paths: Set<string> = new Set()
+    paths.add(OvlTableElement.table.DataStatePath + ".*")
+    return paths
+  }
+
   initProps() {
     super.initProps()
     console.log("init props header")
@@ -340,16 +365,16 @@ export class OvlTableElement extends OvlBaseElement {
     let sortfield = OvlTableElement.table.Sort.Field
     let ascending = OvlTableElement.table.Sort.Ascending ? 1 : -1
     let res: number = 0
-    return Object.keys(this.untrackedData).sort((a, b) => {
-      let valB = this.untrackedData[b][sortfield]
-      let valA = this.untrackedData[a][sortfield]
-      // need to check for function because its untracked state and therefore a derived (=function) won't be executed
-      if (typeof valB == "function") {
-        valB = valB(this.untrackedState)
-      }
-      if (typeof valA == "function") {
-        valA = valA(this.untrackedState)
-      }
+    return Object.keys(this.data).sort((a, b) => {
+      let valB = this.data[b][sortfield]
+      let valA = this.data[a][sortfield]
+      // // need to check for function because its untracked state and therefore a derived (=function) won't be executed
+      // if (typeof valB == "function") {
+      //   valB = valB(this.untrackedState)
+      // }
+      // if (typeof valA == "function") {
+      //   valA = valA(this.untrackedState)
+      // }
       //if (sortfield === "CustomerFullName") debugger
       switch (this.fields[sortfield].Type) {
         case "date":
@@ -397,8 +422,10 @@ export class OvlTableRow extends OvlBaseElement {
     data: BaseData
   }
 
-  removeTracking(paths: Set<string>) {
-    paths.delete(this.rowData.dataStatePath)
+  removeTracking() {
+    let paths: Set<string> = new Set()
+    paths.add(this.rowData.dataStatePath)
+    return paths
   }
 
   initProps() {
