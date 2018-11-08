@@ -1,14 +1,16 @@
-import { app } from "../index"
+import { app, state } from "../index"
 import { render, TemplateResult, html } from "lit-html"
 import { IApp, EventType, Action, Derive } from "overmind"
 import { repeat } from "lit-html/directives/repeat"
 import { TableTest } from "../components/tablea"
+import { isFunction } from "util"
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
   mutationListener: any
   paths: Set<string>
   state: IApp["state"]
+  untrackedState: IApp["state"]
   componentName: string
   id: string
   _id: number
@@ -19,6 +21,7 @@ export class OvlBaseElement extends HTMLElement {
     super()
     this._id = ++OvlBaseElement._counter
     this.state = app.state
+    this.untrackedState = state
   }
 
   // initialising props
@@ -241,6 +244,11 @@ export class OvlTableElement extends OvlBaseElement {
   }
   handleEventBefore(e, position: TableEventPosition, cancel: boolean) {}
   handleEventAfter(e, position: TableEventPosition) {}
+
+  addTracking(paths: Set<string>) {
+    paths.add(OvlTableElement.table.DataStatePath)
+  }
+
   initProps() {
     super.initProps()
     console.log("init props header")
@@ -335,6 +343,14 @@ export class OvlTableElement extends OvlBaseElement {
     return Object.keys(this.untrackedData).sort((a, b) => {
       let valB = this.untrackedData[b][sortfield]
       let valA = this.untrackedData[a][sortfield]
+      // need to check for function because its untracked state and therefore a derived (=function) won't be executed
+      if (typeof valB == "function") {
+        valB = valB(this.untrackedState)
+      }
+      if (typeof valA == "function") {
+        valA = valA(this.untrackedState)
+      }
+      //if (sortfield === "CustomerFullName") debugger
       switch (this.fields[sortfield].Type) {
         case "date":
           // if (valA === undefined || valA === null) {
