@@ -1,4 +1,4 @@
-import { OvlBaseElement, TableData } from "../library/index"
+import { OvlBaseElement, TableData, BaseTable } from "../library/index"
 import { app, state as untracked } from "../index"
 import { html } from "lit-html"
 
@@ -21,15 +21,19 @@ export class CompA extends OvlBaseElement {
   }
   getUI() {
     return html`
-    <div>${this.state.foo}</div>
+      <div>${this.state.foo}</div>
 
-    <ovl-table id="tabletest" 
-    .getData=${() => ({
-      table: this.parentData.table,
-      data: this.parentData.data,
-      untrackedData: this.parentData.untrackedData
-    })}>
-    </ovl-table>
+      <ovl-table
+        id="tabletest"
+        .getData="${
+          () => ({
+            table: this.parentData.table,
+            data: this.parentData.data,
+            untrackedData: this.parentData.untrackedData
+          })
+        }"
+      >
+      </ovl-table>
     `
   }
 }

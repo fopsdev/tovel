@@ -15,7 +15,7 @@ const config = {
 }
 
 declare module "overmind" {
-  interface App extends TApp<typeof config> {}
+  interface IApp extends TApp<typeof config> {}
 }
 
 export const app = new Overmind(config, {
@@ -25,6 +25,8 @@ export const app = new Overmind(config, {
 export { state }
 
 render(
-  html`lala3<comp-a id="maincomp"></comp-a>`,
+  html`
+    lala3<comp-a id="maincomp"></comp-a>
+  `,
   document.getElementById("app")
 )
