@@ -2,6 +2,7 @@ import { app } from "../index"
 import { render, TemplateResult, html } from "lit-html"
 import { IApp, EventType, Action, Derive } from "overmind"
 import { repeat } from "lit-html/directives/repeat"
+import { TableTest } from "../components/tablea"
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
@@ -164,6 +165,7 @@ export type TableData = {
 }
 
 export type BaseTable = {
+  DataStatePath: string
   Filter: string
   Sort: TableSort
   Entity: string
@@ -291,6 +293,7 @@ export class OvlTableElement extends OvlBaseElement {
                   class="c-table__row"
                   .getData="${
                     () => ({
+                      dataStatePath: OvlTableElement.table.DataStatePath,
                       rowKey: i,
                       rowIndex: rowIndex,
                       data: this.data,
@@ -379,7 +382,7 @@ export class OvlTableRow extends OvlBaseElement {
   }
 
   removeTracking(paths: Set<string>) {
-    //paths.delete(this.rowData.dataStatePath)
+    paths.delete(this.rowData.dataStatePath)
   }
 
   initProps() {

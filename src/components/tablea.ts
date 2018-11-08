@@ -1,9 +1,4 @@
-import {
-  OvlTableElement,
-  OvlTableRow,
-  BaseTable,
-  TableField
-} from "../library/index"
+import { OvlTableElement, BaseTable, TableField } from "../library/index"
 import { Derive } from "overmind"
 
 type TableTestColumns =
@@ -94,14 +89,15 @@ const derivedTableFields: Derive<TableFields> = state => {
   return tableFields
 }
 
-const Field: Derive<string> = state =>
+const SortingField: Derive<string> = state =>
   OvlTableElement.table.Sort.field !== ""
     ? OvlTableElement.table.Sort.field
     : OvlTableElement.table.IDField
 
 export let TableTest: UserTable = {
+  DataStatePath: "tblTableTestData",
   Filter: "",
-  Sort: { Ascending: true, field: "", Field: <string>(<any>Field) },
+  Sort: { Ascending: true, field: "", Field: <string>(<any>SortingField) },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },

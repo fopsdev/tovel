@@ -1,5 +1,6 @@
 import { TableTest } from "./components/tablea"
 import { Derive } from "overmind"
+import { state } from "."
 export type Post = {
   id: number
   title: string
@@ -50,9 +51,9 @@ Object.keys(tblTableTestData0).forEach(k => {
   tblTableTestData[k] = tblTableTestData0[k]
   tblTableTestData[k].CustomerFullName = state => {
     return (
-      tblTableTestData[k].CustomerFirstName +
+      state.tblTableTestData[k].CustomerFirstName +
       " " +
-      tblTableTestData[k].CustomerLastName
+      state.tblTableTestData[k].CustomerLastName
     )
   }
 })
