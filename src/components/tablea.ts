@@ -28,7 +28,7 @@ const derivedTableFields: Derive<TableFields> = state => {
 
   let customerFirstNameField: TableField = {
     Pos: 1,
-    Name: state.foo,
+    Name: state.inputValueTest.value,
     Type: "string",
     Editable: true,
     Visible: true,

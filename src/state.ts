@@ -58,11 +58,22 @@ Object.keys(tblTableTestData0).forEach(k => {
   }
 })
 
+export let suggestions = [
+  "Aal",
+  "Barbe",
+  "Forelle",
+  "Hecht",
+  "Regenbogenforelle",
+  "Wels"
+]
+
 export let isLoadingPosts: boolean = false
 
 export let posts: Post[] = []
 
-export const foo: string = "bar"
+export let foo: string = "bar"
+
+export let inputValueTest = { value: "" }
 
 let myState = { myTable: TableTest }
 export { myState }

@@ -14,6 +14,7 @@ export class OvlBaseElement extends HTMLElement {
   componentName: string
   id: string
   _id: number
+  trackId: number
   static _counter: number = 0
 
   // child comps should implement getUI to render a htm template
@@ -38,7 +39,7 @@ export class OvlBaseElement extends HTMLElement {
   removeTracking(): Set<string> {
     return undefined
   }
-
+  afterRender() {}
   prepareUI() {}
   trackState(): number {
     let trackId = app.trackState()
@@ -51,24 +52,26 @@ export class OvlBaseElement extends HTMLElement {
     if (paths.size > 0) {
       this.addTracking(paths)
       let pathsToRemove: Set<string> = this.removeTracking()
-      pathsToRemove.forEach(v => {
-        let searchVal = v
-        let pathsToDelete: string[] = []
-        if (searchVal.endsWith("*")) {
-          //debugger
-          searchVal = searchVal.substring(0, searchVal.length - 1)
-          paths.forEach(pv => {
-            if (pv.startsWith(searchVal)) {
-              pathsToDelete.push(pv)
-            }
+      if (pathsToRemove) {
+        pathsToRemove.forEach(v => {
+          let searchVal = v
+          let pathsToDelete: string[] = []
+          if (searchVal.endsWith("*")) {
+            //debugger
+            searchVal = searchVal.substring(0, searchVal.length - 1)
+            paths.forEach(pv => {
+              if (pv.startsWith(searchVal)) {
+                pathsToDelete.push(pv)
+              }
+            })
+          } else {
+            pathsToDelete.push(v)
+          }
+          pathsToDelete.forEach(p => {
+            paths.delete(p)
           })
-        } else {
-          pathsToDelete.push(v)
-        }
-        pathsToDelete.forEach(p => {
-          paths.delete(p)
         })
-      })
+      }
       if (!this.mutationListener) {
         if (app.devtools) {
           app.eventHub.emitAsync(EventType.COMPONENT_ADD, {
@@ -102,14 +105,19 @@ export class OvlBaseElement extends HTMLElement {
 
   doRender() {
     console.log("render: " + this.componentName)
-    let trackId = this.trackState()
+    if (this.trackId === undefined) {
+      this.trackId = this.trackState()
+    }
     this.prepareUI()
     let res = this.getUI()
     render(res, this)
-    this.clearTrackState(trackId)
+    this.afterRender()
+    this.clearTrackState(this.trackId)
+    this.trackId = undefined
   }
 
   connectedCallback() {
+    this.trackId = this.trackState()
     this.initProps()
     this.doRender()
   }
@@ -183,7 +191,6 @@ export type BaseData = { [key: string]: any }
 export type TableData = {
   table: BaseTable
   data: BaseData
-  untrackedData: BaseData
 }
 
 export type BaseTable = {
