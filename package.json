@@ -13,7 +13,7 @@
     "startNotUsed": "npm run start1 && npm run start2",
     "buildNotUsed": "npm run tsc && npm run parcelbuild",
     "dev": "overmind-devtools",
-    "start": "parcel index.html --open",
+    "start": "parcel index.html",
     "devstart": "run-p dev start",
     "build": "parcel build index.html"
   },

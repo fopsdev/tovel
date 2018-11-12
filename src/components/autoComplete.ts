@@ -1,7 +1,7 @@
 import { OvlBaseElement } from "../library/index"
 import { html } from "lit-html"
 import autocomplete from "javascript-autocomplete"
-import { Action } from "overmind"
+import { Action, log } from "overmind"
 import { app } from ".."
 export type AutoCompleteProps = {
   suggestions: string[]
@@ -31,16 +31,16 @@ export class AutoComplete extends OvlBaseElement {
   handleBlur = e => {
     console.log(e)
     let inputVal: string = (<any>e.target).value
-    if (this.suggestions.value.value !== inputVal) {
-      if (this.suggestions.validFn(inputVal)) {
-        this.inp.classList.replace("c-field--error", "c-field")
+    if (this.suggestions.validFn(inputVal)) {
+      this.inp.classList.replace("c-field--error", "c-field")
+      if (this.suggestions.value.value !== inputVal) {
         app.actions.changeValue({
           stateRef: this.suggestions.value,
           value: inputVal
         })
-      } else {
-        this.inp.classList.replace("c-field", "c-field--error")
       }
+    } else {
+      this.inp.classList.replace("c-field", "c-field--error")
     }
   }
 
@@ -66,6 +66,8 @@ export class AutoComplete extends OvlBaseElement {
         let i = 0
         for (i = 0; i < choices.length; i++)
           if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i])
+
+        log(matches)
         suggest(matches)
       }
     })
