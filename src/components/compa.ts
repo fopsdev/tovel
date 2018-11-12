@@ -8,7 +8,6 @@ export class CompA extends OvlBaseElement {
   handleEvent(e) {
     app.actions.changeFirstName1()
   }
-
   constructor() {
     super()
   }
@@ -17,27 +16,24 @@ export class CompA extends OvlBaseElement {
     super.initProps()
   }
   getUI() {
-    let props: AutoCompleteProps = {
-      suggestions: this.state.suggestions,
-      suggestionsStatePath: "suggestions",
-      value: this.state.inputValueTest,
-      validFn: inp => {
-        return this.state.suggestions.includes(inp)
-      }
-    }
-    let tableProps: TableProps = {
-      table: this.state.myState.myTable,
-      data: this.state.tblTableTestData
-    }
     return html`
       <div class="o-container o-container--super">
       <div>${this.state.foo}</div>
-      <auto-complete id="myautocomplete" .getData="${() =>
-        props}""></auto-complete>
+      <auto-complete id="myautocomplete" .getData="${(): AutoCompleteProps => ({
+        suggestions: this.state.suggestions,
+        suggestionsStatePath: "suggestions",
+        value: this.state.inputValueTest,
+        validFn: inp => {
+          return this.state.suggestions.includes(inp)
+        }
+      })}""></auto-complete>
       <button @click="${this.handleEvent}">changeFirstName1</button>
       <ovl-table
         id="tabletest"
-        .getData="${() => tableProps}"
+        .getData="${(): TableProps => ({
+          table: this.state.myState.myTable,
+          data: this.state.tblTableTestData
+        })}"
       >
       </ovl-table>
       </div>

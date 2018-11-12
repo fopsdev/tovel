@@ -15,6 +15,7 @@ export const changeValue: Action<{
   value: string
 }> = ({ value: value, state }) => {
   console.log(value)
+
   value.stateRef.value = value.value
 }
 
@@ -22,8 +23,25 @@ export class AutoComplete extends OvlBaseElement {
   getData: () => AutoCompleteProps
   autocomplete
   suggestions: AutoCompleteProps
+  inp: HTMLElement
   constructor() {
     super()
+  }
+
+  handleBlur = e => {
+    console.log(e)
+    let inputVal: string = (<any>e.target).value
+    if (this.suggestions.value.value !== inputVal) {
+      if (this.suggestions.validFn(inputVal)) {
+        this.inp.classList.replace("c-field--error", "c-field")
+        app.actions.changeValue({
+          stateRef: this.suggestions.value,
+          value: inputVal
+        })
+      } else {
+        this.inp.classList.replace("c-field", "c-field--error")
+      }
+    }
   }
 
   removeTracking() {
@@ -32,23 +50,14 @@ export class AutoComplete extends OvlBaseElement {
     return paths
   }
   afterRender() {
-    let inp = document.getElementById(this.id + "inp")
-    inp.addEventListener("blur", e => {
-      console.log(e)
-      let inputVal: string = (<any>e.target).value
-      if (this.suggestions.validFn(inputVal)) {
-        inp.classList.replace("c-field--error", "c-field")
-        app.actions.changeValue({
-          stateRef: this.suggestions.value,
-          value: inputVal
-        })
-      } else {
-        inp.classList.replace("c-field", "c-field--error")
-      }
-    })
+    if (this.autocomplete) {
+      return
+    }
+    this.inp = document.getElementById(this.id + "inp")
+    this.inp.addEventListener("blur", this.handleBlur)
     let self = this
     this.autocomplete = new autocomplete({
-      selector: inp,
+      selector: self.inp,
       minChars: 1,
       source: function(term, suggest) {
         term = term.toLowerCase()
@@ -67,10 +76,12 @@ export class AutoComplete extends OvlBaseElement {
   }
   getUI() {
     return html`
-      <input id="${this.id + "inp"}" class="c-field" autocomplete ></input>
+      <input id="${this.id + "inp"}"  class="c-field" autocomplete ></input>
     `
   }
   disconnectedCallback() {
+    this.inp.removeEventListener("blur", this.handleBlur)
     this.autocomplete.destroy()
+    this.autocomplete = undefined
   }
 }
