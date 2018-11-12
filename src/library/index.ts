@@ -188,7 +188,7 @@ export type BaseFields = { [key: string]: TableField }
 
 export type BaseData = { [key: string]: any }
 
-export type TableData = {
+export type TableProps = {
   table: BaseTable
   data: BaseData
 }

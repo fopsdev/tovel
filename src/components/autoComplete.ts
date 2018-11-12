@@ -3,10 +3,11 @@ import { html } from "lit-html"
 import autocomplete from "javascript-autocomplete"
 import { Action } from "overmind"
 import { app } from ".."
-type props = {
+export type AutoCompleteProps = {
   suggestions: string[]
   suggestionsStatePath: string
   value: { value: string }
+  validFn: (inputValue: string) => boolean
 }
 
 export const changeValue: Action<{
@@ -18,9 +19,9 @@ export const changeValue: Action<{
 }
 
 export class AutoComplete extends OvlBaseElement {
-  getData: () => props
+  getData: () => AutoCompleteProps
   autocomplete
-  suggestions: props
+  suggestions: AutoCompleteProps
   constructor() {
     super()
   }
@@ -34,10 +35,16 @@ export class AutoComplete extends OvlBaseElement {
     let inp = document.getElementById(this.id + "inp")
     inp.addEventListener("blur", e => {
       console.log(e)
-      app.actions.changeValue({
-        stateRef: this.suggestions.value,
-        value: (<any>e.target).value
-      })
+      let inputVal: string = (<any>e.target).value
+      if (this.suggestions.validFn(inputVal)) {
+        inp.classList.replace("c-field--error", "c-field")
+        app.actions.changeValue({
+          stateRef: this.suggestions.value,
+          value: inputVal
+        })
+      } else {
+        inp.classList.replace("c-field", "c-field--error")
+      }
     })
     let self = this
     this.autocomplete = new autocomplete({
@@ -60,7 +67,7 @@ export class AutoComplete extends OvlBaseElement {
   }
   getUI() {
     return html`
-      <input id="${this.id + "inp"}" autocomplete ></input>
+      <input id="${this.id + "inp"}" class="c-field" autocomplete ></input>
     `
   }
   disconnectedCallback() {
