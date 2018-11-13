@@ -1,5 +1,6 @@
 import { TableTest } from "./components/tablea"
 import { Derive } from "overmind"
+import { state } from "."
 export type Post = {
   id: number
   title: string
@@ -57,10 +58,22 @@ Object.keys(tblTableTestData0).forEach(k => {
   }
 })
 
+export let suggestions = [
+  "Aal",
+  "Barbe",
+  "Forelle",
+  "Hecht",
+  "Regenbogenforelle",
+  "Wels"
+]
+
 export let isLoadingPosts: boolean = false
 
 export let posts: Post[] = []
 
-export const foo: string = "bar"
+export let foo: string = "bar"
 
-export { TableTest }
+export let inputValueTest = { value: "" }
+
+let myState = { myTable: TableTest }
+export { myState }

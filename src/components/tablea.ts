@@ -1,12 +1,5 @@
-import {
-  OvlTableElement,
-  OvlTableRow,
-  BaseTable,
-  TableField
-} from "../library/index"
+import { OvlTableElement, BaseTable, TableField } from "../library/index"
 import { Derive } from "overmind"
-import { html } from "lit-html"
-import { repeat } from "lit-html/directives/repeat"
 
 type TableTestColumns =
   | "IDTransaction"
@@ -35,7 +28,7 @@ const derivedTableFields: Derive<TableFields> = state => {
 
   let customerFirstNameField: TableField = {
     Pos: 1,
-    Name: state.foo,
+    Name: state.inputValueTest.value,
     Type: "string",
     Editable: true,
     Visible: true,
@@ -96,12 +89,15 @@ const derivedTableFields: Derive<TableFields> = state => {
   return tableFields
 }
 
+const SortingField: Derive<string> = state =>
+  OvlTableElement.table.Sort.field !== ""
+    ? OvlTableElement.table.Sort.field
+    : OvlTableElement.table.IDField
+
 export let TableTest: UserTable = {
-  TableStatePath: "TableTest",
   DataStatePath: "tblTableTestData",
-  Id: "TableTest",
   Filter: "",
-  Sort: { Ascending: true, Field: <TableTestColumns>"" },
+  Sort: { Ascending: true, field: "", Field: <string>(<any>SortingField) },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
@@ -109,100 +105,5 @@ export let TableTest: UserTable = {
   Fields: derivedTableFields
 }
 
-// export class CustomTableA extends OvlTableElement {
-//   getUI() {
-//     console.log("getUI Called")
-//     return html`<div class="c-table c-table--striped">
-//   <div class="c-table__caption">Custom UI Table</div>
-//   <div class="c-table__row c-table__row--heading">
-//     ${this.sortedFieldKeys.map(
-//       k => html`
-//     <span class="c-table__cell">${this.fields[k].Name}</span>`
-//     )}
-//   </div>
-
-//   ${this.getSortedDataKeys().map(i => {
-//     console.log("repeatRow called...")
-//     return html`
-//   <div class="c-table__row">
-//     <custom-row-a class="c-table__cell" .getData=${() => ({
-//       id: this.table.Id + i,
-//       dataStatePath: this.table.DataStatePath,
-//       rowKey: i,
-//       data: this.data,
-//       sortedFieldKeys: this.sortedFieldKeys
-//     })}> </custom-row-a>
-//   </div>`
-//   })}
-// </div>`
-//   }
-// }
-
-// export class CustomRowA extends OvlTableRow {
-//   getUI() {
-//     return html`
-//     ${this.rowData.sortedFieldKeys.map(f => {
-//       let c = ""
-//       if (f == "CustomerLastName") {
-//         c = "HeyHeyHey"
-//       }
-//       return html`<span class="c-table__cell">${c +
-//         this.rowData.data[this.rowData.rowKey][f]}</span>`
-//     })}
-//   `
-//   }
-// }
-// an implementation of the repeat directive... but it creates
-export class CustomTableA extends OvlTableElement {
-  getUI() {
-    return html`<div class="c-table c-table--striped">
-  <div class="c-table__caption">Custom UI Table</div>
-  <div class="c-table__row c-table__row--heading">
-    ${this.sortedFieldKeys.map(
-      k => html`
-    <span class="c-table__cell">${this.fields[k].Name}</span>`
-    )}
-  </div>
-
-  ${this.repeat(
-    this.getSortedDataKeys(),
-    i => i,
-    (i, index) => html`
-  <div class="c-table__row">
-    <custom-row-a class="c-table__cell" .getData=${() => ({
-      id: this.table.Id + i,
-      dataStatePath: this.table.DataStatePath,
-      rowKey: i,
-      data: this.data,
-      sortedFieldKeys: this.sortedFieldKeys
-    })}> </custom-row-a>
-  </div>`
-  )}
-</div>`
-  }
-}
-
-export class CustomRowA extends OvlTableRow {
-  getUI() {
-    return html`
-     ${this.repeat(
-       this.rowData.sortedFieldKeys,
-       f => f,
-       (f: TableTestColumns, findex) => {
-         let c = ""
-         if (f == "CustomerLastName") {
-           c = "HeyHeyHey"
-         }
-         return html`
-    <span class="c-table__cell">${c + this.rowData.data[this.rowData.rowKey][f]}
-    </span>`
-       }
-     )}
-  `
-  }
-}
-
-if (!customElements.get("custom-table-a")) {
-  customElements.define("custom-table-a", CustomTableA)
-  customElements.define("custom-row-a", CustomRowA)
-}
+// customElements.define("custom-table-a", CustomTableA)
+// customElements.define("custom-row-a", CustomRowA)
