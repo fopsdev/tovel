@@ -59,15 +59,11 @@ export class AutoComplete extends OvlBaseElement {
     this.autocomplete = new autocomplete({
       selector: self.inp,
       minChars: 1,
+      cache: false,
       source: function(term, suggest) {
         term = term.toLowerCase()
         var choices = self.suggestions.suggestions
-        var matches = []
-        let i = 0
-        for (i = 0; i < choices.length; i++)
-          if (~choices[i].toLowerCase().indexOf(term)) matches.push(choices[i])
-
-        log(matches)
+        var matches = choices.filter(c => c.toLowerCase().indexOf(term) > -1)
         suggest(matches)
       }
     })
