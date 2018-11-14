@@ -1,11 +1,10 @@
 import { html } from "lit-html"
-import autocomplete from "javascript-autocomplete"
+
 import { Action, log } from "overmind"
 import { app } from ".."
 import { OvlBaseElement } from "../library"
 
 export type AutoCompleteProps = {
-  suggestionsStatePath: string
   value: { value: string }
   matchesFn: (inputValue: string) => Array<IAutoCompleteItem>
   validFn: (inputValue: string) => boolean
@@ -26,68 +25,106 @@ interface IAutoCompleteItem {
 export class AutoComplete extends OvlBaseElement {
   getData: () => AutoCompleteProps
   suggestions: AutoCompleteProps
-
+  inputEl: any
   placeholder: string
   items: Array<IAutoCompleteItem>
   selectedItem: IAutoCompleteItem
   activeItem: IAutoCompleteItem
   _isOpen: boolean
+
   value: string
 
   initProps() {
     super.initProps()
     this.suggestions = this.getData()
-  }
-
-  removeTracking() {
-    let paths = new Set<string>()
-    paths.add(this.suggestions.suggestionsStatePath)
-    return paths
+    this.value = this.suggestions.value.value
   }
 
   constructor() {
     super()
     this.onkeydown = ev => this.handleKeyDown(ev)
     this.items = [] //this.suggestions.suggestions
+    this._isOpen = false
   }
 
-  // setItems(items: Array<IAutoCompleteItem>): void {
-  //   this.items = items
-  //   this.value ? this.open() : this.close()
-  // }
+  handleBlur = e => {
+    if (this._isOpen) {
+      this.close()
+    }
+    let inputVal: string = (<any>e.target).value
+    if (this.suggestions.validFn(inputVal)) {
+      this.inputEl.classList.replace("c-field--error", "c-field")
+      if (this.suggestions.value.value !== inputVal) {
+        app.actions.changeValue({
+          stateRef: this.suggestions.value,
+          value: inputVal
+        })
+      }
+    } else {
+      this.inputEl.classList.replace("c-field", "c-field--error")
+    }
+  }
+
   select(item: IAutoCompleteItem): void {
     this.activeItem = item
     this.selectedItem = item
+    this.inputEl.value = item.text
+    this.inputEl.defaultValue = item.text
     this.value = item.text
+
+    this.inputEl.focus()
     this.close()
   }
+
   search(e: any): void {
-    console.log("search")
     this.activeItem = null
-    //this.value = e.target.value
     this.items = this.suggestions.matchesFn(e.target.value)
     this._isOpen = this.items.length > 0
     this.doRender()
   }
+
   open(): void {
-    if (this.items.length) {
+    if (this.items.length === 0) {
+      this.items = this.suggestions.matchesFn("")
+    }
+    if (this.items.length > 0) {
       this._isOpen = true
       this.doRender()
     }
   }
+
   close(): void {
-    this._isOpen = false
-    this.doRender()
+    if (this._isOpen) {
+      this._isOpen = false
+      this.doRender()
+    }
   }
-  handleKeyDown(ev: KeyboardEvent): void {
+  handleKeyDown(ev: KeyboardEvent): boolean {
     let idx = this.items.indexOf(this.activeItem)
     switch (ev.key) {
+      case "Backspace": {
+        if (ev.target === this.inputEl && !(<any>ev.target).value) {
+          ev.preventDefault()
+          if (!this._isOpen) {
+            this.open()
+          } else {
+            this.close()
+          }
+        }
+        break
+      }
       case "ArrowDown": {
         ev.preventDefault()
-        this.open()
-        if (idx < this.items.length - 1) {
-          this.activeItem = this.items[idx + 1]
+
+        if (!this._isOpen) {
+          this.open()
+        } else {
+          if (idx < this.items.length - 1) {
+            this.activeItem = this.items[idx + 1]
+          }
+          this.doRender()
         }
+
         break
       }
       case "ArrowUp": {
@@ -95,23 +132,37 @@ export class AutoComplete extends OvlBaseElement {
         if (idx > 0) {
           this.activeItem = this.items[idx - 1]
         }
+        this.doRender()
         break
       }
       case "Enter": {
-        if (this.activeItem) {
+        if (this._isOpen && this.activeItem) {
           ev.preventDefault()
           this.select(this.activeItem)
+        } else {
+          if (!this._isOpen) {
+            this.open()
+          } else {
+            this.close()
+          }
+          return false
         }
       }
       case "Escape": {
+        if (this._isOpen) {
+          ev.preventDefault()
+        }
         this.close()
       }
     }
-    this.doRender()
+    return true
+  }
+  afterRender() {
+    this.inputEl = document.getElementById(this.id + "inp")
   }
   getUI() {
     console.log("value " + this.value)
-    let list = ""
+    let list = undefined
     if (this._isOpen) {
       list = html`
         <div role="menu" class="c-card c-card--menu">
@@ -124,6 +175,7 @@ export class AutoComplete extends OvlBaseElement {
                   role="menuitem"
                   class="c-card__control ${isActiveClass}"
                   @click="${() => this.select(item)}"
+                  @touchstart="${() => this.select(item)}"
                 >
                   ${item.text}
                 </button>
@@ -136,13 +188,15 @@ export class AutoComplete extends OvlBaseElement {
     return html`
       <div class="o-field o-field--autocomplete">
         <input
+          id="${this.id + "inp"}"
           type="search"
           class="c-field"
+          value="${this.value}"
+          defaultValue="${this.value}"
           placeholder="${this.placeholder}"
           autocomplete="off"
-          .value="${this.value}"
           @input="${e => this.search(e)}"
-          @click="${() => this.open()}"
+          @blur="${e => this.handleBlur(e)}"
         />
         ${list}
       </div>

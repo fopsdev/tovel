@@ -73,7 +73,7 @@ export let posts: Post[] = []
 
 export let foo: string = "bar"
 
-export let inputValueTest = { value: "" }
+export let inputValueTest = { value: "initial" }
 
 let myState = { myTable: TableTest }
 export { myState }

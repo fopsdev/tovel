@@ -18,7 +18,6 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "javascript-autocomplete": "^1.0.3",
     "lit-html": "^0.13.0",
     "overmind": "^5.0.0-1541965694834"
   },

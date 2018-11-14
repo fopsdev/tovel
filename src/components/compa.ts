@@ -24,9 +24,6 @@ export class CompA extends OvlBaseElement {
           let inp2 = inp.toLowerCase()
           let res = Object.values(this.state.tblTableTestData).reduce(
             (a, v) => {
-              console.log(a)
-              console.log(inp2)
-              console.log(v.CustomerFirstName.toLowerCase())
               if (v.CustomerFirstName.toLowerCase().indexOf(inp2) > -1) {
                 a.push({ text: v.CustomerFirstName })
               }
@@ -37,10 +34,11 @@ export class CompA extends OvlBaseElement {
           console.log(res)
           return res
         },
-        suggestionsStatePath: "suggestions",
         value: this.state.inputValueTest,
         validFn: inp => {
-          return this.state.suggestions.includes(inp)
+          return Object.values(this.state.tblTableTestData).some(
+            v => inp === v.CustomerFirstName
+          )
         }
       })}""></auto-complete>
       <button @click="${this.handleEvent}">changeFirstName1</button>
