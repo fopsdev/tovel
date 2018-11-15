@@ -53,8 +53,6 @@ export class AutoComplete extends OvlBaseElement {
   }
 
   handleBlur = e => {
-    console.log("blur")
-    console.log(e.target)
     this.hasFocus = false
     if (this._isOpen) {
       this.close()
@@ -76,7 +74,6 @@ export class AutoComplete extends OvlBaseElement {
   }
 
   select(item: IAutoCompleteItem): void {
-    console.log("select " + item.text)
     this.activeItem = item
     this.selectedItem = item
     this.inputEl.value = item.text
@@ -155,14 +152,7 @@ export class AutoComplete extends OvlBaseElement {
         if (this._isOpen && this.activeItem) {
           ev.preventDefault()
           this.select(this.activeItem)
-        } // else {
-        //   if (!this._isOpen) {
-        //     this.open()
-        //   } else {
-        //     this.close()
-        //   }
-        //   return false
-        // }
+        }
       }
       case "Escape": {
         if (this._isOpen) {
@@ -177,6 +167,7 @@ export class AutoComplete extends OvlBaseElement {
     this.inputEl = document.getElementById(this.id + "inp")
   }
   getUI() {
+    console.log("render:" + this.componentName)
     this.value = this.suggestions.value.value
 
     let selectButton = undefined
@@ -184,6 +175,7 @@ export class AutoComplete extends OvlBaseElement {
       console.log("button")
       selectButton = html`
         <button
+          tabindex="-1"
           style="height:80%"
           class="c-button c-button--rounded c-button--ghost"
           @mousedown="${
@@ -269,8 +261,8 @@ export class AutoComplete extends OvlBaseElement {
             type="text"
             autocomplete="off"
             id="${this.id + "inp"}"
-            value="${this.suggestions.value.value}"
-            defaultValue="${this.suggestions.value.value}"
+            .value="${this.suggestions.value.value}"
+            .defaultValue="${this.suggestions.value.value}"
             placeholder="${this.placeholder}"
             @blur="${e => this.handleBlur(e)}"
             @input="${e => this.search(e)}"
