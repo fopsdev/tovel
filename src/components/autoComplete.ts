@@ -86,7 +86,11 @@ export class AutoComplete extends OvlBaseElement {
     let query = e.target.value
     this.fullList = query === ""
     this.items = this.suggestions.matchesFn(query)
+
     this._isOpen = this.items.length > 0
+    if (this.items.length === 1) {
+      this.activeItem = this.items[0]
+    }
     this.doRender()
   }
 
@@ -228,11 +232,9 @@ export class AutoComplete extends OvlBaseElement {
                   class="c-card__control ${isActiveClass}"
                   @mousedown="${
                     e => {
-                      //e.stopImmediatePropagation()
                       e.preventDefault()
                       console.log(item.text)
                       this.select(item)
-                      //this.inputEl.focus()
                       return false
                     }
                   }"
