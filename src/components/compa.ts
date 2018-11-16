@@ -1,6 +1,8 @@
 import { OvlBaseElement, TableProps } from "../library/index"
 import { AutoComplete, AutoCompleteProps } from "./autoComplete"
+import { NativeDateInput, NativeDateInputProps } from "./nativeDateInput"
 customElements.define("auto-complete", AutoComplete)
+customElements.define("date-input", NativeDateInput)
 import { app, state as untracked } from "../index"
 import { html } from "lit-html"
 
@@ -98,7 +100,7 @@ export class CompA extends OvlBaseElement {
                     )
                   }
                 })}" "></auto-complete>
-
+<date-input id="mydateinput"/>
       </div>
     `
   }

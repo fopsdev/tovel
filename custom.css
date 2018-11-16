@@ -1,7 +1,4 @@
-.fake-input {
-  position: relative;
-  width: 100%;
-}
+
 .list-input input {
   display: block;
   width: 100%;
@@ -12,6 +9,25 @@
   top: 10%;
   right: 5px;
 }
+.date-input input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+.date-input .native {
+  position: absolute;
+  top: 10%;
+  right: 5px;
+}
+
+::-webkit-datetime-edit { display: none; }
+::-webkit-datetime-edit-fields-wrapper { width:100%;  }
+::-webkit-datetime-edit-text { display: none;  }
+::-webkit-datetime-edit-month-field {display: none;  }
+::-webkit-datetime-edit-day-field { display: none;  }
+::-webkit-datetime-edit-year-field { display: none; }
+::-webkit-inner-spin-button { display: none; }
+::-webkit-calendar-picker-indicator { width:100%;height: 100%; background: orange; }
 
 @charset "UTF-8";
 
