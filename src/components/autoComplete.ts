@@ -215,9 +215,16 @@ export class AutoComplete extends OvlBaseElement {
     if (this._isOpen) {
       list = html`
         <div
+          tabindex="-1"
           style="margin-top:0;border-top:0; "
           role="menu"
           class="c-card c-card--menu animated fadeInDown faster"
+          @mousedown="${
+            e => {
+              e.preventDefault()
+              return false
+            }
+          }"
         >
           ${
             this.items.map(item => {
