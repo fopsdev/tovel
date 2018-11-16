@@ -181,7 +181,7 @@ export class AutoComplete extends OvlBaseElement {
         <button
           tabindex="-1"
           style="height:80%"
-          class="c-button c-button--rounded c-button--ghost"
+          class="c-button c-button--rounded c-button--ghost-info animated fadeIn faster"
           @mousedown="${
             e => {
               e.preventDefault()
@@ -215,7 +215,7 @@ export class AutoComplete extends OvlBaseElement {
     if (this._isOpen) {
       list = html`
         <div
-          style="margin-top:0;border-top:0"
+          style="margin-top:0;border-top:0; "
           role="menu"
           class="c-card c-card--menu animated fadeInDown faster"
         >
@@ -238,7 +238,7 @@ export class AutoComplete extends OvlBaseElement {
                       return false
                     }
                   }"
-                  @touchstart="${
+                  @touch="${
                     e => {
                       e.preventDefault()
                       this.select(item)

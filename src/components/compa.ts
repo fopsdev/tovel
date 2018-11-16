@@ -41,7 +41,7 @@ export class CompA extends OvlBaseElement {
           )
         }
       })}""></auto-complete>
-          <auto-complete id="myautocomplete2" .getData="${(): AutoCompleteProps => ({
+          <div style="width:30%;"><auto-complete id="myautocomplete2" .getData="${(): AutoCompleteProps => ({
             matchesFn: inp => {
               let inp2 = inp.toLowerCase()
               let res = Object.values(this.state.tblTableTestData).reduce(
@@ -61,7 +61,7 @@ export class CompA extends OvlBaseElement {
                 v => inp === v.CustomerFirstName
               )
             }
-          })}" "></auto-complete>
+          })}" "></auto-complete></div>
  
       <button @click="${this.handleEvent}">changeFirstName1</button>
       <ovl-table
@@ -72,6 +72,33 @@ export class CompA extends OvlBaseElement {
         })}"
       >
       </ovl-table>
+                <auto-complete id="myautocomplete3" .getData="${(): AutoCompleteProps => ({
+                  matchesFn: inp => {
+                    let inp2 = inp.toLowerCase()
+                    let res = Object.values(this.state.tblTableTestData).reduce(
+                      (a, v) => {
+                        if (
+                          v.CustomerFirstName.toLowerCase().indexOf(inp2) > -1
+                        ) {
+                          a.push({ text: v.CustomerFirstName })
+                        }
+                        return a
+                      },
+                      []
+                    )
+                    for (let z = 0; z < 200; z++) {
+                      res.push({ text: z.toString() })
+                    }
+                    return res
+                  },
+                  value: this.state.inputValueTest,
+                  validFn: inp => {
+                    return Object.values(this.state.tblTableTestData).some(
+                      v => inp === v.CustomerFirstName
+                    )
+                  }
+                })}" "></auto-complete>
+
       </div>
     `
   }
