@@ -21,7 +21,7 @@
 }
 
 ::-webkit-datetime-edit { display: none; }
-::-webkit-datetime-edit-fields-wrapper { width:100%;  }
+::-webkit-datetime-edit-fields-wrapper { display: none;  }
 ::-webkit-datetime-edit-text { display: none;  }
 ::-webkit-datetime-edit-month-field {display: none;  }
 ::-webkit-datetime-edit-day-field { display: none;  }

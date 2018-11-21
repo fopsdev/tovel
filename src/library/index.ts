@@ -4,6 +4,7 @@ import { IApp, EventType, Action, Derive, forEach } from "overmind"
 import { repeat } from "lit-html/directives/repeat"
 import { TableTest } from "../components/tablea"
 import { isFunction } from "util"
+import { timingSafeEqual } from "crypto"
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
@@ -182,7 +183,19 @@ export type TableField = {
   Editable: boolean
   Visible: boolean
   Width: number
+  // if no format provided, default will be used
+  Format?: Intl.NumberFormat | Intl.DateTimeFormat
 }
+
+let defaultNumberFormat = new Intl.NumberFormat("de-ch", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+})
+let defaultDateFormat = new Intl.DateTimeFormat("de-ch", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "2-digit"
+})
 
 export type BaseFields = { [key: string]: TableField }
 
@@ -271,6 +284,29 @@ export class OvlTableElement extends OvlBaseElement {
   handleEventBefore(e, position: TableEventPosition, cancel: boolean) {}
   handleEventAfter(e, position: TableEventPosition) {}
 
+  static getDisplayValue(fieldInfo: TableField, value: any): string {
+    switch (fieldInfo.Type) {
+      case "date":
+        let format: Intl.DateTimeFormat = <Intl.DateTimeFormat>fieldInfo.Format
+        if (!format) {
+          format = defaultDateFormat
+        }
+        return value ? format.format(new Date(value)) : ""
+
+      case "decimal":
+        let format2: Intl.NumberFormat = <Intl.NumberFormat>fieldInfo.Format
+        if (!format2) {
+          format2 = defaultNumberFormat
+        }
+        return value != undefined && value != null ? format2.format(value) : ""
+
+      default:
+        if (!value) {
+          value = ""
+        }
+        return value.toString()
+    }
+  }
   addTracking(paths: Set<string>) {
     paths.add(OvlTableElement.table.DataStatePath)
   }
@@ -291,7 +327,7 @@ export class OvlTableElement extends OvlBaseElement {
 
   prepareUI() {
     this.fields = <BaseFields>(<any>OvlTableElement.table).Fields
-    this.sortedFieldKeys = this.getSortedFieldKeys()
+    this.sortedFieldKeys = this.getSortedAndFilteredFieldKeys()
     this.sortedDataKeys = this.getSortedDataKeys()
   }
 
@@ -337,7 +373,8 @@ export class OvlTableElement extends OvlBaseElement {
                       rowKey: i,
                       rowIndex: rowIndex,
                       data: this.data,
-                      sortedFieldKeys: this.sortedFieldKeys
+                      sortedFieldKeys: this.sortedFieldKeys,
+                      fields: this.fields
                     })
                   }"
                 >
@@ -363,7 +400,7 @@ export class OvlTableElement extends OvlBaseElement {
     )
   }
 
-  getSortedFieldKeys(): string[] {
+  getSortedAndFilteredFieldKeys(): string[] {
     return Object.keys(this.fields).sort(
       (a, b) => this.fields[a].Pos - this.fields[b].Pos
     )
@@ -372,50 +409,65 @@ export class OvlTableElement extends OvlBaseElement {
     let sortfield = OvlTableElement.table.Sort.Field
     let ascending = OvlTableElement.table.Sort.Ascending ? 1 : -1
     let res: number = 0
-    return Object.keys(this.data).sort((a, b) => {
-      let valB = this.data[b][sortfield]
-      let valA = this.data[a][sortfield]
-      // // need to check for function because its untracked state and therefore a derived (=function) won't be executed
-      // if (typeof valB == "function") {
-      //   valB = valB(this.untrackedState)
-      // }
-      // if (typeof valA == "function") {
-      //   valA = valA(this.untrackedState)
-      // }
-      //if (sortfield === "CustomerFullName") debugger
-      switch (this.fields[sortfield].Type) {
-        case "date":
-          // if (valA === undefined || valA === null) {
-          //   valA = new Date(-8640000000000000)
-          // }
-          // if (valB === undefined || valB === null) {
-          //   valB = new Date(-8640000000000000)
-          // }
-          const aDate = new Date(valA).getTime()
-          const bDate = new Date(valB).getTime()
-          res = aDate - bDate
-          break
-        case "string":
-          if (valA < valB) {
-            res = -1
-          } else if (valA > valB) {
-            res = 1
-          }
-          break
-        case "decimal":
-        case "int":
-          // if (valA === undefined || valA === null) {
-          //   valA = Number.MIN_SAFE_INTEGER
-          // }
-          // if (valB === undefined || valB === null) {
-          //   valB = Number.MIN_SAFE_INTEGER
-          // }
+    return Object.keys(this.data)
+      .filter(v => {
+        return Object.keys(this.data[v]).some(s => {
+          console.log(s)
+          const dispValue = OvlTableElement.getDisplayValue(
+            this.fields[s],
+            this.data[v][s]
+          )
+          return (
+            dispValue
+              .toLowerCase()
+              .indexOf(OvlTableElement.table.Filter.toLowerCase()) > -1
+          )
+        })
+      })
+      .sort((a, b) => {
+        let valB = this.data[b][sortfield]
+        let valA = this.data[a][sortfield]
+        // // need to check for function because its untracked state and therefore a derived (=function) won't be executed
+        // if (typeof valB == "function") {
+        //   valB = valB(this.untrackedState)
+        // }
+        // if (typeof valA == "function") {
+        //   valA = valA(this.untrackedState)
+        // }
+        //if (sortfield === "CustomerFullName") debugger
+        switch (this.fields[sortfield].Type) {
+          case "date":
+            // if (valA === undefined || valA === null) {
+            //   valA = new Date(-8640000000000000)
+            // }
+            // if (valB === undefined || valB === null) {
+            //   valB = new Date(-8640000000000000)
+            // }
+            const aDate = new Date(valA).getTime()
+            const bDate = new Date(valB).getTime()
+            res = aDate - bDate
+            break
+          case "string":
+            if (valA < valB) {
+              res = -1
+            } else if (valA > valB) {
+              res = 1
+            }
+            break
+          case "decimal":
+          case "int":
+            // if (valA === undefined || valA === null) {
+            //   valA = Number.MIN_SAFE_INTEGER
+            // }
+            // if (valB === undefined || valB === null) {
+            //   valB = Number.MIN_SAFE_INTEGER
+            // }
 
-          res = valA - valB
-          break
-      }
-      return res * ascending
-    })
+            res = valA - valB
+            break
+        }
+        return res * ascending
+      })
   }
 }
 
@@ -427,6 +479,7 @@ export class OvlTableRow extends OvlBaseElement {
     rowIndex: number
     sortedFieldKeys: string[]
     data: BaseData
+    fields: BaseFields
   }
 
   removeTracking() {
@@ -460,7 +513,12 @@ export class OvlTableRow extends OvlBaseElement {
                   columnIndex
                 )
               }"
-              >${this.rowData.data[this.rowData.rowKey][f]}
+              >${
+                OvlTableElement.getDisplayValue(
+                  this.rowData.fields[f],
+                  this.rowData.data[this.rowData.rowKey][f]
+                )
+              }
             </span>
           `
         )
