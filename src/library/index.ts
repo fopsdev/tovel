@@ -1,17 +1,13 @@
-import { app, state } from "../index"
+import { app } from "../index"
 import { render, TemplateResult, html } from "lit-html"
-import { IApp, EventType, Action, Derive, forEach } from "overmind"
+import { IConfig, TApp, EventType, Action } from "overmind"
 import { repeat } from "lit-html/directives/repeat"
-import { TableTest } from "../components/tablea"
-import { isFunction } from "util"
-import { timingSafeEqual } from "crypto"
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
   mutationListener: any
   paths: Set<string>
-  state: IApp["state"]
-  untrackedState: IApp["state"]
+  state: TApp<IConfig>["state"]
   componentName: string
   id: string
   _id: number

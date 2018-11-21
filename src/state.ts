@@ -1,6 +1,6 @@
 import { TableTest } from "./components/tablea"
 import { Derive } from "overmind"
-import { state } from "."
+
 export type Post = {
   id: number
   title: string
@@ -15,7 +15,7 @@ export type TableTestData = {
     DeliveryDate: string
     A_ProvisionTotal: number
     A_ProvisionFactor: number
-    CustomerFullName: Derive<string>
+    CustomerFullName: Derive<TableTestData, string>
   }
 }
 
@@ -49,12 +49,8 @@ export let tblTableTestData: TableTestData = {}
 
 Object.keys(tblTableTestData0).forEach(k => {
   tblTableTestData[k] = tblTableTestData0[k]
-  tblTableTestData[k].CustomerFullName = state => {
-    return (
-      state.tblTableTestData[k].CustomerFirstName +
-      " " +
-      state.tblTableTestData[k].CustomerLastName
-    )
+  tblTableTestData[k].CustomerFullName = (self, state) => {
+    return self.CustomerFirstName + " " + self.CustomerLastName
   }
 })
 

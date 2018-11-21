@@ -4,7 +4,7 @@ console.log("start")
 import { CompA } from "./components/compa"
 customElements.define("comp-a", CompA)
 
-import { Overmind, TApp } from "overmind"
+import { Overmind, TConfig } from "overmind"
 import * as state from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
@@ -15,7 +15,7 @@ const config = {
 }
 
 declare module "overmind" {
-  interface IApp extends TApp<typeof config> {}
+  interface IConfig extends TConfig<typeof config> {}
 }
 
 export const app = new Overmind(config, {
