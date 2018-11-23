@@ -307,11 +307,11 @@ export class OvlTableElement extends OvlBaseElement {
     paths.add(OvlTableElement.table.DataStatePath)
   }
 
-  removeTracking() {
-    let paths: Set<string> = new Set()
-    paths.add(OvlTableElement.table.DataStatePath + ".*")
-    return paths
-  }
+  // removeTracking() {
+  //   let paths: Set<string> = new Set()
+  //   paths.add(OvlTableElement.table.DataStatePath + ".*")
+  //   return paths
+  // }
 
   initProps() {
     super.initProps()
@@ -444,6 +444,12 @@ export class OvlTableElement extends OvlBaseElement {
             res = aDate - bDate
             break
           case "string":
+            if (valA === null) {
+              valA = ""
+            }
+            if (valB === null) {
+              valB = ""
+            }
             if (valA < valB) {
               res = -1
             } else if (valA > valB) {

@@ -43,6 +43,14 @@ let tblTableTestData0 = {
     CustomerFirstName: "Piotr",
     CustomerLastName: "Saslic",
     DeliveryDate: "2017-03-03T00:00:00+00:00"
+  },
+  4: {
+    IDTransaction: 4,
+    A_ProvisionFactor: null,
+    A_ProvisionTotal: 300,
+    CustomerFirstName: null,
+    CustomerLastName: "Miller",
+    DeliveryDate: null
   }
 }
 export let tblTableTestData: TableTestData = {}
@@ -50,7 +58,11 @@ export let tblTableTestData: TableTestData = {}
 Object.keys(tblTableTestData0).forEach(k => {
   tblTableTestData[k] = tblTableTestData0[k]
   tblTableTestData[k].CustomerFullName = (self, state) => {
-    return self.CustomerFirstName + " " + self.CustomerLastName
+    return self.CustomerFirstName
+      ? self.CustomerFirstName
+      : "" + " " + self.CustomerLastName
+      ? self.CustomerLastName
+      : ""
   }
 })
 

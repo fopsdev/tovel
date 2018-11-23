@@ -27,7 +27,11 @@ export class CompA extends OvlBaseElement {
           let inp2 = inp.toLowerCase()
           let res = Object.values(this.state.tblTableTestData).reduce(
             (a, v) => {
-              if (v.CustomerFirstName.toLowerCase().indexOf(inp2) > -1) {
+              if (
+                v.CustomerFirstName
+                  ? v.CustomerFirstName
+                  : "".toLowerCase().indexOf(inp2) > -1
+              ) {
                 a.push({ text: v.CustomerFirstName })
               }
               return a
@@ -48,7 +52,11 @@ export class CompA extends OvlBaseElement {
               let inp2 = inp.toLowerCase()
               let res = Object.values(this.state.tblTableTestData).reduce(
                 (a, v) => {
-                  if (v.CustomerFirstName.toLowerCase().indexOf(inp2) > -1) {
+                  if (
+                    v.CustomerFirstName
+                      ? v.CustomerFirstName
+                      : "".toLowerCase().indexOf(inp2) > -1
+                  ) {
                     a.push({ text: v.CustomerFirstName })
                   }
                   return a
@@ -80,7 +88,9 @@ export class CompA extends OvlBaseElement {
                     let res = Object.values(this.state.tblTableTestData).reduce(
                       (a, v) => {
                         if (
-                          v.CustomerFirstName.toLowerCase().indexOf(inp2) > -1
+                          v.CustomerFirstName
+                            ? v.CustomerFirstName
+                            : "".toLowerCase().indexOf(inp2) > -1
                         ) {
                           a.push({ text: v.CustomerFirstName })
                         }
