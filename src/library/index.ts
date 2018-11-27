@@ -280,7 +280,19 @@ export class OvlTableElement extends OvlBaseElement {
   handleEventBefore(e, position: TableEventPosition, cancel: boolean) {}
   handleEventAfter(e, position: TableEventPosition) {}
 
-  static getDisplayValue(fieldInfo: TableField, value: any): string {
+  static getValue(attachedObj: {}, value: any) {
+    if (typeof value == "function") {
+      value = value(attachedObj, state)
+    }
+    return value
+  }
+
+  static getDisplayValue(
+    fieldInfo: TableField,
+    attachedObj: {},
+    value: any
+  ): string {
+    value = OvlTableElement.getValue(attachedObj, value)
     switch (fieldInfo.Type) {
       case "date":
         if (!value) {
@@ -292,7 +304,7 @@ export class OvlTableElement extends OvlBaseElement {
         }
         return format.format(new Date(value))
       case "decimal":
-        if (value == undefined || value == null) {
+        if (value === undefined || value === null) {
           return ""
         }
         let format2: Intl.NumberFormat = <Intl.NumberFormat>fieldInfo.Format
@@ -406,14 +418,18 @@ export class OvlTableElement extends OvlBaseElement {
   getSortedDataKeys(): string[] {
     let sortfield = OvlTableElement.table.Sort.Field
     let ascending = OvlTableElement.table.Sort.Ascending ? 1 : -1
+    const data = state.tblTableTestData
     let res: number = 0
-    return Object.keys(this.data)
+    return Object.keys(data)
       .filter(v => {
-        return Object.keys(this.data[v]).some(s => {
+        return Object.keys(data[v]).some(s => {
           //console.log(s)
+
           const dispValue = OvlTableElement.getDisplayValue(
             this.fields[s],
-            this.data[v][s]
+
+            data[v],
+            data[v][s]
           )
           return (
             dispValue
@@ -423,8 +439,8 @@ export class OvlTableElement extends OvlBaseElement {
         })
       })
       .sort((a, b) => {
-        let valB = this.data[b][sortfield]
-        let valA = this.data[a][sortfield]
+        let valB = data[b][sortfield]
+        let valA = data[a][sortfield]
         // // need to check for function because its untracked state and therefore a derived (=function) won't be executed
         // if (typeof valB == "function") {
         //   valB = valB(this.untrackedState)
@@ -508,6 +524,7 @@ export class OvlTableRow extends OvlBaseElement {
               >${
                 OvlTableElement.getDisplayValue(
                   this.rowData.fields[f],
+                  this.rowData.data[this.rowData.rowKey],
                   this.rowData.data[this.rowData.rowKey][f]
                 )
               }

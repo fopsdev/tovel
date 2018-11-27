@@ -99,7 +99,7 @@ const SortingField: Derive<TableSort, string> = (self, state) =>
 
 export let TableTest: UserTable = {
   DataStatePath: "tblTableTestData",
-  Filter: "er",
+  Filter: "",
   Sort: { Ascending: true, field: "", Field: <string>(<any>SortingField) },
   Entity: "tblTransactions",
   IDField: "IDTransaction",

@@ -1,5 +1,6 @@
 import { TableTest } from "./components/tablea"
 import { Derive } from "overmind"
+import { TableField } from "./library"
 
 export type Post = {
   id: number
@@ -7,16 +8,18 @@ export type Post = {
   body: string
 }
 
+export type TableTestDataEntry = {
+  IDTransaction: number
+  CustomerFirstName: string
+  CustomerLastName: string
+  DeliveryDate: string
+  A_ProvisionTotal: number
+  A_ProvisionFactor: number
+  CustomerFullName: Derive<TableTestDataEntry, string>
+}
+
 export type TableTestData = {
-  [key: string]: {
-    IDTransaction: number
-    CustomerFirstName: string
-    CustomerLastName: string
-    DeliveryDate: string
-    A_ProvisionTotal: number
-    A_ProvisionFactor: number
-    CustomerFullName: Derive<TableTestData, string>
-  }
+  [key: string]: TableTestDataEntry
 }
 
 let tblTableTestData0 = {
@@ -58,11 +61,13 @@ export let tblTableTestData: TableTestData = {}
 Object.keys(tblTableTestData0).forEach(k => {
   tblTableTestData[k] = tblTableTestData0[k]
   tblTableTestData[k].CustomerFullName = (self, state) => {
-    return self.CustomerFirstName
-      ? self.CustomerFirstName
-      : "" + " " + self.CustomerLastName
-      ? self.CustomerLastName
-      : ""
+    console.log(self)
+
+    const res =
+      (self.CustomerFirstName ? self.CustomerFirstName : "") +
+      " " +
+      (self.CustomerLastName ? self.CustomerLastName : "")
+    return res
   }
 })
 
