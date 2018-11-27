@@ -86,7 +86,7 @@ export class AutoComplete extends OvlBaseElement {
     let query = e.target.value
     this.fullList = query === ""
     this.items = this.suggestions.matchesFn(query)
-
+    console.log(this.items)
     this._isOpen = this.items.length > 0
     if (this.items.length === 1) {
       this.activeItem = this.items[0]

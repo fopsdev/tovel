@@ -1,4 +1,4 @@
-import { app } from "../index"
+import { app, state } from "../index"
 import { render, TemplateResult, html } from "lit-html"
 import { IConfig, TApp, EventType, Action } from "overmind"
 import { repeat } from "lit-html/directives/repeat"
@@ -222,7 +222,7 @@ export class OvlTableElement extends OvlBaseElement {
   static table: BaseTable
   fields: BaseFields
   data: BaseData
-  untrackedData: BaseData
+
   sortedFieldKeys: string[]
   sortedDataKeys: string[]
   constructor() {
@@ -283,19 +283,23 @@ export class OvlTableElement extends OvlBaseElement {
   static getDisplayValue(fieldInfo: TableField, value: any): string {
     switch (fieldInfo.Type) {
       case "date":
+        if (!value) {
+          return ""
+        }
         let format: Intl.DateTimeFormat = <Intl.DateTimeFormat>fieldInfo.Format
         if (!format) {
           format = defaultDateFormat
         }
-        return value ? format.format(new Date(value)) : ""
-
+        return format.format(new Date(value))
       case "decimal":
+        if (value == undefined || value == null) {
+          return ""
+        }
         let format2: Intl.NumberFormat = <Intl.NumberFormat>fieldInfo.Format
         if (!format2) {
           format2 = defaultNumberFormat
         }
-        return value != undefined && value != null ? format2.format(value) : ""
-
+        return format2.format(value)
       default:
         if (!value) {
           value = ""
@@ -318,7 +322,6 @@ export class OvlTableElement extends OvlBaseElement {
     console.log("init props header")
     OvlTableElement.table = this.getData().table
     this.data = this.getData().data
-    this.untrackedData = this.getData().untrackedData
   }
 
   prepareUI() {
@@ -365,7 +368,6 @@ export class OvlTableElement extends OvlBaseElement {
                   class="c-table__row"
                   .getData="${
                     () => ({
-                      dataStatePath: OvlTableElement.table.DataStatePath,
                       rowKey: i,
                       rowIndex: rowIndex,
                       data: this.data,
@@ -408,7 +410,7 @@ export class OvlTableElement extends OvlBaseElement {
     return Object.keys(this.data)
       .filter(v => {
         return Object.keys(this.data[v]).some(s => {
-          console.log(s)
+          //console.log(s)
           const dispValue = OvlTableElement.getDisplayValue(
             this.fields[s],
             this.data[v][s]
@@ -433,12 +435,6 @@ export class OvlTableElement extends OvlBaseElement {
         //if (sortfield === "CustomerFullName") debugger
         switch (this.fields[sortfield].Type) {
           case "date":
-            // if (valA === undefined || valA === null) {
-            //   valA = new Date(-8640000000000000)
-            // }
-            // if (valB === undefined || valB === null) {
-            //   valB = new Date(-8640000000000000)
-            // }
             const aDate = new Date(valA).getTime()
             const bDate = new Date(valB).getTime()
             res = aDate - bDate
@@ -458,13 +454,6 @@ export class OvlTableElement extends OvlBaseElement {
             break
           case "decimal":
           case "int":
-            // if (valA === undefined || valA === null) {
-            //   valA = Number.MIN_SAFE_INTEGER
-            // }
-            // if (valB === undefined || valB === null) {
-            //   valB = Number.MIN_SAFE_INTEGER
-            // }
-
             res = valA - valB
             break
         }
@@ -493,6 +482,7 @@ export class OvlTableRow extends OvlBaseElement {
   initProps() {
     super.initProps()
     this.rowData = this.getData()
+    this.rowData.dataStatePath = OvlTableElement.table.DataStatePath
   }
 
   getCellId(cindex: number): string {
