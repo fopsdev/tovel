@@ -11,7 +11,7 @@ export class OvlBaseElement extends HTMLElement {
   componentName: string
   id: string
   _id: number
-  trackId: number
+
   static _counter: number = 0
 
   // child comps should implement getUI to render a htm template
@@ -102,19 +102,15 @@ export class OvlBaseElement extends HTMLElement {
 
   doRender() {
     console.log("render: " + this.componentName)
-    if (this.trackId === undefined) {
-      this.trackId = this.trackState()
-    }
+    const trackId = this.trackState()
     this.prepareUI()
     let res = this.getUI()
     render(res, this)
     this.afterRender()
-    this.clearTrackState(this.trackId)
-    this.trackId = undefined
+    this.clearTrackState(trackId)
   }
 
   connectedCallback() {
-    this.trackId = this.trackState()
     this.initProps()
     this.doRender()
   }
@@ -155,7 +151,6 @@ export const changeSort: Action<TableColumnEventData> = ({
     tableColumnData.Sort.field = tableColumnData.ColumnId
     tableColumnData.Sort.Ascending = true
   }
-  //tableColumnData.Sort.Field = tableColumnData.ColumnId
 }
 
 type TableEventTypes = "@ovlcell@"
@@ -200,6 +195,7 @@ export type BaseData = { [key: string]: any }
 export type TableProps = {
   table: BaseTable
   data: BaseData
+  untrackedData: BaseData
 }
 
 export type BaseTable = {
@@ -222,7 +218,7 @@ export class OvlTableElement extends OvlBaseElement {
   static table: BaseTable
   fields: BaseFields
   data: BaseData
-
+  untrackedData: BaseData
   sortedFieldKeys: string[]
   sortedDataKeys: string[]
   constructor() {
@@ -334,6 +330,7 @@ export class OvlTableElement extends OvlBaseElement {
     console.log("init props header")
     OvlTableElement.table = this.getData().table
     this.data = this.getData().data
+    this.untrackedData = this.getData().untrackedData
   }
 
   prepareUI() {
@@ -418,16 +415,13 @@ export class OvlTableElement extends OvlBaseElement {
   getSortedDataKeys(): string[] {
     let sortfield = OvlTableElement.table.Sort.Field
     let ascending = OvlTableElement.table.Sort.Ascending ? 1 : -1
-    const data = state.tblTableTestData
+    const data = this.untrackedData
     let res: number = 0
     return Object.keys(data)
       .filter(v => {
         return Object.keys(data[v]).some(s => {
-          //console.log(s)
-
           const dispValue = OvlTableElement.getDisplayValue(
             this.fields[s],
-
             data[v],
             data[v][s]
           )
@@ -439,16 +433,8 @@ export class OvlTableElement extends OvlBaseElement {
         })
       })
       .sort((a, b) => {
-        let valB = data[b][sortfield]
-        let valA = data[a][sortfield]
-        // // need to check for function because its untracked state and therefore a derived (=function) won't be executed
-        // if (typeof valB == "function") {
-        //   valB = valB(this.untrackedState)
-        // }
-        // if (typeof valA == "function") {
-        //   valA = valA(this.untrackedState)
-        // }
-        //if (sortfield === "CustomerFullName") debugger
+        let valB = OvlTableElement.getValue(data[b], data[b][sortfield])
+        let valA = OvlTableElement.getValue(data[a], data[a][sortfield])
         switch (this.fields[sortfield].Type) {
           case "date":
             const aDate = new Date(valA).getTime()

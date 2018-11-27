@@ -78,7 +78,8 @@ export class CompA extends OvlBaseElement {
         id="tabletest"
         .getData="${(): TableProps => ({
           table: this.state.myState.myTable,
-          data: this.state.tblTableTestData
+          data: this.state.tblTableTestData,
+          untrackedData: untracked.tblTableTestData
         })}"
       >
       </ovl-table>
@@ -110,7 +111,7 @@ export class CompA extends OvlBaseElement {
                     )
                   }
                 })}" "></auto-complete>
-<date-input id="mydateinput"/>
+       <date-input id="mydateinput"/>
       </div>
     `
   }
