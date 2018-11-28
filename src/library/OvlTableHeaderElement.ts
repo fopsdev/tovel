@@ -1,137 +1,8 @@
-import { app, state } from "../index"
-import { render, TemplateResult, html } from "lit-html"
-import { IConfig, TApp, EventType, Action } from "overmind"
+import { app } from "../index"
+import { TemplateResult, html } from "lit-html"
+import { Action } from "overmind"
 import { repeat } from "lit-html/directives/repeat"
-
-export class OvlBaseElement extends HTMLElement {
-  // each element should at least have an id
-  mutationListener: any
-  paths: Set<string>
-  state: TApp<IConfig>["state"]
-  componentName: string
-  id: string
-  _id: number
-
-  static _counter: number = 0
-
-  // child comps should implement getUI to render a htm template
-  constructor() {
-    super()
-    this._id = ++OvlBaseElement._counter
-    this.state = app.state
-  }
-
-  // initialising props
-  initProps() {
-    this.id = this.getAttribute("id")
-    if (!this.id || this.id === "null") {
-      throw Error("Ovl Base: id attribute is mandatory")
-    }
-    this.componentName = this.tagName + "_" + this.id.toString()
-    console.log("init props: " + this.componentName)
-  }
-  // add manual state tracking paths
-  addTracking(paths: Set<string>) {}
-  // remove manual state tracking paths
-  removeTracking(): Set<string> {
-    return undefined
-  }
-  afterRender() {}
-  prepareUI() {}
-  trackState(): number {
-    let trackId = app.trackState()
-    console.log(this.componentName + " start tracking. trackid:" + trackId)
-    return trackId
-  }
-  clearTrackState(trackId: number) {
-    console.log(this.componentName + " finish tracking. trackid:" + trackId)
-    let paths = app.clearTrackState(trackId)
-    if (paths.size > 0) {
-      this.addTracking(paths)
-      let pathsToRemove: Set<string> = this.removeTracking()
-      if (pathsToRemove) {
-        pathsToRemove.forEach(v => {
-          let searchVal = v
-          let pathsToDelete: string[] = []
-          if (searchVal.endsWith("*")) {
-            //debugger
-            searchVal = searchVal.substring(0, searchVal.length - 1)
-            paths.forEach(pv => {
-              if (pv.startsWith(searchVal)) {
-                pathsToDelete.push(pv)
-              }
-            })
-          } else {
-            pathsToDelete.push(v)
-          }
-          pathsToDelete.forEach(p => {
-            paths.delete(p)
-          })
-        })
-      }
-      if (!this.mutationListener) {
-        if (app.devtools) {
-          app.eventHub.emitAsync(EventType.COMPONENT_ADD, {
-            componentId: this._id,
-            componentInstanceId: this._id,
-            name: this.componentName,
-            paths: Array.from(paths)
-          })
-        }
-        console.log(this.componentName + " adding paths:")
-        console.log(paths)
-        this.mutationListener = app.addMutationListener(paths, flushId => {
-          if (app.devtools) {
-            app.eventHub.emitAsync(EventType.COMPONENT_UPDATE, {
-              componentId: this._id,
-              componentInstanceId: this._id,
-              name: this.componentName,
-              paths: Array.from(paths),
-              flushId
-            })
-          }
-          this.doRender()
-        })
-      } else {
-        console.log(this.componentName + " updating paths:")
-        console.log(paths)
-        this.mutationListener.update(paths)
-      }
-    }
-  }
-
-  doRender() {
-    console.log("render: " + this.componentName)
-    const trackId = this.trackState()
-    this.prepareUI()
-    let res = this.getUI()
-    render(res, this)
-    this.afterRender()
-    this.clearTrackState(trackId)
-  }
-
-  connectedCallback() {
-    this.initProps()
-    this.doRender()
-  }
-
-  disconnectedCallback() {
-    if (this.mutationListener) {
-      this.mutationListener.dispose()
-      this.mutationListener = undefined
-    }
-    if (app.devtools) {
-      app.eventHub.emitAsync(EventType.COMPONENT_REMOVE, {
-        componentId: this._id,
-        componentInstanceId: this._id,
-        name: this.componentName
-      })
-    }
-  }
-  getUI(): TemplateResult {
-    return null
-  }
-}
+import { OvlBaseElement } from "./OvlBaseElement"
 
 //#####################TableHeaderElement##########################
 type TableColumnEventData = {
@@ -166,6 +37,7 @@ export type TablePaging = {
   Size: number
 }
 export type TableFieldTypes = "int" | "decimal" | "string" | "date"
+export type TableColumnAlign = "left" | "center" | "right"
 
 export type TableField = {
   Pos: number
@@ -174,6 +46,7 @@ export type TableField = {
   Editable: boolean
   Visible: boolean
   Width: number
+  Align: TableColumnAlign
   // if no format provided, default will be used
   Format?: Intl.NumberFormat | Intl.DateTimeFormat
 }
@@ -213,7 +86,7 @@ type TableEventPosition = {
   columnIndex: number
 }
 
-export class OvlTableElement extends OvlBaseElement {
+export class OvlTable extends OvlBaseElement {
   getData: any
   static table: BaseTable
   fields: BaseFields
@@ -250,7 +123,7 @@ export class OvlTableElement extends OvlBaseElement {
         if (position.rowIndex === -1) {
           // its a click on a column header
           app.actions.changeSort({
-            Sort: OvlTableElement.table.Sort,
+            Sort: OvlTable.table.Sort,
             ColumnId: this.sortedFieldKeys[position.columnIndex]
           })
         }
@@ -276,19 +149,7 @@ export class OvlTableElement extends OvlBaseElement {
   handleEventBefore(e, position: TableEventPosition, cancel: boolean) {}
   handleEventAfter(e, position: TableEventPosition) {}
 
-  static getValue(attachedObj: {}, value: any) {
-    if (typeof value == "function") {
-      value = value(attachedObj, state)
-    }
-    return value
-  }
-
-  static getDisplayValue(
-    fieldInfo: TableField,
-    attachedObj: {},
-    value: any
-  ): string {
-    value = OvlTableElement.getValue(attachedObj, value)
+  static getDisplayValue(fieldInfo: TableField, value: any): string {
     switch (fieldInfo.Type) {
       case "date":
         if (!value) {
@@ -316,7 +177,7 @@ export class OvlTableElement extends OvlBaseElement {
     }
   }
   addTracking(paths: Set<string>) {
-    paths.add(OvlTableElement.table.DataStatePath)
+    paths.add(OvlTable.table.DataStatePath)
   }
 
   // removeTracking() {
@@ -327,14 +188,14 @@ export class OvlTableElement extends OvlBaseElement {
 
   initProps() {
     super.initProps()
-    console.log("init props header")
-    OvlTableElement.table = this.getData().table
+    //console.log("init props header")
+    OvlTable.table = this.getData().table
     this.data = this.getData().data
     this.untrackedData = this.getData().untrackedData
   }
 
   prepareUI() {
-    this.fields = <BaseFields>(<any>OvlTableElement.table).Fields
+    this.fields = <BaseFields>(<any>OvlTable.table).Fields
     this.sortedFieldKeys = this.getSortedAndFilteredFieldKeys()
     this.sortedDataKeys = this.getSortedDataKeys()
   }
@@ -344,7 +205,7 @@ export class OvlTableElement extends OvlBaseElement {
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
     {
-      let sortField = OvlTableElement.table.Sort.Field
+      let sortField = OvlTable.table.Sort.Field
       return html`
         <div class="c-table c-table--striped">
           <div class="c-table__caption">Default UI Table</div>
@@ -353,13 +214,13 @@ export class OvlTableElement extends OvlBaseElement {
               this.sortedFieldKeys.map((k, index) => {
                 let sortMarker = ""
                 if (k === sortField) {
-                  sortMarker = OvlTableElement.table.Sort.Ascending ? "▲" : "▼"
+                  sortMarker = OvlTable.table.Sort.Ascending ? "▲" : "▼"
                 }
                 return html`
                   <span
                     class="c-table__cell"
                     tabIndex="${index}"
-                    id="${OvlTableElement.getCellId(this.id, -1, index)}"
+                    id="${OvlTable.getCellId(this.id, -1, index)}"
                     >${this.fields[k].Name}${sortMarker}
                   </span>
                 `
@@ -413,28 +274,25 @@ export class OvlTableElement extends OvlBaseElement {
     )
   }
   getSortedDataKeys(): string[] {
-    let sortfield = OvlTableElement.table.Sort.Field
-    let ascending = OvlTableElement.table.Sort.Ascending ? 1 : -1
+    let sortfield = OvlTable.table.Sort.Field
+    let ascending = OvlTable.table.Sort.Ascending ? 1 : -1
     const data = this.untrackedData
     let res: number = 0
     return Object.keys(data)
       .filter(v => {
         return Object.keys(data[v]).some(s => {
-          const dispValue = OvlTableElement.getDisplayValue(
-            this.fields[s],
-            data[v],
-            data[v][s]
-          )
+          const value = OvlBaseElement.getUntrackedValue(data[v], data[v][s])
+          const dispValue = OvlTable.getDisplayValue(this.fields[s], value)
           return (
             dispValue
               .toLowerCase()
-              .indexOf(OvlTableElement.table.Filter.toLowerCase()) > -1
+              .indexOf(OvlTable.table.Filter.toLowerCase()) > -1
           )
         })
       })
       .sort((a, b) => {
-        let valB = OvlTableElement.getValue(data[b], data[b][sortfield])
-        let valA = OvlTableElement.getValue(data[a], data[a][sortfield])
+        let valB = OvlBaseElement.getUntrackedValue(data[b], data[b][sortfield])
+        let valA = OvlBaseElement.getUntrackedValue(data[a], data[a][sortfield])
         switch (this.fields[sortfield].Type) {
           case "date":
             const aDate = new Date(valA).getTime()
@@ -463,63 +321,3 @@ export class OvlTableElement extends OvlBaseElement {
       })
   }
 }
-
-export class OvlTableRow extends OvlBaseElement {
-  getData: any
-  rowData: {
-    dataStatePath: string
-    rowKey: string
-    rowIndex: number
-    sortedFieldKeys: string[]
-    data: BaseData
-    fields: BaseFields
-  }
-
-  removeTracking() {
-    let paths: Set<string> = new Set()
-    paths.add(this.rowData.dataStatePath)
-    return paths
-  }
-
-  initProps() {
-    super.initProps()
-    this.rowData = this.getData()
-    this.rowData.dataStatePath = OvlTableElement.table.DataStatePath
-  }
-
-  getCellId(cindex: number): string {
-    return this.id + "_" + cindex.toString()
-  }
-  getUI() {
-    return html`
-      ${
-        repeat(
-          this.rowData.sortedFieldKeys,
-          f => f,
-          (f, columnIndex) => html`
-            <span
-              class="c-table__cell"
-              tabIndex="${columnIndex}"
-              id="${
-                OvlTableElement.getCellId(
-                  this.id,
-                  this.rowData.rowIndex,
-                  columnIndex
-                )
-              }"
-              >${
-                OvlTableElement.getDisplayValue(
-                  this.rowData.fields[f],
-                  this.rowData.data[this.rowData.rowKey],
-                  this.rowData.data[this.rowData.rowKey][f]
-                )
-              }
-            </span>
-          `
-        )
-      }
-    `
-  }
-}
-customElements.define("ovl-table", OvlTableElement)
-customElements.define("ovl-row", OvlTableRow)

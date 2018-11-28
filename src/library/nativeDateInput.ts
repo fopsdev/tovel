@@ -2,7 +2,7 @@ import { html } from "lit-html"
 
 import { Action, log } from "overmind"
 import { app } from ".."
-import { OvlBaseElement } from "../library"
+import { OvlBaseElement } from "./OvlBaseElement"
 
 export type NativeDateInputProps = {
   value: { value: string }

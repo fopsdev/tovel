@@ -1,6 +1,15 @@
-import { OvlBaseElement, TableProps } from "../library/index"
-import { AutoComplete, AutoCompleteProps } from "./autoComplete"
-import { NativeDateInput, NativeDateInputProps } from "./nativeDateInput"
+import { OvlBaseElement } from "../library/OvlBaseElement"
+import { TableProps } from "../library/OvlTableHeaderElement"
+import { AutoComplete, AutoCompleteProps } from "../library/autoComplete"
+import {
+  NativeDateInput,
+  NativeDateInputProps
+} from "../library/nativeDateInput"
+import { OvlTable } from "../library/OvlTableHeaderElement"
+import { OvlTableRow } from "../library/OvlTableRowElement"
+
+customElements.define("ovl-table", OvlTable)
+customElements.define("ovl-row", OvlTableRow)
 customElements.define("auto-complete", AutoComplete)
 customElements.define("date-input", NativeDateInput)
 import { app, state as untracked } from "../index"

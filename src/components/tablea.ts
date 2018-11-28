@@ -1,9 +1,8 @@
 import {
-  OvlTableElement,
   BaseTable,
   TableField,
   TableSort
-} from "../library/index"
+} from "../library/OvlTableHeaderElement"
 import { Derive } from "overmind"
 
 type TableTestColumns =
@@ -28,7 +27,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Type: "int",
     Editable: true,
     Visible: true,
-    Width: 10
+    Width: 10,
+    Align: "left"
   }
 
   let customerFirstNameField: TableField = {
@@ -37,7 +37,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Type: "string",
     Editable: true,
     Visible: true,
-    Width: 30
+    Width: 30,
+    Align: "left"
   }
 
   let customerLastNameField: TableField = {
@@ -46,7 +47,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Type: "string",
     Editable: true,
     Visible: true,
-    Width: 30
+    Width: 30,
+    Align: "left"
   }
 
   let customerFullNameField: TableField = {
@@ -55,7 +57,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Type: "string",
     Editable: false,
     Visible: true,
-    Width: 30
+    Width: 30,
+    Align: "left"
   }
 
   let deliveryDateField: TableField = {
@@ -64,7 +67,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Type: "date",
     Editable: true,
     Visible: true,
-    Width: 10
+    Width: 10,
+    Align: "center"
   }
   let provisionTotalField: TableField = {
     Pos: 4,
@@ -72,7 +76,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Type: "decimal",
     Editable: true,
     Visible: true,
-    Width: 10
+    Width: 10,
+    Align: "right"
   }
   let provisionFactorField: TableField = {
     Pos: 5,
@@ -80,7 +85,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Type: "decimal",
     Editable: true,
     Visible: true,
-    Width: 10
+    Width: 10,
+    Align: "right"
   }
   let tableFields: TableFields = {
     IDTransaction: idField,

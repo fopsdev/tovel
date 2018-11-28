@@ -1,8 +1,8 @@
-import { html, svg } from "lit-html"
+import { html } from "lit-html"
 
-import { Action, log } from "overmind"
+import { Action } from "overmind"
 import { app } from ".."
-import { OvlBaseElement } from "../library"
+import { OvlBaseElement } from "./OvlBaseElement"
 
 export type AutoCompleteProps = {
   value: { value: string }
