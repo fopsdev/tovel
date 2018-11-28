@@ -3,7 +3,28 @@ import {
   TableField,
   TableSort
 } from "../library/OvlTableHeaderElement"
-import { Derive } from "overmind"
+import { Derive, Action } from "overmind"
+
+export const add1000Rows: Action = ({ state }) => {
+  // console.log(tableColumnData.Sort)
+  for (let z = 0; z < 1000; z++) {
+    const entry: TableTestDataEntry = {
+      A_ProvisionFactor: z + 0.1,
+      A_ProvisionTotal: z + 100,
+      CustomerFirstName: "firstName" + z.toString(),
+      CustomerLastName: "lastName" + z.toString(),
+      DeliveryDate: null,
+      IDTransaction: z + 10,
+      CustomerFullName: null
+    }
+    const key = (z + 10).toString()
+
+    state.tblTableTestData[key] = entry
+
+    //state.tblTableTestData = state.tblTableTestData
+  }
+  state.myState.myTable.Filter = ""
+}
 
 type TableTestColumns =
   | "IDTransaction"
@@ -100,7 +121,7 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
   return tableFields
 }
 
-const SortingField: Derive<TableSort, string> = (self, state) =>
+const SortingField: Derive<TableSort, string> = self =>
   self.field !== "" ? self.field : TableTest.IDField
 
 export let TableTest: UserTable = {
@@ -114,5 +135,65 @@ export let TableTest: UserTable = {
   Fields: derivedTableFields
 }
 
-// customElements.define("custom-table-a", CustomTableA)
-// customElements.define("custom-row-a", CustomRowA)
+export type TableTestDataEntry = {
+  IDTransaction: number
+  CustomerFirstName: string
+  CustomerLastName: string
+  DeliveryDate: string
+  A_ProvisionTotal: number
+  A_ProvisionFactor: number
+  CustomerFullName: Derive<TableTestDataEntry, string>
+}
+
+export type TableTestData = {
+  [key: string]: TableTestDataEntry
+}
+
+let tblTableTestData0 = {
+  1: {
+    IDTransaction: 1,
+    A_ProvisionFactor: 10,
+    A_ProvisionTotal: 100,
+    CustomerFirstName: "Peter",
+    CustomerLastName: "Müller",
+    DeliveryDate: "2017-03-06T00:00:00+00:00"
+  },
+  2: {
+    IDTransaction: 2,
+    A_ProvisionFactor: 20,
+    A_ProvisionTotal: 200,
+    CustomerFirstName: "Paul",
+    CustomerLastName: "Meier",
+    DeliveryDate: "2016-03-07T00:00:00+00:00"
+  },
+  3: {
+    IDTransaction: 3,
+    A_ProvisionFactor: 30,
+    A_ProvisionTotal: 300,
+    CustomerFirstName: "Piotr",
+    CustomerLastName: "Saslic",
+    DeliveryDate: "2017-03-03T00:00:00+00:00"
+  },
+  4: {
+    IDTransaction: 4,
+    A_ProvisionFactor: null,
+    A_ProvisionTotal: 300,
+    CustomerFirstName: null,
+    CustomerLastName: "Miller",
+    DeliveryDate: null
+  }
+}
+export let tblTableTestData: TableTestData = {}
+
+Object.keys(tblTableTestData0).forEach(k => {
+  tblTableTestData[k] = tblTableTestData0[k]
+  tblTableTestData[k].CustomerFullName = self => {
+    console.log(self)
+
+    const res =
+      (self.CustomerFirstName ? self.CustomerFirstName : "") +
+      " " +
+      (self.CustomerLastName ? self.CustomerLastName : "")
+    return res
+  }
+})

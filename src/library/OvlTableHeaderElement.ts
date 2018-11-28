@@ -198,6 +198,8 @@ export class OvlTable extends OvlBaseElement {
     this.fields = <BaseFields>(<any>OvlTable.table).Fields
     this.sortedFieldKeys = this.getSortedAndFilteredFieldKeys()
     this.sortedDataKeys = this.getSortedDataKeys()
+    console.log("sortedDataKeys")
+    console.log(this.sortedDataKeys)
   }
 
   getUI(): TemplateResult {
@@ -277,6 +279,10 @@ export class OvlTable extends OvlBaseElement {
     let sortfield = OvlTable.table.Sort.Field
     let ascending = OvlTable.table.Sort.Ascending ? 1 : -1
     const data = this.untrackedData
+    console.log("untracked")
+    console.log(this.untrackedData)
+    console.log("tracked")
+    console.log(this.data)
     let res: number = 0
     return Object.keys(data)
       .filter(v => {

@@ -1,4 +1,4 @@
-import { TableTest } from "./components/tablea"
+import { TableTest, tblTableTestData } from "./components/tablea"
 import { Derive } from "overmind"
 
 export type Post = {
@@ -6,69 +6,6 @@ export type Post = {
   title: string
   body: string
 }
-
-export type TableTestDataEntry = {
-  IDTransaction: number
-  CustomerFirstName: string
-  CustomerLastName: string
-  DeliveryDate: string
-  A_ProvisionTotal: number
-  A_ProvisionFactor: number
-  CustomerFullName: Derive<TableTestDataEntry, string>
-}
-
-export type TableTestData = {
-  [key: string]: TableTestDataEntry
-}
-
-let tblTableTestData0 = {
-  1: {
-    IDTransaction: 1,
-    A_ProvisionFactor: 10,
-    A_ProvisionTotal: 100,
-    CustomerFirstName: "Peter",
-    CustomerLastName: "Müller",
-    DeliveryDate: "2017-03-06T00:00:00+00:00"
-  },
-  2: {
-    IDTransaction: 2,
-    A_ProvisionFactor: 20,
-    A_ProvisionTotal: 200,
-    CustomerFirstName: "Paul",
-    CustomerLastName: "Meier",
-    DeliveryDate: "2016-03-07T00:00:00+00:00"
-  },
-  3: {
-    IDTransaction: 3,
-    A_ProvisionFactor: 30,
-    A_ProvisionTotal: 300,
-    CustomerFirstName: "Piotr",
-    CustomerLastName: "Saslic",
-    DeliveryDate: "2017-03-03T00:00:00+00:00"
-  },
-  4: {
-    IDTransaction: 4,
-    A_ProvisionFactor: null,
-    A_ProvisionTotal: 300,
-    CustomerFirstName: null,
-    CustomerLastName: "Miller",
-    DeliveryDate: null
-  }
-}
-export let tblTableTestData: TableTestData = {}
-
-Object.keys(tblTableTestData0).forEach(k => {
-  tblTableTestData[k] = tblTableTestData0[k]
-  tblTableTestData[k].CustomerFullName = self => {
-    console.log(self)
-
-    const res =
-      (self.CustomerFirstName ? self.CustomerFirstName : "") +
-      " " +
-      (self.CustomerLastName ? self.CustomerLastName : "")
-    return res
-  }
-})
 
 export let suggestions = [
   "Aal",
@@ -89,3 +26,4 @@ export let inputValueTest = { value: "initial" }
 
 let myState = { myTable: TableTest }
 export { myState }
+export { tblTableTestData }

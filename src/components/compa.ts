@@ -16,9 +16,14 @@ import { app, state as untracked } from "../index"
 import { html } from "lit-html"
 
 export class CompA extends OvlBaseElement {
-  handleEvent(e) {
+  changeFirstName(e) {
     app.actions.changeFirstName1()
   }
+
+  add1000Rows(e) {
+    app.actions.add1000Rows()
+  }
+
   constructor() {
     super()
   }
@@ -82,7 +87,8 @@ export class CompA extends OvlBaseElement {
             }
           })}" "></auto-complete></div>
  
-      <button @click="${this.handleEvent}">changeFirstName1</button>
+      <button @click="${this.changeFirstName}">changeFirstName1</button>
+       <button @click="${this.add1000Rows}">add1000Rows</button>
       <ovl-table
         id="tabletest"
         .getData="${(): TableProps => ({
