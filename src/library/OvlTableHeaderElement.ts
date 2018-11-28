@@ -278,17 +278,18 @@ export class OvlTable extends OvlBaseElement {
   getSortedDataKeys(): string[] {
     let sortfield = OvlTable.table.Sort.Field
     let ascending = OvlTable.table.Sort.Ascending ? 1 : -1
-    const data = this.untrackedData
-    console.log("untracked")
-    console.log(this.untrackedData)
-    console.log("tracked")
-    console.log(this.data)
+    app.proxyStateTree.pauseTracking = true
+    const data = this.data
+    // console.log("untracked")
+    // console.log(this.untrackedData)
+    // console.log("tracked")
+    // console.log(this.data)
     let res: number = 0
     return Object.keys(data)
       .filter(v => {
         return Object.keys(data[v]).some(s => {
-          const value = OvlBaseElement.getUntrackedValue(data[v], data[v][s])
-          const dispValue = OvlTable.getDisplayValue(this.fields[s], value)
+          //const value = OvlBaseElement.getUntrackedValue(data[v], data[v][s])
+          const dispValue = OvlTable.getDisplayValue(this.fields[s], data[v][s])
           return (
             dispValue
               .toLowerCase()
@@ -297,8 +298,10 @@ export class OvlTable extends OvlBaseElement {
         })
       })
       .sort((a, b) => {
-        let valB = OvlBaseElement.getUntrackedValue(data[b], data[b][sortfield])
-        let valA = OvlBaseElement.getUntrackedValue(data[a], data[a][sortfield])
+        let valB = data[b][sortfield]
+        console.log("valB:" + valB)
+        let valA = data[a][sortfield]
+
         switch (this.fields[sortfield].Type) {
           case "date":
             const aDate = new Date(valA).getTime()
@@ -323,6 +326,7 @@ export class OvlTable extends OvlBaseElement {
             res = valA - valB
             break
         }
+        app.proxyStateTree.pauseTracking = false
         return res * ascending
       })
   }

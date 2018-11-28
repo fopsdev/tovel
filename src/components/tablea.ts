@@ -7,7 +7,9 @@ import { Derive, Action } from "overmind"
 
 export const add1000Rows: Action = ({ state }) => {
   // console.log(tableColumnData.Sort)
-  for (let z = 0; z < 1000; z++) {
+  state.myState.myTable.Filter = ""
+
+  for (let z = 0; z < 10; z++) {
     const entry: TableTestDataEntry = {
       A_ProvisionFactor: z + 0.1,
       A_ProvisionTotal: z + 100,
@@ -20,10 +22,9 @@ export const add1000Rows: Action = ({ state }) => {
     const key = (z + 10).toString()
 
     state.tblTableTestData[key] = entry
-
-    //state.tblTableTestData = state.tblTableTestData
   }
-  state.myState.myTable.Filter = ""
+
+  state.myState.myTable.Sort.Ascending = state.myState.myTable.Sort.Ascending
 }
 
 type TableTestColumns =
@@ -126,7 +127,7 @@ const SortingField: Derive<TableSort, string> = self =>
 
 export let TableTest: UserTable = {
   DataStatePath: "tblTableTestData",
-  Filter: "",
+  Filter: "er",
   Sort: { Ascending: true, field: "", Field: <string>(<any>SortingField) },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
