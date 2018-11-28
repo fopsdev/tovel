@@ -1,6 +1,7 @@
-import { app, state } from "../index"
+import { app, state, Tracking } from "../index"
 import { render, TemplateResult } from "lit-html"
 import { IConfig, TApp, EventType } from "overmind"
+export type TrackingType = { trackId: number; mutationListener: any }
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
@@ -10,7 +11,6 @@ export class OvlBaseElement extends HTMLElement {
   componentName: string
   id: string
   _id: number
-  trackId: number
 
   static _counter: number = 0
 
@@ -78,7 +78,7 @@ export class OvlBaseElement extends HTMLElement {
           })
         })
       }
-      if (!this.mutationListener) {
+      if (!Tracking.mutationListener) {
         if (app.devtools) {
           app.eventHub.emitAsync(EventType.COMPONENT_ADD, {
             componentId: this._id,
@@ -89,7 +89,7 @@ export class OvlBaseElement extends HTMLElement {
         }
         console.log(this.componentName + " adding paths:")
         console.log(paths)
-        this.mutationListener = app.addMutationListener(paths, flushId => {
+        Tracking.mutationListener = app.addMutationListener(paths, flushId => {
           if (app.devtools) {
             app.eventHub.emitAsync(EventType.COMPONENT_UPDATE, {
               componentId: this._id,
@@ -104,26 +104,32 @@ export class OvlBaseElement extends HTMLElement {
       } else {
         console.log(this.componentName + " updating paths:")
         console.log(paths)
-        this.mutationListener.update(paths)
+        Tracking.mutationListener.update(paths)
       }
     }
   }
 
   doRender() {
     console.log("render: " + this.componentName)
-    if (this.trackId === undefined) {
-      this.trackId = this.trackState()
-    }
     this.prepareUI()
+
+    Tracking.trackId = this.trackState()
+    Tracking.mutationListener = this.mutationListener
     let res = this.getUI()
     render(res, this)
+    console.log("finished render: " + this.componentName)
+
     this.afterRender()
-    this.clearTrackState(this.trackId)
-    this.trackId = undefined
+    if (Tracking.trackId !== undefined) {
+      this.clearTrackState(Tracking.trackId)
+    }
   }
 
   connectedCallback() {
-    this.trackId = this.trackState()
+    if (Tracking.trackId !== undefined) {
+      this.clearTrackState(Tracking.trackId)
+      Tracking.trackId = undefined
+    }
     this.initProps()
     this.doRender()
   }

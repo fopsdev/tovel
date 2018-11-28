@@ -1,6 +1,6 @@
 // workaround hmr.. not really hmr now but at least it refreshes...
 console.log("start")
-
+import { TrackingType } from "./library/OvlBaseElement"
 import { CompA } from "./components/compa"
 customElements.define("comp-a", CompA)
 
@@ -23,6 +23,11 @@ export const app = new Overmind(config, {
 })
 
 export { state }
+
+export let Tracking: TrackingType = {
+  trackId: undefined,
+  mutationListener: undefined
+}
 
 render(
   html`
