@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "lit-html": "^0.13.0",
-    "overmind": "^5.1.2-1542795518225"
+    "overmind": "^5.1.2-1542833038677"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.3",

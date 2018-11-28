@@ -1,6 +1,7 @@
 import { app, state } from "../index"
 import { render, TemplateResult } from "lit-html"
 import { IConfig, TApp, EventType } from "overmind"
+import { workaroundConfig } from "proxy-state-tree/es/proxify.js"
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
@@ -21,15 +22,6 @@ export class OvlBaseElement extends HTMLElement {
     this.state = app.state
   }
 
-  // this function is needed because we also want to access untracked state
-  // since derived will be also in the state we need to duplicate the logic when accessing state functions (aka derived)
-  // https://github.com/cerebral/overmind/issues/135
-  static getUntrackedValue(self: {}, value: any) {
-    if (typeof value == "function") {
-      value = value(self, state)
-    }
-    return value
-  }
   // initialising props
   initProps() {
     this.id = this.getAttribute("id")
@@ -114,7 +106,9 @@ export class OvlBaseElement extends HTMLElement {
     if (this.trackId === undefined) {
       this.trackId = this.trackState()
     }
+    workaroundConfig.pauseTracking = true
     this.prepareUI()
+    workaroundConfig.pauseTracking = false
     let res = this.getUI()
     render(res, this)
     this.afterRender()
@@ -124,7 +118,10 @@ export class OvlBaseElement extends HTMLElement {
 
   connectedCallback() {
     this.trackId = this.trackState()
+    workaroundConfig.pauseTracking = true
     this.initProps()
+    workaroundConfig.pauseTracking = false
+
     this.doRender()
   }
 

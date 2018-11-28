@@ -207,6 +207,8 @@ export class OvlTable extends OvlBaseElement {
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
     {
+      console.log("sortedfiltered")
+      console.log(this.sortedDataKeys)
       let sortField = OvlTable.table.Sort.Field
       return html`
         <div class="c-table c-table--striped">
@@ -278,7 +280,7 @@ export class OvlTable extends OvlBaseElement {
   getSortedDataKeys(): string[] {
     let sortfield = OvlTable.table.Sort.Field
     let ascending = OvlTable.table.Sort.Ascending ? 1 : -1
-    app.proxyStateTree.pauseTracking = true
+
     const data = this.data
     // console.log("untracked")
     // console.log(this.untrackedData)
@@ -326,7 +328,7 @@ export class OvlTable extends OvlBaseElement {
             res = valA - valB
             break
         }
-        app.proxyStateTree.pauseTracking = false
+
         return res * ascending
       })
   }
