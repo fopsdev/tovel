@@ -1,8 +1,8 @@
 import { OvlBaseElement } from "../library/OvlBaseElement"
 import { TSimpleState } from "../state"
 import { html } from "lit-html"
-
-export class CompA extends OvlBaseElement {
+import { repeat } from "lit-html/directives/repeat"
+export class CompList extends OvlBaseElement {
   getData: any
   data: TSimpleState
   initProps() {
@@ -12,8 +12,16 @@ export class CompA extends OvlBaseElement {
   }
   getUI() {
     return html`
-      ${this.data.A}
-      <comp-b .getData="${() => this.data}" id="b"></comp-b>
+      ${
+        repeat(
+          Object.keys(this.data),
+          k => k,
+          k =>
+            html`
+              <li>${this.data[k]}</li>
+            `
+        )
+      }
     `
   }
 }

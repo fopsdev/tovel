@@ -2,7 +2,7 @@ import { OvlBaseElement } from "../library/OvlBaseElement"
 import { TSimpleState } from "../state"
 import { html } from "lit-html"
 
-export class CompA extends OvlBaseElement {
+export class CompC extends OvlBaseElement {
   getData: any
   data: TSimpleState
   initProps() {
@@ -12,8 +12,7 @@ export class CompA extends OvlBaseElement {
   }
   getUI() {
     return html`
-      ${this.data.A}
-      <comp-b .getData="${() => this.data}" id="b"></comp-b>
+      ${this.data.C}
     `
   }
 }

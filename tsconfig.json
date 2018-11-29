@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "es6",
-    "jsx": "preserve",
     "sourceMap": true,
     "allowJs": true,
     "target": "es6",
