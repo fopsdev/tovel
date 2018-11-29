@@ -1,7 +1,6 @@
-import { app, state } from "../index"
+import { app } from "../index"
 import { render, TemplateResult } from "lit-html"
 import { IConfig, TApp, EventType } from "overmind"
-import { workaroundConfig } from "proxy-state-tree/es/proxify.js"
 
 export class OvlBaseElement extends HTMLElement {
   // each element should at least have an id
@@ -11,7 +10,6 @@ export class OvlBaseElement extends HTMLElement {
   componentName: string
   id: string
   _id: number
-  trackId: number
 
   static _counter: number = 0
 
@@ -103,25 +101,16 @@ export class OvlBaseElement extends HTMLElement {
 
   doRender() {
     console.log("render: " + this.componentName)
-    if (this.trackId === undefined) {
-      this.trackId = this.trackState()
-    }
-    workaroundConfig.pauseTracking = true
     this.prepareUI()
-    workaroundConfig.pauseTracking = false
+    let trackId = this.trackState()
     let res = this.getUI()
+    this.clearTrackState(trackId)
     render(res, this)
     this.afterRender()
-    this.clearTrackState(this.trackId)
-    this.trackId = undefined
   }
 
   connectedCallback() {
-    this.trackId = this.trackState()
-    workaroundConfig.pauseTracking = true
     this.initProps()
-    workaroundConfig.pauseTracking = false
-
     this.doRender()
   }
 

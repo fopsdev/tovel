@@ -1,7 +1,7 @@
 import { app } from "../index"
 import { TemplateResult, html } from "lit-html"
 import { Action } from "overmind"
-import { repeat } from "lit-html/directives/repeat"
+import { repeat } from "./repeat"
 import { OvlBaseElement } from "./OvlBaseElement"
 
 //#####################TableHeaderElement##########################
@@ -176,9 +176,9 @@ export class OvlTable extends OvlBaseElement {
         return value.toString()
     }
   }
-  addTracking(paths: Set<string>) {
-    paths.add(OvlTable.table.DataStatePath)
-  }
+  // addTracking(paths: Set<string>) {
+  //   paths.add(OvlTable.table.DataStatePath)
+  // }
 
   // removeTracking() {
   //   let paths: Set<string> = new Set()
@@ -191,12 +191,11 @@ export class OvlTable extends OvlBaseElement {
     //console.log("init props header")
     OvlTable.table = this.getData().table
     this.data = this.getData().data
-    this.untrackedData = this.getData().untrackedData
   }
 
   prepareUI() {
     this.fields = <BaseFields>(<any>OvlTable.table).Fields
-    this.sortedFieldKeys = this.getSortedAndFilteredFieldKeys()
+
     this.sortedDataKeys = this.getSortedDataKeys()
     console.log("sortedDataKeys")
     console.log(this.sortedDataKeys)
@@ -207,8 +206,13 @@ export class OvlTable extends OvlBaseElement {
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
     {
+      this.sortedFieldKeys = this.getSortedAndFilteredFieldKeys()
       console.log("sortedfiltered")
       console.log(this.sortedDataKeys)
+      // <additional_tracking>
+      OvlTable.table.Filter
+      // </additional_tracking>
+
       let sortField = OvlTable.table.Sort.Field
       return html`
         <div class="c-table c-table--striped">
@@ -234,7 +238,8 @@ export class OvlTable extends OvlBaseElement {
 
           ${
             repeat(
-              this.getSortedDataKeys(),
+              this,
+              this.sortedDataKeys,
               i => i,
               (i, rowIndex) => html`
                 <ovl-row

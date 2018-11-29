@@ -1,5 +1,5 @@
 import { html } from "lit-html"
-import { repeat } from "lit-html/directives/repeat"
+import { repeat } from "./repeat"
 import { OvlBaseElement } from "./OvlBaseElement"
 import { OvlTable, BaseData, BaseFields } from "./OvlTableHeaderElement"
 export class OvlTableRow extends OvlBaseElement {
@@ -32,6 +32,7 @@ export class OvlTableRow extends OvlBaseElement {
     return html`
       ${
         repeat(
+          this,
           this.rowData.sortedFieldKeys,
           f => f,
           (f, columnIndex) => html`

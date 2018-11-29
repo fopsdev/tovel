@@ -17,11 +17,27 @@ export const add1000Rows: Action = ({ state }) => {
       CustomerLastName: "lastName" + z.toString(),
       DeliveryDate: null,
       IDTransaction: z + 10,
-      CustomerFullName: null
+      CustomerFullName: (self, state) => {
+        console.log("self")
+        console.log(self)
+        return <string>(
+          ((self.CustomerFirstName ? self.CustomerFirstName : "") +
+            " " +
+            (self.CustomerLastName ? self.CustomerLastName : ""))
+        )
+      }
     }
     const key = (z + 10).toString()
 
     state.tblTableTestData[key] = entry
+    // state.tblTableTestData[key].CustomerFullName = (self, state) => {
+    //   return "calcualted"
+    //   // const res =
+    //   //   (self.CustomerFirstName ? self.CustomerFirstName : "") +
+    //   //   " " +
+    //   //   (self.CustomerLastName ? self.CustomerLastName : "")
+    //   // return res
+    // }
   }
 
   state.myState.myTable.Sort.Ascending = state.myState.myTable.Sort.Ascending
