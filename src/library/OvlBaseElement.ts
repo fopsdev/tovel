@@ -10,7 +10,6 @@ export class OvlBaseElement extends HTMLElement {
   componentName: string
   id: string
   _id: number
-  trackId: number
 
   static _counter: number = 0
 
@@ -103,14 +102,12 @@ export class OvlBaseElement extends HTMLElement {
   doRender() {
     console.log("render: " + this.componentName)
     this.prepareUI()
-    if (this.trackId === undefined) {
-      this.trackId = this.trackState()
-    }
+
+    let trackId = this.trackState()
     let res = this.getUI()
-    this.clearTrackState(this.trackId)
+    this.clearTrackState(trackId)
     render(res, this)
     this.afterRender()
-    this.trackId = undefined
   }
 
   connectedCallback() {
