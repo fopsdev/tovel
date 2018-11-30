@@ -29,6 +29,7 @@ export class OvlTableRow extends OvlBaseElement {
     return this.id + "_" + cindex.toString()
   }
   getUI() {
+    console.log(this.rowData.data[this.rowData.rowKey])
     return html`
       ${
         repeat(
@@ -45,7 +46,8 @@ export class OvlTableRow extends OvlBaseElement {
               >${
                 OvlTable.getDisplayValue(
                   this.rowData.fields[f],
-                  this.rowData.data[this.rowData.rowKey][f]
+                  this.rowData.data[this.rowData.rowKey],
+                  f
                 )
               }
             </span>

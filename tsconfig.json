@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
     "module": "es6",
-    "jsx": "preserve",
     "sourceMap": true,
     "allowJs": true,
     "target": "es6",
-
     "lib": ["es2017", "dom"],
-    "rootDir": "src",
+    "rootDir": "src/",
     "moduleResolution": "node"
   },
   "exclude": ["node_modules", "dist"]

@@ -3,6 +3,7 @@ import { TemplateResult, html } from "lit-html"
 import { Action } from "overmind"
 import { repeat } from "./repeat"
 import { OvlBaseElement } from "./OvlBaseElement"
+import { TableTestData } from "../components/tablea"
 
 //#####################TableHeaderElement##########################
 type TableColumnEventData = {
@@ -49,6 +50,8 @@ export type TableField = {
   Align: TableColumnAlign
   // if no format provided, default will be used
   Format?: Intl.NumberFormat | Intl.DateTimeFormat
+  // helps to generate eg. FullName from FirstName and LastName
+  Fn?: any
 }
 
 let defaultNumberFormat = new Intl.NumberFormat("de-ch", {
@@ -149,7 +152,17 @@ export class OvlTable extends OvlBaseElement {
   handleEventBefore(e, position: TableEventPosition, cancel: boolean) {}
   handleEventAfter(e, position: TableEventPosition) {}
 
-  static getDisplayValue(fieldInfo: TableField, value: any): string {
+  static getDisplayValue(
+    fieldInfo: TableField,
+    row: TableTestData,
+    field: string
+  ): string {
+    let value
+    if (fieldInfo.Fn) {
+      value = fieldInfo.Fn(row)
+    } else {
+      value = row[field]
+    }
     switch (fieldInfo.Type) {
       case "date":
         if (!value) {
@@ -195,8 +208,7 @@ export class OvlTable extends OvlBaseElement {
 
   prepareUI() {
     this.fields = <BaseFields>(<any>OvlTable.table).Fields
-
-    this.sortedDataKeys = this.getSortedDataKeys()
+    this.sortedDataKeys = this.getFilteredAndSortedDataKeys()
     console.log("sortedDataKeys")
     console.log(this.sortedDataKeys)
   }
@@ -206,7 +218,8 @@ export class OvlTable extends OvlBaseElement {
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
     {
-      this.sortedFieldKeys = this.getSortedAndFilteredFieldKeys()
+      this.fields = <BaseFields>(<any>OvlTable.table).Fields
+      this.sortedFieldKeys = this.getSortedFieldKeys()
       console.log("sortedfiltered")
       console.log(this.sortedDataKeys)
       // <additional_tracking>
@@ -277,12 +290,12 @@ export class OvlTable extends OvlBaseElement {
     )
   }
 
-  getSortedAndFilteredFieldKeys(): string[] {
+  getSortedFieldKeys(): string[] {
     return Object.keys(this.fields).sort(
       (a, b) => this.fields[a].Pos - this.fields[b].Pos
     )
   }
-  getSortedDataKeys(): string[] {
+  getFilteredAndSortedDataKeys(): string[] {
     let sortfield = OvlTable.table.Sort.Field
     let ascending = OvlTable.table.Sort.Ascending ? 1 : -1
 
@@ -295,8 +308,7 @@ export class OvlTable extends OvlBaseElement {
     return Object.keys(data)
       .filter(v => {
         return Object.keys(data[v]).some(s => {
-          //const value = OvlBaseElement.getUntrackedValue(data[v], data[v][s])
-          const dispValue = OvlTable.getDisplayValue(this.fields[s], data[v][s])
+          const dispValue = OvlTable.getDisplayValue(this.fields[s], data[v], s)
           return (
             dispValue
               .toLowerCase()
@@ -305,9 +317,16 @@ export class OvlTable extends OvlBaseElement {
         })
       })
       .sort((a, b) => {
-        let valB = data[b][sortfield]
-        console.log("valB:" + valB)
-        let valA = data[a][sortfield]
+        let valA
+        let valB
+        const fn = this.fields[sortfield].Fn
+        if (fn) {
+          valB = fn(data[b])
+          valA = fn(data[a])
+        } else {
+          valB = data[b][sortfield]
+          valA = data[a][sortfield]
+        }
 
         switch (this.fields[sortfield].Type) {
           case "date":

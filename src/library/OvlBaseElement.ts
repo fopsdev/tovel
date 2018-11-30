@@ -19,7 +19,6 @@ export class OvlBaseElement extends HTMLElement {
     this._id = ++OvlBaseElement._counter
     this.state = app.state
   }
-
   // initialising props
   initProps() {
     this.id = this.getAttribute("id")
@@ -94,6 +93,14 @@ export class OvlBaseElement extends HTMLElement {
       } else {
         console.log(this.componentName + " updating paths:")
         console.log(paths)
+        if (app.devtools) {
+          app.eventHub.emitAsync(EventType.COMPONENT_UPDATE, {
+            componentId: this._id,
+            componentInstanceId: this._id,
+            name: this.componentName,
+            paths: Array.from(paths)
+          })
+        }
         this.mutationListener.update(paths)
       }
     }

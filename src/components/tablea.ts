@@ -13,31 +13,13 @@ export const add1000Rows: Action = ({ state }) => {
     const entry: TableTestDataEntry = {
       A_ProvisionFactor: z + 0.1,
       A_ProvisionTotal: z + 100,
-      CustomerFirstName: "firstName" + z.toString(),
-      CustomerLastName: "lastName" + z.toString(),
+      CustomerFirstName: "FirstName" + z.toString(),
+      CustomerLastName: "LastName" + z.toString(),
       DeliveryDate: null,
-      IDTransaction: z + 10,
-      CustomerFullName: (self, state) => {
-        console.log("self")
-        console.log(self)
-        return <string>(
-          ((self.CustomerFirstName ? self.CustomerFirstName : "") +
-            " " +
-            (self.CustomerLastName ? self.CustomerLastName : ""))
-        )
-      }
+      IDTransaction: z + 10
     }
     const key = (z + 10).toString()
-
     state.tblTableTestData[key] = entry
-    // state.tblTableTestData[key].CustomerFullName = (self, state) => {
-    //   return "calcualted"
-    //   // const res =
-    //   //   (self.CustomerFirstName ? self.CustomerFirstName : "") +
-    //   //   " " +
-    //   //   (self.CustomerLastName ? self.CustomerLastName : "")
-    //   // return res
-    // }
   }
 
   state.myState.myTable.Sort.Ascending = state.myState.myTable.Sort.Ascending
@@ -53,6 +35,9 @@ type TableTestColumns =
   | "A_ProvisionFactor"
 
 type TableFields = { [key in TableTestColumns]: TableField }
+
+const getFullName = (row: TableTestDataEntry) =>
+  row.CustomerFirstName + " " + row.CustomerLastName
 
 export interface UserTable extends BaseTable {
   Fields: Derive<UserTable, TableFields>
@@ -96,7 +81,8 @@ const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
     Editable: false,
     Visible: true,
     Width: 30,
-    Align: "left"
+    Align: "left",
+    Fn: row => getFullName(row)
   }
 
   let deliveryDateField: TableField = {
@@ -159,14 +145,13 @@ export type TableTestDataEntry = {
   DeliveryDate: string
   A_ProvisionTotal: number
   A_ProvisionFactor: number
-  CustomerFullName: Derive<TableTestDataEntry, string>
 }
 
 export type TableTestData = {
   [key: string]: TableTestDataEntry
 }
 
-let tblTableTestData0 = {
+export let tblTableTestData: TableTestData = {
   1: {
     IDTransaction: 1,
     A_ProvisionFactor: 10,
@@ -200,17 +185,3 @@ let tblTableTestData0 = {
     DeliveryDate: null
   }
 }
-export let tblTableTestData: TableTestData = {}
-
-Object.keys(tblTableTestData0).forEach(k => {
-  tblTableTestData[k] = tblTableTestData0[k]
-  tblTableTestData[k].CustomerFullName = self => {
-    console.log(self)
-
-    const res =
-      (self.CustomerFirstName ? self.CustomerFirstName : "") +
-      " " +
-      (self.CustomerLastName ? self.CustomerLastName : "")
-    return res
-  }
-})
