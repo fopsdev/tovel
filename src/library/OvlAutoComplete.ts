@@ -10,7 +10,7 @@ export type AutoCompleteProps = {
   validFn: (inputValue: string) => boolean
 }
 
-export const changeValue: Action<{
+export const OvlAutoCompleteChangeValue: Action<{
   stateRef: { value: string }
   value: string
 }> = ({ value: value, state }) => {
@@ -22,7 +22,7 @@ interface IAutoCompleteItem {
   text: string
 }
 
-export class AutoComplete extends OvlBaseElement {
+export class OvlAutoComplete extends OvlBaseElement {
   getData: () => AutoCompleteProps
   suggestions: AutoCompleteProps
   inputEl: any
@@ -63,7 +63,7 @@ export class AutoComplete extends OvlBaseElement {
     if (this.suggestions.validFn(inputVal)) {
       this.inputEl.classList = "c-field"
       if (this.suggestions.value.value !== inputVal) {
-        app.actions.changeValue({
+        app.actions.OvlAutoCompleteChangeValue({
           stateRef: this.suggestions.value,
           value: inputVal
         })
@@ -240,7 +240,7 @@ export class AutoComplete extends OvlBaseElement {
                   @mousedown="${
                     e => {
                       e.preventDefault()
-                      console.log(item.text)
+                      //console.log(item.text)
                       this.select(item)
                       return false
                     }

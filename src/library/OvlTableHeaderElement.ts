@@ -10,7 +10,7 @@ type TableColumnEventData = {
   Sort: TableSort
   ColumnId: string
 }
-export const changeSort: Action<TableColumnEventData> = ({
+export const OvlTableChangeSort: Action<TableColumnEventData> = ({
   value: tableColumnData,
   state
 }) => {
@@ -125,7 +125,7 @@ export class OvlTable extends OvlBaseElement {
       if (e.type === "click") {
         if (position.rowIndex === -1) {
           // its a click on a column header
-          app.actions.changeSort({
+          app.actions.OvlTableChangeSort({
             Sort: OvlTable.table.Sort,
             ColumnId: this.sortedFieldKeys[position.columnIndex]
           })
@@ -249,7 +249,7 @@ export class OvlTable extends OvlBaseElement {
           ${
             repeat(
               this,
-              this.sortedDataKeys,
+              this.sortedDataKeys.slice(0, 20),
               i => i,
               (i, rowIndex) => html`
                 <ovl-row

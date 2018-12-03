@@ -88,7 +88,7 @@ export class OvlBaseElement extends HTMLElement {
               flushId
             })
           }
-          this.doRender()
+          requestAnimationFrame(() => this.doRender())
         })
       } else {
         console.log(this.componentName + " updating paths:")

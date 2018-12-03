@@ -7,9 +7,9 @@ import { Derive, Action } from "overmind"
 
 export const add1000Rows: Action = ({ state }) => {
   // console.log(tableColumnData.Sort)
-  state.myState.myTable.Filter = ""
+  state.myState.myTable.Filter = "1"
 
-  for (let z = 0; z < 10; z++) {
+  for (let z = 0; z < 1000; z++) {
     const entry: TableTestDataEntry = {
       A_ProvisionFactor: z + 0.1,
       A_ProvisionTotal: z + 100,

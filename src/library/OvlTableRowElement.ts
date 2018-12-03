@@ -29,7 +29,6 @@ export class OvlTableRow extends OvlBaseElement {
     return this.id + "_" + cindex.toString()
   }
   getUI() {
-    console.log(this.rowData.data[this.rowData.rowKey])
     return html`
       ${
         repeat(
