@@ -10,12 +10,10 @@ export type AutoCompleteProps = {
   validFn: (inputValue: string) => boolean
 }
 
-export const OvlAutoCompleteChangeValue: Action<{
-  stateRef: { value: string }
-  value: string
-}> = ({ value: value, state }) => {
+export const OvlAutoCompleteChangeValue = ({ value: value, state }) => {
   console.log(value)
   value.stateRef.value = value.value
+  app.getMutationTree().state.foo = "bbbaaaarrr"
 }
 
 interface IAutoCompleteItem {

@@ -128,6 +128,8 @@ export const repeat = directive(
       // array indicating its key.
       const newValues: unknown[] = []
       const newKeys: unknown[] = []
+      console.log("Start Render repeat")
+      console.log(comp)
       let trackId = comp.trackState()
 
       let index = 0
@@ -137,7 +139,8 @@ export const repeat = directive(
         index++
       }
       comp.clearTrackState(trackId)
-
+      console.log("Stop Render repeat")
+      console.log(comp)
       // Maps from key to index for current and previous update; these are
       // generated lazily only when needed as a performance optimization,
       // since they are only required for multiple non-contiguous changes in
