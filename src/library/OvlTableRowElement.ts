@@ -16,7 +16,6 @@ export class OvlTableRow extends OvlBaseElement {
   }
 
   init() {
-    super.init()
     this.rowData = this.getData(this.state)
     this.rowData.dataStatePath = OvlTable.table.DataStatePath
   }

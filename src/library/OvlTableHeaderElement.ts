@@ -191,7 +191,6 @@ export class OvlTable extends OvlBaseElement {
   }
 
   init() {
-    super.init()
     //console.log("init props header")
     OvlTable.table = this.getData(this.state).table
     this.data = this.getData(this.state).data
