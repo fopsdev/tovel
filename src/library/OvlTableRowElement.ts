@@ -1,7 +1,9 @@
 import { html } from "lit-html"
-import { repeat } from "./repeat"
+//import { repeat } from "./repeat"
+import { repeat } from "lit-html/directives/repeat.js"
 import { OvlBaseElement } from "./OvlBaseElement"
 import { OvlTable, BaseData, BaseFields } from "./OvlTableHeaderElement"
+import { overmind } from "../index"
 export class OvlTableRow extends OvlBaseElement {
   getData: any
   rowData: {
@@ -13,15 +15,9 @@ export class OvlTableRow extends OvlBaseElement {
     fields: BaseFields
   }
 
-  removeTracking() {
-    let paths: Set<string> = new Set()
-    paths.add(this.rowData.dataStatePath)
-    return paths
-  }
-
-  initProps() {
-    super.initProps()
-    this.rowData = this.getData()
+  init() {
+    super.init()
+    this.rowData = this.getData(this.state)
     this.rowData.dataStatePath = OvlTable.table.DataStatePath
   }
 
@@ -32,7 +28,6 @@ export class OvlTableRow extends OvlBaseElement {
     return html`
       ${
         repeat(
-          this,
           this.rowData.sortedFieldKeys,
           f => f,
           (f, columnIndex) => html`

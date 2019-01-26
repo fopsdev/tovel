@@ -3,7 +3,8 @@ import {
   TableField,
   TableSort
 } from "../library/OvlTableHeaderElement"
-import { Derive, Action } from "overmind"
+import { Derive, TApp } from "overmind"
+import { Action, Config } from "../index"
 
 export const add1000Rows: Action = ({ state }) => {
   // console.log(tableColumnData.Sort)
@@ -40,88 +41,7 @@ const getFullName = (row: TableTestDataEntry) =>
   row.CustomerFirstName + " " + row.CustomerLastName
 
 export interface UserTable extends BaseTable {
-  Fields: Derive<UserTable, TableFields>
-}
-
-const derivedTableFields: Derive<UserTable, TableFields> = (self, state) => {
-  let idField: TableField = {
-    Pos: 0,
-    Name: "ID",
-    Type: "int",
-    Editable: true,
-    Visible: true,
-    Width: 10,
-    Align: "left"
-  }
-
-  let customerFirstNameField: TableField = {
-    Pos: 1,
-    Name: state.inputValueTest.value,
-    Type: "string",
-    Editable: true,
-    Visible: true,
-    Width: 30,
-    Align: "left"
-  }
-
-  let customerLastNameField: TableField = {
-    Pos: 2,
-    Name: "Last Name",
-    Type: "string",
-    Editable: true,
-    Visible: true,
-    Width: 30,
-    Align: "left"
-  }
-
-  let customerFullNameField: TableField = {
-    Pos: 7,
-    Name: "Full Name",
-    Type: "string",
-    Editable: false,
-    Visible: true,
-    Width: 30,
-    Align: "left",
-    Fn: row => getFullName(row)
-  }
-
-  let deliveryDateField: TableField = {
-    Pos: 3,
-    Name: "Delivery",
-    Type: "date",
-    Editable: true,
-    Visible: true,
-    Width: 10,
-    Align: "center"
-  }
-  let provisionTotalField: TableField = {
-    Pos: 4,
-    Name: "Provision Total",
-    Type: "decimal",
-    Editable: true,
-    Visible: true,
-    Width: 10,
-    Align: "right"
-  }
-  let provisionFactorField: TableField = {
-    Pos: 5,
-    Name: "Provision Factor",
-    Type: "decimal",
-    Editable: true,
-    Visible: true,
-    Width: 10,
-    Align: "right"
-  }
-  let tableFields: TableFields = {
-    IDTransaction: idField,
-    CustomerFirstName: customerFirstNameField,
-    CustomerLastName: customerLastNameField,
-    CustomerFullName: customerFullNameField,
-    DeliveryDate: deliveryDateField,
-    A_ProvisionTotal: provisionTotalField,
-    A_ProvisionFactor: provisionFactorField
-  }
-  return tableFields
+  Fields: Derive<TableField, TableFields>
 }
 
 const SortingField: Derive<TableSort, string> = self =>
@@ -135,7 +55,86 @@ export let TableTest: UserTable = {
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
   Selected: [],
-  Fields: derivedTableFields
+  Fields: (self, state: TApp<Config>["state"]) => {
+    let idField: TableField = {
+      Pos: 0,
+      Name: "ID",
+      Type: "int",
+      Editable: true,
+      Visible: true,
+      Width: 10,
+      Align: "left"
+    }
+
+    let customerFirstNameField: TableField = {
+      Pos: 1,
+      Name: state.inputValueTest.value,
+      Type: "string",
+      Editable: true,
+      Visible: true,
+      Width: 30,
+      Align: "left"
+    }
+
+    let customerLastNameField: TableField = {
+      Pos: 2,
+      Name: "Last Name",
+      Type: "string",
+      Editable: true,
+      Visible: true,
+      Width: 30,
+      Align: "left"
+    }
+
+    let customerFullNameField: TableField = {
+      Pos: 7,
+      Name: "Full Name",
+      Type: "string",
+      Editable: false,
+      Visible: true,
+      Width: 30,
+      Align: "left",
+      Fn: row => getFullName(row)
+    }
+
+    let deliveryDateField: TableField = {
+      Pos: 3,
+      Name: "Delivery",
+      Type: "date",
+      Editable: true,
+      Visible: true,
+      Width: 10,
+      Align: "center"
+    }
+    let provisionTotalField: TableField = {
+      Pos: 4,
+      Name: "Provision Total",
+      Type: "decimal",
+      Editable: true,
+      Visible: true,
+      Width: 10,
+      Align: "right"
+    }
+    let provisionFactorField: TableField = {
+      Pos: 5,
+      Name: "Provision Factor",
+      Type: "decimal",
+      Editable: true,
+      Visible: true,
+      Width: 10,
+      Align: "right"
+    }
+    let tableFields: TableFields = {
+      IDTransaction: idField,
+      CustomerFirstName: customerFirstNameField,
+      CustomerLastName: customerLastNameField,
+      CustomerFullName: customerFullNameField,
+      DeliveryDate: deliveryDateField,
+      A_ProvisionTotal: provisionTotalField,
+      A_ProvisionFactor: provisionFactorField
+    }
+    return tableFields
+  }
 }
 
 export type TableTestDataEntry = {

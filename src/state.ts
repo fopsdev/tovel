@@ -21,6 +21,7 @@ export let isLoadingPosts: boolean = false
 export let posts: Post[] = []
 
 export let foo: string = "bar"
+export let foo2: string = "bar2"
 
 export let inputValueTest = { value: "initial" }
 

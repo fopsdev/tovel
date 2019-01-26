@@ -1,9 +1,10 @@
-import { app } from "../index"
+import { overmind } from "../index"
 import { TemplateResult, html } from "lit-html"
 import { Action } from "overmind"
-import { repeat } from "./repeat"
+//import { repeat } from "./repeat"
+import { repeat } from "lit-html/directives/repeat.js"
 import { OvlBaseElement } from "./OvlBaseElement"
-import { TableTestData } from "../components/tablea"
+//import { TableTestData } from "../components/tablea"
 
 //#####################TableHeaderElement##########################
 type TableColumnEventData = {
@@ -71,7 +72,6 @@ export type BaseData = { [key: string]: any }
 export type TableProps = {
   table: BaseTable
   data: BaseData
-  untrackedData: BaseData
 }
 
 export type BaseTable = {
@@ -125,7 +125,7 @@ export class OvlTable extends OvlBaseElement {
       if (e.type === "click") {
         if (position.rowIndex === -1) {
           // its a click on a column header
-          app.actions.OvlTableChangeSort({
+          overmind.actions.OvlTableChangeSort({
             Sort: OvlTable.table.Sort,
             ColumnId: this.sortedFieldKeys[position.columnIndex]
           })
@@ -154,7 +154,7 @@ export class OvlTable extends OvlBaseElement {
 
   static getDisplayValue(
     fieldInfo: TableField,
-    row: TableTestData,
+    row: any,
     field: string
   ): string {
     let value
@@ -189,24 +189,15 @@ export class OvlTable extends OvlBaseElement {
         return value.toString()
     }
   }
-  // addTracking(paths: Set<string>) {
-  //   paths.add(OvlTable.table.DataStatePath)
-  // }
 
-  // removeTracking() {
-  //   let paths: Set<string> = new Set()
-  //   paths.add(OvlTableElement.table.DataStatePath + ".*")
-  //   return paths
-  // }
-
-  initProps() {
-    super.initProps()
+  init() {
+    super.init()
     //console.log("init props header")
-    OvlTable.table = this.getData().table
-    this.data = this.getData().data
+    OvlTable.table = this.getData(this.state).table
+    this.data = this.getData(this.state).data
   }
 
-  prepareUI() {
+  prepare() {
     this.fields = <BaseFields>(<any>OvlTable.table).Fields
     this.sortedDataKeys = this.getFilteredAndSortedDataKeys()
   }
@@ -248,7 +239,6 @@ export class OvlTable extends OvlBaseElement {
 
           ${
             repeat(
-              this,
               this.sortedDataKeys.slice(0, 20),
               i => i,
               (i, rowIndex) => html`
@@ -256,7 +246,7 @@ export class OvlTable extends OvlBaseElement {
                   id="${this.id + i}"
                   class="c-table__row"
                   .getData="${
-                    () => ({
+                    state => ({
                       rowKey: i,
                       rowIndex: rowIndex,
                       data: this.data,

@@ -4,25 +4,22 @@ console.log("start")
 import { CompA } from "./components/compa"
 customElements.define("comp-a", CompA)
 
-import { Overmind, TConfig } from "overmind"
+import { Overmind, IAction } from "overmind"
 import * as state from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
 
 const config = {
   state,
-  actions
+  actions,
+  devtools: false
 }
 
-declare module "overmind" {
-  interface IConfig extends TConfig<typeof config> {}
-}
+export type Config = typeof config
 
-export const app = new Overmind(config, {
-  devtools: "localhost:3031"
-})
+export interface Action<Value = void> extends IAction<Config, Value> {}
 
-export { state }
+export const overmind = new Overmind(config, { logProxies: false })
 
 render(
   html`
