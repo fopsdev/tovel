@@ -7,7 +7,6 @@ import { overmind } from "../index"
 export class OvlTableRow extends OvlBaseElement {
   getData: any
   rowData: {
-    dataStatePath: string
     rowKey: string
     rowIndex: number
     sortedFieldKeys: string[]
@@ -17,7 +16,6 @@ export class OvlTableRow extends OvlBaseElement {
 
   init() {
     this.rowData = this.getData(this.state)
-    this.rowData.dataStatePath = OvlTable.table.DataStatePath
   }
 
   getCellId(cindex: number): string {

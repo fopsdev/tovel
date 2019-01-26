@@ -34,11 +34,10 @@ export class CompA extends OvlBaseElement {
 
         <ovl-table
           id="tabletest"
-          .getData="${
-            (state): TableProps => ({
-              table: state.myState.myTable,
-              data: state.tblTableTestData
-            })
+          .props="${
+            {
+              tableStatePath: "myState.myTable"
+            }
           }"
         >
         </ovl-table>
