@@ -211,6 +211,8 @@ export class OvlTable extends OvlBaseElement {
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
     {
+      this.trackedTree.addTrackingPath(this.tableState.DataStatePath)
+      this.trackedTree.addTrackingPath(this.props.tableStatePath)
       this.fields = <BaseFields>(<any>this.tableState).Fields
       this.sortedFieldKeys = this.getSortedFieldKeys()
       console.log("sortedfiltered")
