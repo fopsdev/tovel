@@ -38,8 +38,9 @@ export class OvlBaseElement extends HTMLElement {
     console.log(this.name + " startRender")
     this.prepare()
     // now that we have prepared our stuff, start tracking
-    let res
-    this.trackedTree.track(this.onUpdate)
+    // @ts-ignore
+    this.trackedTree.resume()
+
     // from here now this.state.xy will be tracked
     render(this.getUI(), this)
     console.log(this.name + " finishedRender. Registered paths:")
@@ -55,6 +56,9 @@ export class OvlBaseElement extends HTMLElement {
 
   connectedCallback() {
     console.log(this.name + " connect")
+    this.trackedTree.track(this.onUpdate)
+    // @ts-ignore
+    this.trackedTree.pause()
     this.init()
     this.doRender()
   }
