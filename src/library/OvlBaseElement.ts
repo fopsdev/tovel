@@ -39,7 +39,7 @@ export class OvlBaseElement extends HTMLElement {
     this.prepare()
     // now that we have prepared our stuff, start tracking
     // @ts-ignore
-    this.trackedTree.resume()
+    //this.trackedTree.resume()
 
     // from here now this.state.xy will be tracked
     render(this.getUI(), this)
@@ -58,7 +58,7 @@ export class OvlBaseElement extends HTMLElement {
     console.log(this.name + " connect")
     this.trackedTree.track(this.onUpdate)
     // @ts-ignore
-    this.trackedTree.pause()
+    //this.trackedTree.pause()
     this.init()
     this.doRender()
   }

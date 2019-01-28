@@ -50,11 +50,17 @@ const SortingField: Derive<TableSort, string> = self =>
 export let TableTest: UserTable = {
   DataStatePath: "tblTableTestData",
   Filter: "er",
-  Sort: { Ascending: true, field: "", Field: <string>(<any>SortingField) },
+  Sort: {
+    Ascending: true,
+    field: "",
+    Field: <string>(<any>SortingField),
+    CheckTracking: ""
+  },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
   Selected: [],
+  FilteredAndSorted: [],
   Fields: (self, state: TApp<Config>["state"]) => {
     let idField: TableField = {
       Pos: 0,
