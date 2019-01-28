@@ -256,13 +256,13 @@ export class OvlTable extends OvlBaseElement {
     if (this.tableState.FilteredAndSorted.length < 1) {
     }
 
-    // if (this.tableState.FilteredAndSorted.length < 1) {
-    //   this.actions["OvlTableChangeSort"]({
-    //     ColumnId: this.tableState.IDField,
-    //     TableState: this.tableState,
-    //     Data: this.data,
-    //   })
-    // }
+    if (this.tableState.FilteredAndSorted.length < 1) {
+      this.actions["OvlTableChangeSort"]({
+        ColumnId: this.tableState.IDField,
+        TableState: this.tableState,
+        Data: this.data
+      })
+    }
   }
 
   getUI(): TemplateResult {
