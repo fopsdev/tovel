@@ -53,14 +53,15 @@ export let TableTest: UserTable = {
   Sort: {
     Ascending: true,
     field: "",
-    Field: <string>(<any>SortingField),
-    CheckTracking: ""
+    Field: <string>(<any>SortingField)
   },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
   Selected: [],
-  FilteredAndSorted: [],
+  FilteredAndSorted: [
+    /*"4", "2", "1"*/
+  ],
   Fields: (self, state: TApp<Config>["state"]) => {
     let idField: TableField = {
       Pos: 0,

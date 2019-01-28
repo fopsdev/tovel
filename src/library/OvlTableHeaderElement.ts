@@ -83,7 +83,6 @@ export type TableSort = {
   Ascending: boolean
   field: string
   Field: string
-  CheckTracking: string
 }
 
 export type TablePaging = {
@@ -253,16 +252,14 @@ export class OvlTable extends OvlBaseElement {
     )
 
     this.sortedFieldKeys = this.getSortedFieldKeys()
-    if (this.tableState.FilteredAndSorted.length < 1) {
-    }
 
-    if (this.tableState.FilteredAndSorted.length < 1) {
-      this.actions["OvlTableChangeSort"]({
-        ColumnId: this.tableState.IDField,
-        TableState: this.tableState,
-        Data: this.data
-      })
-    }
+    // if (this.tableState.FilteredAndSorted.length < 1) {
+    //   this.actions["OvlTableChangeSort"]({
+    //     ColumnId: this.tableState.IDField,
+    //     TableState: this.tableState,
+    //     Data: this.data
+    //   })
+    // }
   }
 
   getUI(): TemplateResult {
