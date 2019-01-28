@@ -9,7 +9,21 @@ import * as state from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
 
+const onInitialize = ({ value: overmind, state, actions, effects }) => {
+  console.log("init")
+  // const initialData = await effects.api.getInitialData()
+  // state.initialData = initialData
+  // if (state.myState.myTable.FilteredAndSorted.length < 1) {
+  //   actions["OvlTableChangeSort"]({
+  //     ColumnId: state.myState.myTable.IDField,
+  //     TableState: state.myState.myTable,
+  //     Data: state.tblTableTestData
+  //   })
+  // }
+}
+
 const config = {
+  onInitialize,
   state,
   actions,
   devtools: false

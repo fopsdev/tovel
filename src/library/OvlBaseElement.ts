@@ -16,10 +16,7 @@ export class OvlBaseElement extends HTMLElement {
   getUI(): TemplateResult {
     return null
   }
-  // can be overwritten in derived element
-  prepare() {
-    // accessing state from inside this method should not be tracked
-  }
+
   // can be overwritten in derived element
   init() {
     // use it for getting data from parent, ...
@@ -36,8 +33,6 @@ export class OvlBaseElement extends HTMLElement {
 
   doRender() {
     console.log(this.name + " startRender")
-    this.prepare()
-    // now that we have prepared our stuff, start tracking
     // @ts-ignore
     //this.trackedTree.resume()
 

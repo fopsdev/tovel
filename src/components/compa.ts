@@ -24,9 +24,6 @@ export class CompA extends OvlBaseElement {
   //   overmind.actions.add1000Rows()
   // }
 
-  prepare() {
-    let shouldnotbetracked = this.state.foo2
-  }
   getUI() {
     return html`
       <div class="o-container o-container--super">
@@ -35,7 +32,7 @@ export class CompA extends OvlBaseElement {
         <ovl-table
           id="tabletest"
           .props="${
-            {
+            <TableProps>{
               tableStatePath: "myState.myTable"
             }
           }"

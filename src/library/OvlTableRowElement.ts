@@ -1,26 +1,23 @@
 import { html } from "lit-html"
-//import { repeat } from "./repeat"
 import { repeat } from "lit-html/directives/repeat.js"
 import { OvlBaseElement } from "./OvlBaseElement"
 import { OvlTable, BaseData, BaseFields } from "./OvlTableHeaderElement"
-import { overmind } from "../index"
-export class OvlTableRow extends OvlBaseElement {
-  getData: any
-  rowData: {
-    rowKey: string
-    rowIndex: number
-    sortedFieldKeys: string[]
-    data: BaseData
-    fields: BaseFields
-  }
 
-  init() {
-    this.rowData = this.getData(this.state)
-  }
+export type RowProps = {
+  rowKey: string
+  rowIndex: number
+  sortedFieldKeys: string[]
+  data: BaseData
+  fields: BaseFields
+}
+
+export class OvlTableRow extends OvlBaseElement {
+  rowData: RowProps
 
   getCellId(cindex: number): string {
     return this.id + "_" + cindex.toString()
   }
+
   getUI() {
     return html`
       ${
