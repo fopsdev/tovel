@@ -1,38 +1,27 @@
 import { html } from "lit-html"
-import { repeat } from "./repeat"
+import { repeat } from "lit-html/directives/repeat.js"
 import { OvlBaseElement } from "./OvlBaseElement"
 import { OvlTable, BaseData, BaseFields } from "./OvlTableHeaderElement"
+
+export type RowProps = {
+  rowKey: string
+  rowIndex: number
+  sortedFieldKeys: string[]
+  data: BaseData
+  fields: BaseFields
+}
+
 export class OvlTableRow extends OvlBaseElement {
-  getData: any
-  rowData: {
-    dataStatePath: string
-    rowKey: string
-    rowIndex: number
-    sortedFieldKeys: string[]
-    data: BaseData
-    fields: BaseFields
-  }
-
-  removeTracking() {
-    let paths: Set<string> = new Set()
-    paths.add(this.rowData.dataStatePath)
-    return paths
-  }
-
-  initProps() {
-    super.initProps()
-    this.rowData = this.getData()
-    this.rowData.dataStatePath = OvlTable.table.DataStatePath
-  }
+  rowData: RowProps
 
   getCellId(cindex: number): string {
     return this.id + "_" + cindex.toString()
   }
+
   getUI() {
     return html`
       ${
         repeat(
-          this,
           this.rowData.sortedFieldKeys,
           f => f,
           (f, columnIndex) => html`

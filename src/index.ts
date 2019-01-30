@@ -4,25 +4,37 @@ console.log("start")
 import { CompA } from "./components/compa"
 customElements.define("comp-a", CompA)
 
-import { Overmind, TConfig } from "overmind"
+import { Overmind, IAction, TApp } from "overmind"
 import * as state from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
 
+const onInitialize = ({ value: overmind, state, actions, effects }) => {
+  console.log("init")
+  // const initialData = await effects.api.getInitialData()
+  // state.initialData = initialData
+  if (state.myState.myTable.FilteredAndSorted.length < 1) {
+    state.myState.myTable.Filter = ""
+    actions["OvlTableChangeSort"]({
+      ColumnId: state.myState.myTable.IDField,
+      TableState: state.myState.myTable,
+      Data: state.tblTableTestData
+    })
+  }
+}
+
 const config = {
+  onInitialize,
   state,
-  actions
+  actions,
+  devtools: false
 }
 
-declare module "overmind" {
-  interface IConfig extends TConfig<typeof config> {}
-}
+export type Config = typeof config
 
-export const app = new Overmind(config, {
-  devtools: "localhost:3031"
-})
+export interface Action<Value = void> extends IAction<Config, Value> {}
 
-export { state }
+export const overmind = new Overmind(config, { logProxies: false })
 
 render(
   html`

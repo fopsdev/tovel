@@ -1,28 +1,80 @@
-import { app } from "../index"
+import { overmind } from "../index"
 import { TemplateResult, html } from "lit-html"
-import { Action } from "overmind"
-import { repeat } from "./repeat"
+import { Action } from "../index"
+import { repeat } from "lit-html/directives/repeat.js"
 import { OvlBaseElement } from "./OvlBaseElement"
-import { TableTestData } from "../components/tablea"
+import { RowProps } from "./OvlTableRowElement"
 
 //#####################TableHeaderElement##########################
 type TableColumnEventData = {
-  Sort: TableSort
   ColumnId: string
+  TableState: BaseTable
+  Data: BaseData
 }
 export const OvlTableChangeSort: Action<TableColumnEventData> = ({
   value: tableColumnData,
   state
 }) => {
-  // console.log(tableColumnData.Sort)
-  // console.log(state)
-  const field = tableColumnData.Sort.Field
+  const field = tableColumnData.TableState.Sort.Field
   if (tableColumnData.ColumnId === field) {
-    tableColumnData.Sort.Ascending = !tableColumnData.Sort.Ascending
+    tableColumnData.TableState.Sort.Ascending = !tableColumnData.TableState.Sort
+      .Ascending
   } else {
-    tableColumnData.Sort.field = tableColumnData.ColumnId
-    tableColumnData.Sort.Ascending = true
+    tableColumnData.TableState.Sort.field = tableColumnData.ColumnId
+    tableColumnData.TableState.Sort.Ascending = true
   }
+
+  let sortfield = tableColumnData.TableState.Sort.Field
+  let ascending = tableColumnData.TableState.Sort.Ascending ? 1 : -1
+
+  const data = tableColumnData.Data
+  let res: number = 0
+  tableColumnData.TableState.FilteredAndSorted = Object.keys(data)
+    .filter(v => {
+      return Object.keys(data[v]).some(s => {
+        const dispValue = OvlTable.getDisplayValue(
+          tableColumnData.TableState.Fields,
+          data[v],
+          s
+        )
+        return (
+          dispValue
+            .toLowerCase()
+            .indexOf(tableColumnData.TableState.Filter.toLowerCase()) > -1
+        )
+      })
+    })
+    .sort((a, b) => {
+      let valB = data[b][sortfield]
+      let valA = data[a][sortfield]
+      switch (tableColumnData.TableState.Fields[sortfield].Type) {
+        case "date":
+          const aDate = new Date(valA).getTime()
+          const bDate = new Date(valB).getTime()
+          res = aDate - bDate
+          break
+        case "string":
+          if (valA === null) {
+            valA = ""
+          }
+          if (valB === null) {
+            valB = ""
+          }
+          if (valA < valB) {
+            res = -1
+          } else if (valA > valB) {
+            res = 1
+          }
+          break
+        case "decimal":
+        case "int":
+          res = valA - valB
+          break
+      }
+
+      return res * ascending
+    })
+  console.log(tableColumnData.TableState.FilteredAndSorted)
 }
 
 type TableEventTypes = "@ovlcell@"
@@ -69,9 +121,7 @@ export type BaseFields = { [key: string]: TableField }
 export type BaseData = { [key: string]: any }
 
 export type TableProps = {
-  table: BaseTable
-  data: BaseData
-  untrackedData: BaseData
+  tableStatePath: string
 }
 
 export type BaseTable = {
@@ -82,6 +132,8 @@ export type BaseTable = {
   IDField: string
   Paging: TablePaging
   Selected: string[]
+  FilteredAndSorted: string[]
+  Fields: any
 }
 
 type TableEventPosition = {
@@ -90,13 +142,10 @@ type TableEventPosition = {
 }
 
 export class OvlTable extends OvlBaseElement {
-  getData: any
-  static table: BaseTable
-  fields: BaseFields
+  props: any
+  tableState: BaseTable
   data: BaseData
-  untrackedData: BaseData
   sortedFieldKeys: string[]
-  sortedDataKeys: string[]
   constructor() {
     super()
     this.addEventListener("click", e => {
@@ -125,8 +174,9 @@ export class OvlTable extends OvlBaseElement {
       if (e.type === "click") {
         if (position.rowIndex === -1) {
           // its a click on a column header
-          app.actions.OvlTableChangeSort({
-            Sort: OvlTable.table.Sort,
+          overmind.actions.OvlTableChangeSort({
+            TableState: this.tableState,
+            Data: this.data,
             ColumnId: this.sortedFieldKeys[position.columnIndex]
           })
         }
@@ -154,7 +204,7 @@ export class OvlTable extends OvlBaseElement {
 
   static getDisplayValue(
     fieldInfo: TableField,
-    row: TableTestData,
+    row: any,
     field: string
   ): string {
     let value
@@ -189,26 +239,27 @@ export class OvlTable extends OvlBaseElement {
         return value.toString()
     }
   }
-  // addTracking(paths: Set<string>) {
-  //   paths.add(OvlTable.table.DataStatePath)
-  // }
 
-  // removeTracking() {
-  //   let paths: Set<string> = new Set()
-  //   paths.add(OvlTableElement.table.DataStatePath + ".*")
-  //   return paths
-  // }
-
-  initProps() {
-    super.initProps()
+  init() {
     //console.log("init props header")
-    OvlTable.table = this.getData().table
-    this.data = this.getData().data
-  }
+    this.tableState = this.props.tableStatePath
+      .split(".")
+      .reduce((p, c) => (p && p[c]) || null, this.state)
 
-  prepareUI() {
-    this.fields = <BaseFields>(<any>OvlTable.table).Fields
-    this.sortedDataKeys = this.getFilteredAndSortedDataKeys()
+    this.data = this.tableState.DataStatePath.split(".").reduce(
+      (p, c) => (p && p[c]) || null,
+      this.state
+    )
+
+    this.sortedFieldKeys = this.getSortedFieldKeys()
+
+    // if (this.tableState.FilteredAndSorted.length < 1) {
+    //   this.actions["OvlTableChangeSort"]({
+    //     ColumnId: this.tableState.IDField,
+    //     TableState: this.tableState,
+    //     Data: this.data
+    //   })
+    // }
   }
 
   getUI(): TemplateResult {
@@ -216,14 +267,8 @@ export class OvlTable extends OvlBaseElement {
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
     {
-      this.fields = <BaseFields>(<any>OvlTable.table).Fields
-      this.sortedFieldKeys = this.getSortedFieldKeys()
-      console.log("sortedfiltered")
-      // <additional_tracking>
-      OvlTable.table.Filter
-      // </additional_tracking>
-
-      let sortField = OvlTable.table.Sort.Field
+      console.log(this.tableState.FilteredAndSorted)
+      let sortField = this.tableState.Sort.Field
       return html`
         <div class="c-table c-table--striped">
           <div class="c-table__caption">Default UI Table</div>
@@ -232,14 +277,14 @@ export class OvlTable extends OvlBaseElement {
               this.sortedFieldKeys.map((k, index) => {
                 let sortMarker = ""
                 if (k === sortField) {
-                  sortMarker = OvlTable.table.Sort.Ascending ? "▲" : "▼"
+                  sortMarker = this.tableState.Sort.Ascending ? "▲" : "▼"
                 }
                 return html`
                   <span
                     class="c-table__cell"
                     tabIndex="${index}"
                     id="${OvlTable.getCellId(this.id, -1, index)}"
-                    >${this.fields[k].Name}${sortMarker}
+                    >${this.tableState.Fields[k].Name}${sortMarker}
                   </span>
                 `
               })
@@ -248,21 +293,20 @@ export class OvlTable extends OvlBaseElement {
 
           ${
             repeat(
-              this,
-              this.sortedDataKeys.slice(0, 20),
+              this.tableState.FilteredAndSorted.slice(0, 20),
               i => i,
               (i, rowIndex) => html`
                 <ovl-row
                   id="${this.id + i}"
                   class="c-table__row"
-                  .getData="${
-                    () => ({
+                  .rowData="${
+                    <RowProps>{
                       rowKey: i,
                       rowIndex: rowIndex,
                       data: this.data,
                       sortedFieldKeys: this.sortedFieldKeys,
-                      fields: this.fields
-                    })
+                      fields: this.tableState.Fields
+                    }
                   }"
                 >
                 </ovl-row>
@@ -288,65 +332,8 @@ export class OvlTable extends OvlBaseElement {
   }
 
   getSortedFieldKeys(): string[] {
-    return Object.keys(this.fields).sort(
-      (a, b) => this.fields[a].Pos - this.fields[b].Pos
+    return Object.keys(this.tableState.Fields).sort(
+      (a, b) => this.tableState.Fields[a].Pos - this.tableState.Fields[b].Pos
     )
-  }
-  getFilteredAndSortedDataKeys(): string[] {
-    let sortfield = OvlTable.table.Sort.Field
-    let ascending = OvlTable.table.Sort.Ascending ? 1 : -1
-
-    const data = this.data
-    let res: number = 0
-    return Object.keys(data)
-      .filter(v => {
-        return Object.keys(data[v]).some(s => {
-          const dispValue = OvlTable.getDisplayValue(this.fields[s], data[v], s)
-          return (
-            dispValue
-              .toLowerCase()
-              .indexOf(OvlTable.table.Filter.toLowerCase()) > -1
-          )
-        })
-      })
-      .sort((a, b) => {
-        let valA
-        let valB
-        const fn = this.fields[sortfield].Fn
-        if (fn) {
-          valB = fn(data[b])
-          valA = fn(data[a])
-        } else {
-          valB = data[b][sortfield]
-          valA = data[a][sortfield]
-        }
-
-        switch (this.fields[sortfield].Type) {
-          case "date":
-            const aDate = new Date(valA).getTime()
-            const bDate = new Date(valB).getTime()
-            res = aDate - bDate
-            break
-          case "string":
-            if (valA === null) {
-              valA = ""
-            }
-            if (valB === null) {
-              valB = ""
-            }
-            if (valA < valB) {
-              res = -1
-            } else if (valA > valB) {
-              res = 1
-            }
-            break
-          case "decimal":
-          case "int":
-            res = valA - valB
-            break
-        }
-
-        return res * ascending
-      })
   }
 }
