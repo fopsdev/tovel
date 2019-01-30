@@ -8,7 +8,6 @@ import { Action, Config } from "../index"
 
 export const add1000Rows: Action = ({ state }) => {
   // console.log(tableColumnData.Sort)
-  state.myState.myTable.Filter = "1"
 
   for (let z = 0; z < 1000; z++) {
     const entry: TableTestDataEntry = {
@@ -22,8 +21,7 @@ export const add1000Rows: Action = ({ state }) => {
     const key = (z + 10).toString()
     state.tblTableTestData[key] = entry
   }
-
-  state.myState.myTable.Sort.Ascending = state.myState.myTable.Sort.Ascending
+  //state.myState.myTable.Sort.Ascending = state.myState.myTable.Sort.Ascending
 }
 
 type TableTestColumns =

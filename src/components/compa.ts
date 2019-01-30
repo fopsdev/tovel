@@ -19,7 +19,15 @@ export class CompA extends OvlBaseElement {
   changeFirstName(e) {
     overmind.actions.changeFirstName1()
   }
-
+  add1000Rows = e => {
+    overmind.actions.add1000Rows()
+    console.log(this.state)
+    overmind.actions.OvlTableChangeSort({
+      TableState: this.state.myState.myTable,
+      Data: this.state.tblTableTestData,
+      ColumnId: this.state.myState.myTable.Sort.Field
+    })
+  }
   // add1000Rows(e) {
   //   overmind.actions.add1000Rows()
   // }
@@ -28,7 +36,7 @@ export class CompA extends OvlBaseElement {
     return html`
       <div class="o-container o-container--super">
         <button @click="${this.changeFirstName}">${this.state.foo}</button>
-
+        <button @click="${this.add1000Rows}">add100Rows</button>
         <ovl-table
           id="tabletest"
           .props="${

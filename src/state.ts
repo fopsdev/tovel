@@ -1,5 +1,4 @@
-import { TableTest, tblTableTestData } from "./components/tablea"
-import { Derive } from "overmind"
+import { TableTest, tblTableTestData } from "./components/testTable"
 
 export type Post = {
   id: number

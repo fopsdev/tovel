@@ -7,8 +7,8 @@ export { OvlTableChangeSort }
 // import { OvlAutoCompleteChangeValue } from "./library/OvlAutoComplete"
 // export { OvlAutoCompleteChangeValue }
 
-// import { add1000Rows } from "./components/tablea"
-// export { add1000Rows }
+import { add1000Rows } from "./components/testTable"
+export { add1000Rows }
 export const changeFirstName1: Action = ({ state }) => {
   // console.log(tableColumnData.Sort)
   //state.tblTableTestData["1"].CustomerFirstName = "Aladin"
