@@ -6,7 +6,7 @@ export type Post = {
   body: string
 }
 
-export let suggestions = [
+let suggestions = [
   "Aal",
   "Barbe",
   "Forelle",
@@ -15,15 +15,20 @@ export let suggestions = [
   "Wels"
 ]
 
-export let isLoadingPosts: boolean = false
+let isLoadingPosts: boolean = false
 
-export let posts: Post[] = []
+let posts: Post[] = []
 
-export let foo: string = "bar"
-export let foo2: string = "bar2"
-
-export let inputValueTest = { value: "initial" }
+let foo: string = "bar"
+let foo2: string = "bar2"
+let inputValueTest = { value: "initial" }
 
 let myState = { myTable: TableTest }
-export { myState }
-export { tblTableTestData }
+
+export const state: any = {}
+
+state.foo = foo
+state.foo2 = foo2
+state.inputValueTest = inputValueTest
+state.myState = myState
+state.tblTableTestData = tblTableTestData

@@ -5,7 +5,7 @@ import { CompA } from "./components/compa"
 customElements.define("comp-a", CompA)
 
 import { Overmind, IAction, TApp } from "overmind"
-import * as state from "./state"
+import { state } from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
 
@@ -38,7 +38,7 @@ export const overmind = new Overmind(config, { logProxies: false })
 
 render(
   html`
-    lala3<comp-a id="maincomp"></comp-a>
+    <comp-a id="maincomp"></comp-a>
   `,
   document.getElementById("app")
 )

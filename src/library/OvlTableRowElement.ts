@@ -14,11 +14,8 @@ export type RowProps = {
 export class OvlTableRow extends OvlBaseElement {
   rowData: RowProps
 
-  getCellId(cindex: number): string {
-    return this.id + "_" + cindex.toString()
-  }
-
   getUI() {
+    console.log(this.rowData)
     return html`
       ${
         repeat(

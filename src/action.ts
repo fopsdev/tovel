@@ -11,7 +11,7 @@ import { add1000Rows } from "./components/testTable"
 export { add1000Rows }
 export const changeFirstName1: Action = ({ state }) => {
   // console.log(tableColumnData.Sort)
-  //state.tblTableTestData["1"].CustomerFirstName = "Aladin"
+  state.tblTableTestData["1"].CustomerFirstName = "Aladin"
   //state.suggestions.push("Rotauge")
   state.foo = "loloooooo"
 }

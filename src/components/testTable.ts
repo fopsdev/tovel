@@ -15,6 +15,9 @@ export const add1000Rows: Action = ({ state }) => {
       A_ProvisionTotal: z + 100,
       CustomerFirstName: "FirstName" + z.toString(),
       CustomerLastName: "LastName" + z.toString(),
+      get CustomerFullName() {
+        return this.CustomerFirstName + " " + this.CustomerLastName
+      },
       DeliveryDate: null,
       IDTransaction: z + 10
     }
@@ -28,6 +31,7 @@ type TableTestColumns =
   | "IDTransaction"
   | "CustomerFirstName"
   | "CustomerLastName"
+  | "CustomerFullName"
   | "DeliveryDate"
   | "A_ProvisionTotal"
   | "A_ProvisionFactor"
@@ -72,6 +76,7 @@ export let TableTest: UserTable = {
 
     let customerFirstNameField: TableField = {
       Pos: 1,
+
       Name: state.inputValueTest.value,
       Type: "string",
       Editable: true,
@@ -83,6 +88,15 @@ export let TableTest: UserTable = {
     let customerLastNameField: TableField = {
       Pos: 2,
       Name: "Last Name",
+      Type: "string",
+      Editable: true,
+      Visible: true,
+      Width: 30,
+      Align: "left"
+    }
+    let customerFullName: TableField = {
+      Pos: 2,
+      Name: "Full Name",
       Type: "string",
       Editable: true,
       Visible: true,
@@ -121,7 +135,7 @@ export let TableTest: UserTable = {
       IDTransaction: idField,
       CustomerFirstName: customerFirstNameField,
       CustomerLastName: customerLastNameField,
-
+      CustomerFullName: customerFullName,
       DeliveryDate: deliveryDateField,
       A_ProvisionTotal: provisionTotalField,
       A_ProvisionFactor: provisionFactorField
@@ -134,6 +148,7 @@ export type TableTestDataEntry = {
   IDTransaction: number
   CustomerFirstName: string
   CustomerLastName: string
+  CustomerFullName: string
   DeliveryDate: string
   A_ProvisionTotal: number
   A_ProvisionFactor: number
@@ -150,6 +165,9 @@ export let tblTableTestData: TableTestData = {
     A_ProvisionTotal: 100,
     CustomerFirstName: "Peter",
     CustomerLastName: "Müller",
+    get CustomerFullName() {
+      return this.CustomerFirstName + " " + this.CustomerLastName
+    },
     DeliveryDate: "2017-03-06T00:00:00+00:00"
   },
   2: {
@@ -158,6 +176,9 @@ export let tblTableTestData: TableTestData = {
     A_ProvisionTotal: 200,
     CustomerFirstName: "Paul",
     CustomerLastName: "Meier",
+    get CustomerFullName() {
+      return this.CustomerFirstName + " " + this.CustomerLastName
+    },
     DeliveryDate: "2016-03-07T00:00:00+00:00"
   },
   3: {
@@ -166,6 +187,9 @@ export let tblTableTestData: TableTestData = {
     A_ProvisionTotal: 300,
     CustomerFirstName: "Piotr",
     CustomerLastName: "Saslic",
+    get CustomerFullName() {
+      return this.CustomerFirstName + " " + this.CustomerLastName
+    },
     DeliveryDate: "2017-03-03T00:00:00+00:00"
   },
   4: {
@@ -173,6 +197,9 @@ export let tblTableTestData: TableTestData = {
     A_ProvisionFactor: null,
     A_ProvisionTotal: 300,
     CustomerFirstName: null,
+    get CustomerFullName() {
+      return this.CustomerFirstName + " " + this.CustomerLastName
+    },
     CustomerLastName: "Miller",
     DeliveryDate: null
   }
