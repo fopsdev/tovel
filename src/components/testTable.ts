@@ -28,15 +28,14 @@ type TableTestColumns =
   | "IDTransaction"
   | "CustomerFirstName"
   | "CustomerLastName"
-  | "CustomerFullName"
   | "DeliveryDate"
   | "A_ProvisionTotal"
   | "A_ProvisionFactor"
 
 type TableFields = { [key in TableTestColumns]: TableField }
 
-const getFullName = (row: TableTestDataEntry) =>
-  row.CustomerFirstName + " " + row.CustomerLastName
+// const getFullName = (row: TableTestDataEntry) =>
+//   row.CustomerFirstName + " " + row.CustomerLastName
 
 export interface UserTable extends BaseTable {
   Fields: Derive<TableField, TableFields>
@@ -91,17 +90,6 @@ export let TableTest: UserTable = {
       Align: "left"
     }
 
-    let customerFullNameField: TableField = {
-      Pos: 7,
-      Name: "Full Name",
-      Type: "string",
-      Editable: false,
-      Visible: true,
-      Width: 30,
-      Align: "left",
-      Fn: row => getFullName(row)
-    }
-
     let deliveryDateField: TableField = {
       Pos: 3,
       Name: "Delivery",
@@ -133,7 +121,7 @@ export let TableTest: UserTable = {
       IDTransaction: idField,
       CustomerFirstName: customerFirstNameField,
       CustomerLastName: customerLastNameField,
-      CustomerFullName: customerFullNameField,
+
       DeliveryDate: deliveryDateField,
       A_ProvisionTotal: provisionTotalField,
       A_ProvisionFactor: provisionFactorField
