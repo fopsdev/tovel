@@ -22,6 +22,7 @@ export const add1000Rows: Action = ({ state }) => {
       IDTransaction: z + 10
     }
     const key = (z + 10).toString()
+    
     state.tblTableTestData[key] = entry
   }
   //state.myState.myTable.Sort.Ascending = state.myState.myTable.Sort.Ascending

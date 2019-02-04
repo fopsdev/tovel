@@ -7,7 +7,7 @@ export type RowProps = {
   rowKey: string
   rowIndex: number
   sortedFieldKeys: string[]
-  data: BaseData
+  rowData: any
   fields: BaseFields
 }
 
@@ -17,28 +17,26 @@ export class OvlTableRow extends OvlBaseElement {
   getUI() {
     console.log(this.rowData)
     return html`
-      ${
-        repeat(
-          this.rowData.sortedFieldKeys,
-          f => f,
-          (f, columnIndex) => html`
-            <span
-              class="c-table__cell"
-              tabIndex="${columnIndex}"
-              id="${
-                OvlTable.getCellId(this.id, this.rowData.rowIndex, columnIndex)
-              }"
-              >${
-                OvlTable.getDisplayValue(
-                  this.rowData.fields[f],
-                  this.rowData.data[this.rowData.rowKey],
-                  f
-                )
-              }
-            </span>
-          `
-        )
-      }
+      ${repeat(
+        this.rowData.sortedFieldKeys,
+        f => f,
+        (f, columnIndex) => html`
+          <span
+            class="c-table__cell"
+            tabIndex="${columnIndex}"
+            id="${OvlTable.getCellId(
+              this.id,
+              this.rowData.rowIndex,
+              columnIndex
+            )}"
+            >${OvlTable.getDisplayValue(
+              this.rowData.fields[f],
+              this.rowData.rowData,
+              f
+            )}
+          </span>
+        `
+      )}
     `
   }
 }

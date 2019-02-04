@@ -272,47 +272,44 @@ export class OvlTable extends OvlBaseElement {
       return html`
         <div class="c-table c-table--striped">
           <div class="c-table__caption">Default UI Table</div>
-          <div class="c-table__row c-table__row--heading">
-            ${
-              this.sortedFieldKeys.map((k, index) => {
-                let sortMarker = ""
-                if (k === sortField) {
-                  sortMarker = this.tableState.Sort.Ascending ? "▲" : "▼"
-                }
-                return html`
-                  <span
-                    class="c-table__cell"
-                    tabIndex="${index}"
-                    id="${OvlTable.getCellId(this.id, -1, index)}"
-                    >${this.tableState.Fields[k].Name}${sortMarker}
-                  </span>
-                `
-              })
-            }
+          <div
+            class="c-table__row c-table__row--heading"
+            style="user-select: none;"
+          >
+            ${this.sortedFieldKeys.map((k, index) => {
+              let sortMarker = ""
+              if (k === sortField) {
+                sortMarker = this.tableState.Sort.Ascending ? "▲" : "▼"
+              }
+              return html`
+                <span
+                  class="c-table__cell"
+                  tabIndex="${index}"
+                  id="${OvlTable.getCellId(this.id, -1, index)}"
+                  >${this.tableState.Fields[k].Name}${sortMarker}
+                </span>
+              `
+            })}
           </div>
 
-          ${
-            repeat(
-              this.tableState.FilteredAndSorted.slice(0, 20),
-              i => i,
-              (i, rowIndex) => html`
-                <ovl-row
-                  id="${this.id + i}"
-                  class="c-table__row"
-                  .rowData="${
-                    <RowProps>{
-                      rowKey: i,
-                      rowIndex: rowIndex,
-                      data: this.data,
-                      sortedFieldKeys: this.sortedFieldKeys,
-                      fields: this.tableState.Fields
-                    }
-                  }"
-                >
-                </ovl-row>
-              `
-            )
-          }
+          ${repeat(
+            this.tableState.FilteredAndSorted.slice(0, 20),
+            i => i,
+            (i, rowIndex) => html`
+              <ovl-row
+                id="${this.id + i}"
+                class="c-table__row"
+                .rowData="${<RowProps>{
+                  rowKey: i,
+                  rowIndex: rowIndex,
+                  rowData: this.data[i],
+                  sortedFieldKeys: this.sortedFieldKeys,
+                  fields: this.tableState.Fields
+                }}"
+              >
+              </ovl-row>
+            `
+          )}
         </div>
       `
     }
