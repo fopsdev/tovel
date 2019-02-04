@@ -1,5 +1,9 @@
 import { OvlBaseElement } from "../library/OvlBaseElement"
-import { TableProps } from "../library/OvlTableHeaderElement"
+import {
+  TableProps,
+  BaseData,
+  BaseTable
+} from "../library/OvlTableHeaderElement"
 
 import { OvlTable } from "../library/OvlTableHeaderElement"
 import { OvlTableRow } from "../library/OvlTableRowElement"
@@ -25,20 +29,10 @@ export class CompA extends OvlBaseElement {
       <div class="o-container o-container--super">
         <button @click="${this.changeFirstName}">changeFirstName.1</button>
         <button @click="${this.add1000Rows}">add100Rows</button>
-        <ovl-table
-          id="tabletest"
-          .props="${<TableProps>{
-            tableStatePath: "myState.myTableA"
-          }}"
-        >
+        <ovl-table id="tabletest" .props="${this.state.myState.myTableA}">
         </ovl-table>
 
-        <ovl-table
-          id="tabletest2"
-          .props="${<TableProps>{
-            tableStatePath: "myState.myTableB"
-          }}"
-        >
+        <ovl-table id="tabletest2" .props="${this.state.myState.myTableB}">
         </ovl-table>
       </div>
     `

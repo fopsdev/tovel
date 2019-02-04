@@ -1,4 +1,4 @@
-type TableTestDataEntry = {
+export type TableTestDataEntry = {
   IDTransaction: number
   CustomerFirstName: string
   CustomerLastName: string

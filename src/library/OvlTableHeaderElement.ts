@@ -243,10 +243,7 @@ export class OvlTable extends OvlBaseElement {
 
   init() {
     //console.log("init props header")
-    this.tableState = this.props.tableStatePath
-      .split(".")
-      .reduce((p, c) => (p && p[c]) || null, this.state)
-
+    this.tableState = this.props
     this.data = this.tableState.Data
 
     this.sortedFieldKeys = this.getSortedFieldKeys()
