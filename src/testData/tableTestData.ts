@@ -8,7 +8,7 @@ export type TableTestDataEntry = {
   A_ProvisionFactor: number
 }
 
-type TableTestData = {
+export type TableTestData = {
   [key: string]: TableTestDataEntry
 }
 

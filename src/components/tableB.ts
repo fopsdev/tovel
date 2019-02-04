@@ -26,7 +26,7 @@ const SortingField: Derive<TableSort, string> = self =>
   self.field !== "" ? self.field : TableBDef.IDField
 
 export let TableBDef: UserTable = {
-  Data: {},
+  Data: (self, state) => state.tblTableTestData,
 
   Filter: "",
   Sort: {

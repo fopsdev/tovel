@@ -5,11 +5,39 @@ import { TableTestDataEntry } from "./testData/tableTestData"
 // export const changeFoo: Action = action => action.mutate(mutations.changeFoo)
 import {
   OvlTableChangeSort,
-  OvlTableRefresh
+  OvlTableRefresh,
+  BaseTable
 } from "./library/OvlTableHeaderElement"
+import { pipe, forEach, action } from "overmind"
+import { Operator } from "./index"
+
 export { OvlTableChangeSort, OvlTableRefresh }
 // import { OvlAutoCompleteChangeValue } from "./library/OvlAutoComplete"
 // export { OvlAutoCompleteChangeValue }
+
+export const Add1000Properly: Operator<BaseTable[]> = pipe(
+  action(({ state }) => {
+    // console.log(tableColumnData.Sort)
+
+    for (let z = 0; z < 1000; z++) {
+      const entry: TableTestDataEntry = {
+        A_ProvisionFactor: z + 0.1,
+        A_ProvisionTotal: z + 100,
+        CustomerFirstName: "FirstName" + z.toString(),
+        CustomerLastName: "LastName" + z.toString(),
+        get CustomerFullName() {
+          return this.CustomerFirstName + " " + this.CustomerLastName
+        },
+        DeliveryDate: null,
+        IDTransaction: z + 10
+      }
+      const key = (z + 10).toString()
+
+      state.tblTableTestData[key] = entry
+    }
+  }),
+  forEach(OvlTableRefresh)
+)
 
 export const add1000Rows: Action = ({ state }) => {
   // console.log(tableColumnData.Sort)
