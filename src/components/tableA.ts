@@ -22,7 +22,7 @@ export const add1000Rows: Action = ({ state }) => {
       IDTransaction: z + 10
     }
     const key = (z + 10).toString()
-    
+
     state.tblTableTestData[key] = entry
   }
   //state.myState.myTable.Sort.Ascending = state.myState.myTable.Sort.Ascending
@@ -47,10 +47,11 @@ export interface UserTable extends BaseTable {
 }
 
 const SortingField: Derive<TableSort, string> = self =>
-  self.field !== "" ? self.field : TableTest.IDField
+  self.field !== "" ? self.field : TableADef.IDField
 
-export let TableTest: UserTable = {
+export let TableADef: UserTable = {
   DataStatePath: "tblTableTestData",
+
   Filter: "er",
   Sort: {
     Ascending: true,

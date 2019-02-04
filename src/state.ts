@@ -1,4 +1,5 @@
-import { TableTest, tblTableTestData } from "./components/testTable"
+import { TableADef, tblTableTestData } from "./components/tableA"
+import { TableBDef } from "./components/tableB"
 
 export type Post = {
   id: number
@@ -23,7 +24,7 @@ let foo: string = "bar"
 let foo2: string = "bar2"
 let inputValueTest = { value: "initial" }
 
-let myState = { myTable: TableTest }
+let myState = { myTableA: TableADef, myTableB: TableBDef }
 
 export const state: any = {}
 

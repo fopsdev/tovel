@@ -13,7 +13,8 @@ type TableColumnEventData = {
 }
 export const OvlTableChangeSort: Action<TableColumnEventData> = ({
   value: tableColumnData,
-  state
+  state,
+  actions
 }) => {
   const field = tableColumnData.TableState.Sort.Field
   if (tableColumnData.ColumnId === field) {
@@ -23,31 +24,35 @@ export const OvlTableChangeSort: Action<TableColumnEventData> = ({
     tableColumnData.TableState.Sort.field = tableColumnData.ColumnId
     tableColumnData.TableState.Sort.Ascending = true
   }
+  actions.OvlTableRefresh(tableColumnData.TableState)
+  console.log(tableColumnData.TableState.FilteredAndSorted)
+}
 
-  let sortfield = tableColumnData.TableState.Sort.Field
-  let ascending = tableColumnData.TableState.Sort.Ascending ? 1 : -1
+export const OvlTableRefresh: Action<BaseTable> = ({
+  value: baseTable,
+  state
+}) => {
+  let sortfield = baseTable.Sort.Field
+  let ascending = baseTable.Sort.Ascending ? 1 : -1
 
-  const data = tableColumnData.Data
+  const data = baseTable.DataStatePath.split(".").reduce(
+    (p, c) => (p && p[c]) || null,
+    state
+  )
   let res: number = 0
-  tableColumnData.TableState.FilteredAndSorted = Object.keys(data)
+  baseTable.FilteredAndSorted = Object.keys(data)
     .filter(v => {
       return Object.keys(data[v]).some(s => {
-        const dispValue = OvlTable.getDisplayValue(
-          tableColumnData.TableState.Fields,
-          data[v],
-          s
-        )
+        const dispValue = OvlTable.getDisplayValue(baseTable.Fields, data[v], s)
         return (
-          dispValue
-            .toLowerCase()
-            .indexOf(tableColumnData.TableState.Filter.toLowerCase()) > -1
+          dispValue.toLowerCase().indexOf(baseTable.Filter.toLowerCase()) > -1
         )
       })
     })
     .sort((a, b) => {
       let valB = data[b][sortfield]
       let valA = data[a][sortfield]
-      switch (tableColumnData.TableState.Fields[sortfield].Type) {
+      switch (baseTable.Fields[sortfield].Type) {
         case "date":
           const aDate = new Date(valA).getTime()
           const bDate = new Date(valB).getTime()
@@ -74,7 +79,6 @@ export const OvlTableChangeSort: Action<TableColumnEventData> = ({
 
       return res * ascending
     })
-  console.log(tableColumnData.TableState.FilteredAndSorted)
 }
 
 type TableEventTypes = "@ovlcell@"
@@ -271,7 +275,9 @@ export class OvlTable extends OvlBaseElement {
       let sortField = this.tableState.Sort.Field
       return html`
         <div class="c-table c-table--striped">
-          <div class="c-table__caption">Default UI Table</div>
+          <div class="c-table__caption">
+            ${this.id} filtered by:${this.tableState.Filter}
+          </div>
           <div
             class="c-table__row c-table__row--heading"
             style="user-select: none;"

@@ -10,17 +10,15 @@ import * as actions from "./action"
 import { html, render } from "lit-html"
 
 const onInitialize = ({ value: overmind, state, actions, effects }) => {
-  console.log("init")
-  // const initialData = await effects.api.getInitialData()
-  // state.initialData = initialData
-  if (state.myState.myTable.FilteredAndSorted.length < 1) {
-    state.myState.myTable.Filter = ""
-    actions["OvlTableChangeSort"]({
-      ColumnId: state.myState.myTable.IDField,
-      TableState: state.myState.myTable,
-      Data: state.tblTableTestData
-    })
-  }
+  // console.log("init")
+  // if (state.myState.myTableA.FilteredAndSorted.length < 1) {
+  //   state.myState.myTableA.Filter = ""
+  //   actions["OvlTableChangeSort"]({
+  //     ColumnId: state.myState.myTableA.IDField,
+  //     TableState: state.myState.myTableA,
+  //     Data: state.tblTableTestData
+  //   })
+  // }
 }
 
 const config = {
