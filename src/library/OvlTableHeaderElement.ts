@@ -35,10 +35,7 @@ export const OvlTableRefresh: Action<BaseTable> = ({
   let sortfield = baseTable.Sort.Field
   let ascending = baseTable.Sort.Ascending ? 1 : -1
 
-  const data = baseTable.DataStatePath.split(".").reduce(
-    (p, c) => (p && p[c]) || null,
-    state
-  )
+  const data = baseTable.Data
   let res: number = 0
   baseTable.FilteredAndSorted = Object.keys(data)
     .filter(v => {
@@ -129,7 +126,7 @@ export type TableProps = {
 }
 
 export type BaseTable = {
-  DataStatePath: string
+  Data: BaseData
   Filter: string
   Sort: TableSort
   Entity: string
@@ -250,10 +247,7 @@ export class OvlTable extends OvlBaseElement {
       .split(".")
       .reduce((p, c) => (p && p[c]) || null, this.state)
 
-    this.data = this.tableState.DataStatePath.split(".").reduce(
-      (p, c) => (p && p[c]) || null,
-      this.state
-    )
+    this.data = this.tableState.Data
 
     this.sortedFieldKeys = this.getSortedFieldKeys()
 

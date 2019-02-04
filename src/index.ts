@@ -1,13 +1,12 @@
 // workaround hmr.. not really hmr now but at least it refreshes...
 console.log("start")
 
-import { CompA } from "./components/compa"
-customElements.define("comp-a", CompA)
-
 import { Overmind, IAction, TApp } from "overmind"
 import { state } from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
+import { CompA } from "./components/compa"
+customElements.define("comp-a", CompA)
 
 const onInitialize = ({ value: overmind, state, actions, effects }) => {
   // console.log("init")

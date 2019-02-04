@@ -1,17 +1,12 @@
 import { OvlBaseElement } from "../library/OvlBaseElement"
 import { TableProps } from "../library/OvlTableHeaderElement"
-// import { OvlAutoComplete, AutoCompleteProps } from "../library/OvlAutoComplete"
-// import {
-//   NativeDateInput,
-//   NativeDateInputProps
-// } from "../library/nativeDateInput"
+
 import { OvlTable } from "../library/OvlTableHeaderElement"
 import { OvlTableRow } from "../library/OvlTableRowElement"
 
 customElements.define("ovl-table", OvlTable)
 customElements.define("ovl-row", OvlTableRow)
-// customElements.define("auto-complete", OvlAutoComplete)
-// customElements.define("date-input", NativeDateInput)
+
 import { overmind } from "../index"
 import { html } from "lit-html"
 

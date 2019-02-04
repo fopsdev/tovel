@@ -1,10 +1,11 @@
+import { tblTableTestData } from "../testData/tableTestData"
 import {
   BaseTable,
   TableField,
   TableSort
 } from "../library/OvlTableHeaderElement"
 import { Derive, TApp } from "overmind"
-import { Action, Config } from "../index"
+import { Config } from "../index"
 
 type TableTestColumns =
   | "IDTransaction"
@@ -25,8 +26,8 @@ const SortingField: Derive<TableSort, string> = self =>
   self.field !== "" ? self.field : TableBDef.IDField
 
 export let TableBDef: UserTable = {
-  DataStatePath: "tblTableTestData",
-  Data: undefined,
+  Data: {},
+
   Filter: "",
   Sort: {
     Ascending: true,
