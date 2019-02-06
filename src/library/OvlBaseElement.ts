@@ -44,7 +44,7 @@ export class OvlBaseElement extends HTMLElement {
 
   onUpdate = (mutations, paths, flushId) => {
     console.log(this.name + " onUpdate")
-    // console.log(paths)
+    console.log(paths)
     // console.log(mutations)
     this.trackedTree.track(this.onUpdate)
     this.doRender()

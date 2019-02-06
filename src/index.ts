@@ -1,6 +1,3 @@
-// workaround hmr.. not really hmr now but at least it refreshes...
-console.log("start")
-
 import {
   Overmind,
   IAction,
