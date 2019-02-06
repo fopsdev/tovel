@@ -36,7 +36,7 @@ export let TableBDef: UserTable = {
   },
   Entity: "tblTransactions",
   IDField: "IDTransaction",
-  Paging: { Page: 1, Size: 50 },
+  Paging: { Page: 1, Size: 10 },
   Selected: [],
   FilteredAndSorted: [],
   Fields: (self, state: TApp<Config>["state"]) => {

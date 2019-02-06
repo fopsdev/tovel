@@ -15,7 +15,7 @@ export class OvlTableRow extends OvlBaseElement {
   rowData: RowProps
 
   getUI() {
-    console.log(this.rowData)
+    //console.log(this.rowData)
     return html`
       ${repeat(
         this.rowData.sortedFieldKeys,

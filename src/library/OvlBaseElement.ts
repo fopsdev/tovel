@@ -1,10 +1,11 @@
 import { overmind, Config } from "../index"
-import { TApp } from "overmind"
+import { TApp, EventType } from "overmind"
 import { render, TemplateResult } from "lit-html"
 import { ITrackStateTree } from "proxy-state-tree"
 
 export class OvlBaseElement extends HTMLElement {
   _id: number
+  _flushId: number
   state: TApp<Config>["state"]
 
   name: string
@@ -39,28 +40,56 @@ export class OvlBaseElement extends HTMLElement {
     // from here now this.state.xy will be tracked
     render(this.getUI(), this)
     console.log(this.name + " finishedRender. Registered paths:")
-    console.log(Array.from(this.trackedTree.pathDependencies))
+    console.log(this.trackedTree.pathDependencies)
+    let eventType = EventType.COMPONENT_ADD
+    if (this._flushId) {
+      eventType = EventType.COMPONENT_UPDATE
+    }
+    let eventObj: any = {
+      componentId: this.name,
+      componentInstanceId: this._id,
+      name: this.name,
+      paths: Array.from(this.trackedTree.pathDependencies) as any
+    }
+    if (this._flushId) {
+      eventObj.flushId = this._flushId
+    }
+    console.log("send to devtools:")
+    console.log(eventType)
+    console.log(eventObj)
+    overmind.eventHub.emitAsync(eventType, eventObj)
   }
 
   onUpdate = (mutations, paths, flushId) => {
     console.log(this.name + " onUpdate")
     console.log(paths)
+    console.log(flushId)
     // console.log(mutations)
-    this.trackedTree.track(this.onUpdate)
-    this.doRender()
+    this._flushId = flushId
+    this.trackedTree.trackScope(() => this.doRender(), this.onUpdate)
   }
 
   connectedCallback() {
     console.log(this.name + " connect")
-    this.trackedTree.track(this.onUpdate)
+
+    this.trackedTree.trackScope(() => {
+      this.init()
+      this.doRender()
+    }, this.onUpdate)
+
     // @ts-ignore
     //this.trackedTree.pause()
-    this.init()
-    this.doRender()
   }
 
   disconnectedCallback() {
     console.log(this.name + " disconnect")
+
+    overmind.eventHub.emitAsync(EventType.COMPONENT_REMOVE, {
+      componentId: this.name,
+      componentInstanceId: this._id,
+      name: this.name
+    })
+
     this.trackedTree.dispose()
   }
 }
