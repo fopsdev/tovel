@@ -26,23 +26,6 @@ export const OvlTableChangeSort: Operator<TableColumnEventData> = action(
   }
 )
 
-// export const OvlTableChangeSort: Action<TableColumnEventData> = ({
-//   value: tableColumnData,
-//   state,
-//   actions
-// }) => {
-//   const field = tableColumnData.TableState.Sort.Field
-//   if (tableColumnData.ColumnId === field) {
-//     tableColumnData.TableState.Sort.Ascending = !tableColumnData.TableState.Sort
-//       .Ascending
-//   } else {
-//     tableColumnData.TableState.Sort.field = tableColumnData.ColumnId
-//     tableColumnData.TableState.Sort.Ascending = true
-//   }
-//   actions.OvlTableRefresh(tableColumnData.TableState)
-//   console.log(tableColumnData.TableState.FilteredAndSorted)
-// }
-
 export const OvlTableRefresh: Operator<BaseTable> = action(
   ({ value: baseTable, state }) => {
     let sortfield = baseTable.Sort.Field
@@ -95,11 +78,14 @@ export const OvlTableRefresh: Operator<BaseTable> = action(
       })
   }
 )
-const getBaseTable = map(
-  ({ value }) => (<TableColumnEventData>value).TableState
+const getBaseTable: Operator<TableColumnEventData, BaseTable> = map(
+  ({ value }) => value.TableState
 )
 
-export const OvlTableSortAndRefresh: Operator<TableColumnEventData> = pipe(
+export const OvlTableSortAndRefresh: Operator<
+  TableColumnEventData,
+  BaseTable
+> = pipe(
   OvlTableChangeSort,
   getBaseTable,
   OvlTableRefresh
@@ -309,7 +295,10 @@ export class OvlTable extends OvlBaseElement {
           </div>
 
           ${repeat(
-            this.tableState.FilteredAndSorted.slice(0, 20),
+            this.tableState.FilteredAndSorted.slice(
+              this.tableState.Paging.Page - 1,
+              this.tableState.Paging.Size
+            ),
             i => i,
             (i, rowIndex) => html`
               <ovl-row
