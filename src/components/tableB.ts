@@ -3,7 +3,7 @@ import {
   BaseTable,
   TableField,
   TableSort
-} from "../library/OvlTableHeaderElement"
+} from "../library/OvlTable/OvlTableHeaderElement"
 import { Derive, TApp } from "overmind"
 import { Config } from "../index"
 

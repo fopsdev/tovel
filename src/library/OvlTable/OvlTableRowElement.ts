@@ -1,6 +1,6 @@
 import { html } from "lit-html"
 import { repeat } from "lit-html/directives/repeat.js"
-import { OvlBaseElement } from "./OvlBaseElement"
+import { OvlBaseElement } from "../OvlBaseElement"
 import { OvlTable, BaseData, BaseFields } from "./OvlTableHeaderElement"
 
 export type RowProps = {

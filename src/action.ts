@@ -3,12 +3,13 @@ import { TableTestDataEntry } from "./testData/tableTestData"
 
 // import * as mutations from "./mutations"
 // export const changeFoo: Action = action => action.mutate(mutations.changeFoo)
+import { BaseTable } from "./library/OvlTable/OvlTableHeaderElement"
+
 import {
   OvlTableChangeSort,
   OvlTableRefresh,
-  OvlTableSortAndRefresh,
-  BaseTable
-} from "./library/OvlTableHeaderElement"
+  OvlTableSortAndRefresh
+} from "./library/OvlTable/operators"
 import { pipe, forEach, action } from "overmind"
 import { Operator } from "./index"
 

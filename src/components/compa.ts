@@ -1,7 +1,7 @@
 import { OvlBaseElement } from "../library/OvlBaseElement"
 
-import { OvlTable } from "../library/OvlTableHeaderElement"
-import { OvlTableRow } from "../library/OvlTableRowElement"
+import { OvlTable } from "../library/OvlTable/OvlTableHeaderElement"
+import { OvlTableRow } from "../library/OvlTable/OvlTableRowElement"
 
 customElements.define("ovl-table", OvlTable)
 customElements.define("ovl-row", OvlTableRow)

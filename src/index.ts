@@ -24,9 +24,9 @@ const onInitialize: OnInitialize = ({
   effects
 }) => {
   console.log("init")
-  if (state.myState.myTableA.FilteredAndSorted.length < 1) {
-    actions.OvlTableRefresh(state.myState.myTableA)
-  }
+
+  actions.OvlTableRefresh(state.myState.myTableA)
+  actions.OvlTableRefresh(state.myState.myTableB)
 }
 
 const config = {

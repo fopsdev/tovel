@@ -2,10 +2,9 @@ import {
   BaseTable,
   TableField,
   TableSort
-} from "../library/OvlTableHeaderElement"
+} from "../library/OvlTable/OvlTableHeaderElement"
 import { Derive, TApp } from "overmind"
-import { Action, Config } from "../index"
-import { state } from "../state"
+import { Config } from "../index"
 
 type TableTestColumns =
   | "IDTransaction"
@@ -40,9 +39,7 @@ export let TableADef: UserTable = {
   IDField: "IDTransaction",
   Paging: { Page: 1, Size: 50 },
   Selected: [],
-  FilteredAndSorted: [
-    /*"4", "2", "1"*/
-  ],
+  FilteredAndSorted: [],
   Fields: (self, state: TApp<Config>["state"]) => {
     let idField: TableField = {
       Pos: 0,
