@@ -6,12 +6,13 @@ import { TableTestDataEntry } from "./testData/tableTestData"
 import {
   OvlTableChangeSort,
   OvlTableRefresh,
+  OvlTableSortAndRefresh,
   BaseTable
 } from "./library/OvlTableHeaderElement"
 import { pipe, forEach, action } from "overmind"
 import { Operator } from "./index"
 
-export { OvlTableChangeSort, OvlTableRefresh }
+export { OvlTableChangeSort, OvlTableRefresh, OvlTableSortAndRefresh }
 // import { OvlAutoCompleteChangeValue } from "./library/OvlAutoComplete"
 // export { OvlAutoCompleteChangeValue }
 

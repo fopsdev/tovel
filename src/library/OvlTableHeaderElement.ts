@@ -1,12 +1,11 @@
 import { overmind, Operator, Derive } from "../index"
 
 import { TemplateResult, html } from "lit-html"
-import { Action } from "../index"
 import { repeat } from "lit-html/directives/repeat.js"
 import { OvlBaseElement } from "./OvlBaseElement"
 import { RowProps } from "./OvlTableRowElement"
 import { TableTestData } from "../testData/TableTestData"
-import { action } from "overmind"
+import { action, pipe, map } from "overmind"
 
 //#####################TableHeaderElement##########################
 type TableColumnEventData = {
@@ -14,22 +13,35 @@ type TableColumnEventData = {
   TableState: BaseTable
   Data: BaseData
 }
-export const OvlTableChangeSort: Action<TableColumnEventData> = ({
-  value: tableColumnData,
-  state,
-  actions
-}) => {
-  const field = tableColumnData.TableState.Sort.Field
-  if (tableColumnData.ColumnId === field) {
-    tableColumnData.TableState.Sort.Ascending = !tableColumnData.TableState.Sort
-      .Ascending
-  } else {
-    tableColumnData.TableState.Sort.field = tableColumnData.ColumnId
-    tableColumnData.TableState.Sort.Ascending = true
+export const OvlTableChangeSort: Operator<TableColumnEventData> = action(
+  ({ value: tableColumnData, state }) => {
+    const field = tableColumnData.TableState.Sort.Field
+    if (tableColumnData.ColumnId === field) {
+      tableColumnData.TableState.Sort.Ascending = !tableColumnData.TableState
+        .Sort.Ascending
+    } else {
+      tableColumnData.TableState.Sort.field = tableColumnData.ColumnId
+      tableColumnData.TableState.Sort.Ascending = true
+    }
   }
-  actions.OvlTableRefresh(tableColumnData.TableState)
-  console.log(tableColumnData.TableState.FilteredAndSorted)
-}
+)
+
+// export const OvlTableChangeSort: Action<TableColumnEventData> = ({
+//   value: tableColumnData,
+//   state,
+//   actions
+// }) => {
+//   const field = tableColumnData.TableState.Sort.Field
+//   if (tableColumnData.ColumnId === field) {
+//     tableColumnData.TableState.Sort.Ascending = !tableColumnData.TableState.Sort
+//       .Ascending
+//   } else {
+//     tableColumnData.TableState.Sort.field = tableColumnData.ColumnId
+//     tableColumnData.TableState.Sort.Ascending = true
+//   }
+//   actions.OvlTableRefresh(tableColumnData.TableState)
+//   console.log(tableColumnData.TableState.FilteredAndSorted)
+// }
 
 export const OvlTableRefresh: Operator<BaseTable> = action(
   ({ value: baseTable, state }) => {
@@ -82,6 +94,15 @@ export const OvlTableRefresh: Operator<BaseTable> = action(
         return res * ascending
       })
   }
+)
+const getBaseTable = map(
+  ({ value }) => (<TableColumnEventData>value).TableState
+)
+
+export const OvlTableSortAndRefresh: Operator<TableColumnEventData> = pipe(
+  OvlTableChangeSort,
+  getBaseTable,
+  OvlTableRefresh
 )
 
 type TableEventTypes = "@ovlcell@"
@@ -182,7 +203,7 @@ export class OvlTable extends OvlBaseElement {
       if (e.type === "click") {
         if (position.rowIndex === -1) {
           // its a click on a column header
-          overmind.actions.OvlTableChangeSort({
+          overmind.actions.OvlTableSortAndRefresh({
             TableState: this.tableState,
             Data: this.data,
             ColumnId: this.sortedFieldKeys[position.columnIndex]
@@ -254,14 +275,6 @@ export class OvlTable extends OvlBaseElement {
     this.data = this.tableState.Data
 
     this.sortedFieldKeys = this.getSortedFieldKeys()
-
-    // if (this.tableState.FilteredAndSorted.length < 1) {
-    //   this.actions["OvlTableChangeSort"]({
-    //     ColumnId: this.tableState.IDField,
-    //     TableState: this.tableState,
-    //     Data: this.data
-    //   })
-    // }
   }
 
   getUI(): TemplateResult {
@@ -269,7 +282,6 @@ export class OvlTable extends OvlBaseElement {
     // and calling the default row element
     // overwrite those getUI methods in your child elements if you prefer a different rendering
     {
-      console.log(this.tableState.FilteredAndSorted)
       let sortField = this.tableState.Sort.Field
       return html`
         <div class="c-table c-table--striped">

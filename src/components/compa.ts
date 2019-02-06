@@ -1,9 +1,4 @@
 import { OvlBaseElement } from "../library/OvlBaseElement"
-import {
-  TableProps,
-  BaseData,
-  BaseTable
-} from "../library/OvlTableHeaderElement"
 
 import { OvlTable } from "../library/OvlTableHeaderElement"
 import { OvlTableRow } from "../library/OvlTableRowElement"

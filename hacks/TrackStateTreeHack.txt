@@ -1,1 +1,0 @@
-Added a pause and resume function to pause or resume state tracking because elsewise i ended up having too much trackings
