@@ -11,8 +11,8 @@ import {
 import { state } from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
-import { CompA } from "./components/compa"
-customElements.define("comp-a", CompA)
+import { CompOml } from "./components/comp_oml"
+customElements.define("comp-oml", CompOml)
 
 const onInitialize: OnInitialize = ({
   value: overmind,
@@ -21,7 +21,8 @@ const onInitialize: OnInitialize = ({
   effects
 }) => {
   console.log("init")
-
+  // @ts-ignore
+  window.M.AutoInit()
   actions.OvlTableRefresh(state.myState.myTableA)
   actions.OvlTableRefresh(state.myState.myTableB)
 }
@@ -44,11 +45,14 @@ export interface Action<Input = void> extends IAction<Config, Input> {}
 export interface Operator<Input = void, Output = Input>
   extends IOperator<Config, Input, Output> {}
 
-export const overmind = new Overmind(config, { logProxies: false })
+export const overmind = new Overmind(config, {
+  devtools: true,
+  logProxies: false
+})
 
 render(
   html`
-    <comp-a id="maincomp"></comp-a>
+    <comp-oml id="maincomp"></comp-oml>
   `,
   document.getElementById("app")
 )

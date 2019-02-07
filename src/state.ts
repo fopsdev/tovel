@@ -13,5 +13,6 @@ export const state = {
   myState: { myTableA: TableADef, myTableB: TableBDef },
   foo,
   foo2,
-  inputValueTest
+  inputValueTest,
+  tabState: { activeTab: "#test4" }
 }

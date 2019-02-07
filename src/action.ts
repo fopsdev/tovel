@@ -10,10 +10,16 @@ import {
   OvlTableRefresh,
   OvlTableSortAndRefresh
 } from "./library/OvlTable/operators"
+import { OmlChangeTab } from "./library/OmlTab/OmlTab"
 import { pipe, forEach, action } from "overmind"
 import { Operator } from "./index"
 
-export { OvlTableChangeSort, OvlTableRefresh, OvlTableSortAndRefresh }
+export {
+  OvlTableChangeSort,
+  OvlTableRefresh,
+  OvlTableSortAndRefresh,
+  OmlChangeTab
+}
 // import { OvlAutoCompleteChangeValue } from "./library/OvlAutoComplete"
 // export { OvlAutoCompleteChangeValue }
 

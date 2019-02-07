@@ -23,6 +23,14 @@ export class OvlBaseElement extends HTMLElement {
     // use it for getting data from parent, ...
   }
 
+  afterRender() {
+    // use it eg. for dom manips after rendering ...
+  }
+
+  destroy() {
+    // use it eg. for cleanup dom refs  ...
+  }
+
   constructor() {
     super()
     this._id = ++OvlBaseElement._counter
@@ -34,9 +42,6 @@ export class OvlBaseElement extends HTMLElement {
 
   doRender() {
     console.log(this.name + " startRender")
-    // @ts-ignore
-    //this.trackedTree.resume()
-
     // from here now this.state.xy will be tracked
     render(this.getUI(), this)
     console.log(this.name + " finishedRender. Registered paths:")
@@ -58,6 +63,7 @@ export class OvlBaseElement extends HTMLElement {
     console.log(eventType)
     console.log(eventObj)
     overmind.eventHub.emitAsync(eventType, eventObj)
+    this.afterRender()
   }
 
   onUpdate = (mutations, paths, flushId) => {
@@ -76,9 +82,6 @@ export class OvlBaseElement extends HTMLElement {
       this.init()
       this.doRender()
     }, this.onUpdate)
-
-    // @ts-ignore
-    //this.trackedTree.pause()
   }
 
   disconnectedCallback() {
@@ -91,5 +94,6 @@ export class OvlBaseElement extends HTMLElement {
     })
 
     this.trackedTree.dispose()
+    this.destroy()
   }
 }
