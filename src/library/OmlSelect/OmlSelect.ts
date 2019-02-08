@@ -11,6 +11,7 @@ type Option = {
 export type SelectState = {
   options: Option[]
   selected: string[]
+  multiple: boolean
 }
 
 type ChangeSelectParam = {
@@ -22,6 +23,7 @@ export const OmlChangeSelected: Action<ChangeSelectParam> = ({
   value,
   state
 }) => {
+  console.log("new value(s) selected:")
   console.log(value)
   value.selectedState.selected = value.selected
 }
@@ -40,23 +42,37 @@ export class OmlSelect extends OvlBaseElement {
   }
   selectHandler = e => {
     this.instance._setSelectedStates()
-    overmind.actions.OmlChangeSelected({
-      selectedState: this.selectState,
-      selected: this.instance.getSelectedValues()
-    })
+    let selectedValues = this.instance.getSelectedValues()
+    // console.log(selectedValues)
+    // console.log(this.state.selectState.selected)
+    if (
+      JSON.stringify(selectedValues) !==
+      JSON.stringify(this.state.selectState.selected)
+    ) {
+      overmind.actions.OmlChangeSelected({
+        selectedState: this.selectState,
+        selected: selectedValues
+      })
+    }
   }
   getUI(): TemplateResult {
     {
       return html`
         
           <div class="input-field col s12">
-            <select id="mainselect" multiple>
-              <option value="" selected>Choose your option</option>
-              <option value="1">Option 1</option>
-              <option value="2">Option 2</option>
-              <option value="3">Option 3</option>
+            <select id="mainselect" ?multiple=${this.selectState.multiple}>
+            ${this.selectState.options.map(o => {
+              const selected = this.state.selectState.selected.includes(o.key)
+              return html`
+                <option value="${o.key}" ?selected=${selected}
+                  >${o.value}</option
+                >
+              `
+            })}  
             </select>
-            <label>Materialize Multiple Select</label>
+            <label>Materialize ${
+              this.selectState.multiple ? "multiple" : ""
+            } Select</label>
           </div>
         </div>
       `
