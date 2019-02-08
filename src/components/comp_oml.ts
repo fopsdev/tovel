@@ -6,7 +6,6 @@ import { OmlSelect } from "../library/OmlSelect/OmlSelect"
 customElements.define("oml-select", OmlSelect)
 customElements.define("oml-tab", OmlTab)
 
-import { overmind } from "../index"
 import { html } from "lit-html"
 
 export class CompOml extends OvlBaseElement {

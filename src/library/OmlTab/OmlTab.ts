@@ -4,7 +4,7 @@ import { ifDefined } from "lit-html/directives/if-defined"
 import { OvlBaseElement } from "../OvlBaseElement"
 import { Action, overmind } from "../../index"
 
-type TabState = {
+export type TabState = {
   activeTab: string
 }
 
@@ -31,9 +31,10 @@ export class OmlTab extends OvlBaseElement {
     console.log(this.tabState)
   }
   tabHandler = e => {
-    if (!e.target.enabled) {
+    if (e.target.parentNode.classList.contains("disabled")) {
       return
     }
+    console.log("uuuuuu")
     overmind.actions.OmlChangeTab({
       tabState: this.tabState,
       selectedTab: e.target.hash
