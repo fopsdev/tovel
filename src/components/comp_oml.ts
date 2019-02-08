@@ -1,7 +1,9 @@
 import { OvlBaseElement } from "../library/OvlBaseElement"
 
 import { OmlTab } from "../library/OmlTab/OmlTab"
+import { OmlSelect } from "../library/OmlSelect/OmlSelect"
 
+customElements.define("oml-select", OmlSelect)
 customElements.define("oml-tab", OmlTab)
 
 import { overmind } from "../index"
@@ -12,7 +14,9 @@ export class CompOml extends OvlBaseElement {
     return html`
       <div>
         <oml-tab id="tabletest" .props="${() => this.state.tabState}">
-        </ovl-table>
+        </oml-tab>
+        <oml-select id="selecttest" .props="${() => this.state.selectState}">
+        </oml-select>
       </div>
     `
   }

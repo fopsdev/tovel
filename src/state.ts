@@ -14,5 +14,13 @@ export const state = {
   foo,
   foo2,
   inputValueTest,
-  tabState: { activeTab: "#test4" }
+  tabState: { activeTab: "#test4" },
+  selectState: {
+    selected: [],
+    options: [
+      { key: "", value: "Pls choose..." },
+      { key: "1", value: "Option 1" },
+      { key: "2", value: "Option 2" }
+    ]
+  }
 }

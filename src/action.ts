@@ -11,6 +11,7 @@ import {
   OvlTableSortAndRefresh
 } from "./library/OvlTable/operators"
 import { OmlChangeTab } from "./library/OmlTab/OmlTab"
+import { OmlChangeSelected } from "./library/OmlSelect/OmlSelect"
 import { pipe, forEach, action } from "overmind"
 import { Operator } from "./index"
 
@@ -18,7 +19,8 @@ export {
   OvlTableChangeSort,
   OvlTableRefresh,
   OvlTableSortAndRefresh,
-  OmlChangeTab
+  OmlChangeTab,
+  OmlChangeSelected
 }
 // import { OvlAutoCompleteChangeValue } from "./library/OvlAutoComplete"
 // export { OvlAutoCompleteChangeValue }
