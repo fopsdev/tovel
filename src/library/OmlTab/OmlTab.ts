@@ -34,7 +34,6 @@ export class OmlTab extends OvlBaseElement {
     if (e.target.parentNode.classList.contains("disabled")) {
       return
     }
-    console.log("uuuuuu")
     overmind.actions.OmlChangeTab({
       tabState: this.tabState,
       selectedTab: e.target.hash
