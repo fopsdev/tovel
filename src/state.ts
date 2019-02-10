@@ -13,7 +13,7 @@ let inputValueTest = { value: "initial" }
 let tabState: TabState = { activeTab: "#test4" }
 
 let selectState: SelectState = {
-  selected: ["2", ""],
+  selected: ["1", "2", ""],
   options: [
     { key: "", value: "Pls choose..." },
     { key: "1", value: "Option 1" },

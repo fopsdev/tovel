@@ -57,6 +57,7 @@ export class OmlSelect extends OvlBaseElement {
   }
   getUI(): TemplateResult {
     {
+      console.log(this.selectState)
       return html`
         
           <div class="input-field col s12">
@@ -88,9 +89,12 @@ export class OmlSelect extends OvlBaseElement {
       this.instance = window.M.FormSelect.getInstance(
         document.getElementById("mainselect")
       )
+      //this.instance._setSelectedStates()
+
+      //this.instance.updateTabIndicator()
+      this.instance.input.addEventListener("focus", this.selectHandler)
     }
-    //this.instance.updateTabIndicator()
-    this.instance.input.addEventListener("focus", this.selectHandler)
+    this.instance._setValueToInput()
     // console.log(this.instance.input.add)
   }
   destroy() {

@@ -52,3 +52,7 @@ export const Add1000Properly: Operator<BaseTable[]> = pipe(
 export const changeFirstName1: Action = ({ state }) => {
   state.tblTableTestData["1"].CustomerFirstName = "Aladin"
 }
+
+export const SelectOption: Action = ({ state }) => {
+  state.selectState.selected = ["1","2","3"]
+}
