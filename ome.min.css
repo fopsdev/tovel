@@ -375,12 +375,12 @@ ome-checkbox input {
   z-index: 1;
 }
 
-/* ome-checkbox label {
+ome-checkbox label {
   display: inline-block;
   margin-top: -88%;
   margin-left: 116%;
   user-select: none;
-} */
+}
 ome-chip {
   height: 32px;
   display: inline-block;
