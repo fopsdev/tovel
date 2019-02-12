@@ -12,6 +12,7 @@ import {
 } from "./library/OvlTable/operators"
 import { OmlChangeTab } from "./library/OmlTab/OmlTab"
 import { OmlChangeSelected } from "./library/OmlSelect/OmlSelect"
+import { OmeCheckBoxChecked } from "./library/OmeCheckbox/OmeCheckBox"
 import { pipe, forEach, action } from "overmind"
 import { Operator } from "./index"
 
@@ -20,7 +21,8 @@ export {
   OvlTableRefresh,
   OvlTableSortAndRefresh,
   OmlChangeTab,
-  OmlChangeSelected
+  OmlChangeSelected,
+  OmeCheckBoxChecked
 }
 // import { OvlAutoCompleteChangeValue } from "./library/OvlAutoComplete"
 // export { OvlAutoCompleteChangeValue }
@@ -54,5 +56,5 @@ export const changeFirstName1: Action = ({ state }) => {
 }
 
 export const SelectOption: Action = ({ state }) => {
-  state.selectState.selected = ["1","2","3"]
+  state.selectState.selected = ["1", "2", "3"]
 }

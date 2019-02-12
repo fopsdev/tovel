@@ -11,8 +11,9 @@ import {
 import { state } from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
-import { CompOml } from "./components/comp_oml"
-customElements.define("comp-oml", CompOml)
+import { CompOme } from "./components/comp_ome"
+
+customElements.define("comp-ome", CompOme)
 
 const onInitialize: OnInitialize = ({
   value: overmind,
@@ -22,7 +23,7 @@ const onInitialize: OnInitialize = ({
 }) => {
   console.log("init")
   // @ts-ignore
-  window.M.AutoInit()
+  //window.M.AutoInit()
   actions.OvlTableRefresh(state.myState.myTableA)
   actions.OvlTableRefresh(state.myState.myTableB)
 }
@@ -52,7 +53,7 @@ export const overmind = new Overmind(config, {
 
 render(
   html`
-    <comp-oml id="maincomp"></comp-oml>
+    <comp-ome class="ome-container" id="maincomp"></comp-ome>
   `,
   document.getElementById("app")
 )

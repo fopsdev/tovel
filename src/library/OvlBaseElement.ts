@@ -14,8 +14,13 @@ export class OvlBaseElement extends HTMLElement {
   static _counter: number = 0
 
   // should be overwritten in derived element
+  // gets a optimized lit-html template
   getUI(): TemplateResult {
-    return null
+    return undefined
+  }
+
+  setUI() {
+    // use this to directly use DOM to create/recreate element
   }
 
   // can be overwritten in derived element
@@ -43,7 +48,12 @@ export class OvlBaseElement extends HTMLElement {
   doRender() {
     console.log(this.name + " startRender")
     // from here now this.state.xy will be tracked
-    render(this.getUI(), this)
+    let res = this.getUI()
+    if (res !== undefined) {
+      render(res, this)
+    }
+    this.setUI()
+    this.afterRender()
     console.log(this.name + " finishedRender. Registered paths:")
     console.log(this.trackedTree.pathDependencies)
     let eventType = EventType.COMPONENT_ADD
@@ -63,7 +73,6 @@ export class OvlBaseElement extends HTMLElement {
     console.log(eventType)
     console.log(eventObj)
     overmind.eventHub.emitAsync(eventType, eventObj)
-    this.afterRender()
   }
 
   onUpdate = (mutations, paths, flushId) => {
