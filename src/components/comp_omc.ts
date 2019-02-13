@@ -15,12 +15,14 @@ export type CheckBoxAttributes = {
   disabled?: boolean
   label?: string
   checkedState: CheckBoxState
+  visible: boolean
 }
 
 export type TextBoxState = {
   valueState: { value: string }
   label: string
   id: string
+  visible: boolean
 }
 
 type CheckBoxState = {
@@ -99,7 +101,10 @@ export class CompOmc extends OvlBaseElement {
   getUI() {
     return html`
       <div class="mdc-form-field">
-        <div class="mdc-checkbox">
+        <div
+          style="visibility:${this.checkBox1.visible ? "visible" : "hidden"};"
+          class="mdc-checkbox"
+        >
           <input
             type="checkbox"
             id="${this.checkBox1.id}"
@@ -108,7 +113,12 @@ export class CompOmc extends OvlBaseElement {
           />
           <div class="mdc-checkbox__background"></div>
         </div>
-        <label for="${this.checkBox1.id}">${this.checkBox1.label}</label>
+
+        <label
+          style="visibility:${this.checkBox1.visible ? "visible" : "hidden"};"
+          for="${this.checkBox1.id}"
+          >${this.checkBox1.label}</label
+        >
         <div class="mdc-checkbox">
           <input
             type="checkbox"
