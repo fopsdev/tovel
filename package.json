@@ -13,11 +13,13 @@
     "startNotUsed": "npm run start1 && npm run start2",
     "buildNotUsed": "npm run tsc && npm run parcelbuild",
     "dev": "overmind-devtools",
-    "start": "parcel index.html",
+    "start": "parcel index.html --no-cache",
     "devstart": "run-p dev start",
     "build": "parcel build index.html"
   },
   "dependencies": {
+    "@material/checkbox": "^0.44.0",
+    "@material/form-field": "^0.44.0",
     "lit-html": "^1.0.0",
     "overmind": "^15.1.2"
   },
@@ -27,6 +29,7 @@
     "parcel-bundler": "^1.10.3",
     "parcel-plugin-compress": "^1.0.7",
     "rimraf": "^2.6.2",
+    "sass": "^1.17.0",
     "typescript": "^3.3.3"
   }
 }

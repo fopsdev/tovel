@@ -13,6 +13,8 @@ import {
 import { OmlChangeTab } from "./library/OmlTab/OmlTab"
 import { OmlChangeSelected } from "./library/OmlSelect/OmlSelect"
 import { OmeCheckBoxChecked } from "./library/OmeCheckbox/OmeCheckBox"
+import { OmcCheckBoxChecked } from "./components/comp_omc"
+
 import { pipe, forEach, action } from "overmind"
 import { Operator } from "./index"
 
@@ -22,7 +24,8 @@ export {
   OvlTableSortAndRefresh,
   OmlChangeTab,
   OmlChangeSelected,
-  OmeCheckBoxChecked
+  OmeCheckBoxChecked,
+  OmcCheckBoxChecked
 }
 // import { OvlAutoCompleteChangeValue } from "./library/OvlAutoComplete"
 // export { OvlAutoCompleteChangeValue }

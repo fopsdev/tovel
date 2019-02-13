@@ -11,9 +11,9 @@ import {
 import { state } from "./state"
 import * as actions from "./action"
 import { html, render } from "lit-html"
-import { CompOme } from "./components/comp_ome"
+import { CompOmc } from "./components/comp_omc"
 
-customElements.define("comp-ome", CompOme)
+customElements.define("comp-omc", CompOmc)
 
 const onInitialize: OnInitialize = ({
   value: overmind,
@@ -53,7 +53,7 @@ export const overmind = new Overmind(config, {
 
 render(
   html`
-    <comp-ome class="ome-container" id="maincomp"></comp-ome>
+    <comp-omc .props=${state => state.checkBox1} id="maincomp"></comp-omc>
   `,
   document.getElementById("app")
 )
