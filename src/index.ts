@@ -15,21 +15,7 @@ import { CompOmc } from "./components/comp_omc"
 
 customElements.define("comp-omc", CompOmc)
 
-const onInitialize: OnInitialize = ({
-  value: overmind,
-  state,
-  actions,
-  effects
-}) => {
-  console.log("init")
-  // @ts-ignore
-  //window.M.AutoInit()
-  actions.OvlTableRefresh(state.myState.myTableA)
-  actions.OvlTableRefresh(state.myState.myTableB)
-}
-
 const config = {
-  onInitialize,
   state,
   actions
 }
@@ -53,7 +39,16 @@ export const overmind = new Overmind(config, {
 
 render(
   html`
-    <comp-omc .props=${state => state.checkBox1} id="maincomp"></comp-omc>
+    <comp-omc
+      .props=${state => {
+        return {
+          checkBox1: state.checkBox1,
+          checkBox2: state.checkBox2,
+          textBox1: state.textBox1
+        }
+      }}
+      id="maincomp"
+    ></comp-omc>
   `,
   document.getElementById("app")
 )

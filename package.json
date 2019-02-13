@@ -20,6 +20,7 @@
   "dependencies": {
     "@material/checkbox": "^0.44.0",
     "@material/form-field": "^0.44.0",
+    "@material/textfield": "^0.44.0",
     "lit-html": "^1.0.0",
     "overmind": "^15.1.2"
   },
