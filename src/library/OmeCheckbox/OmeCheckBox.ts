@@ -42,24 +42,29 @@ export class CheckBox extends OvlBaseElement {
     })
   }
   init() {
+    this.style.cssText =
+      "display: grid; grid-template-rows: 1fr; grid-template-columns: 1fr 1fr 1fr; "
     this.checkBoxAttributes = this.props(this.state)
     let id = this.name + "-" + this.checkBoxAttributes.id
     this.setAttribute("id", id)
+
+    let labelEl: HTMLLabelElement
+    if (this.checkBoxAttributes.label) {
+      labelEl = document.createElement("label")
+      //labelEl.setAttribute("for", this.checkBoxAttributes.id)
+      //labelEl.style.cssText = "margin-left: 1.5em;margin-top: 1.5em"
+      this.appendChild(labelEl)
+      this.labelEl = labelEl
+    }
+
     let inputEl = document.createElement("input")
     inputEl.setAttribute("type", "checkbox")
     inputEl.setAttribute("tabindex", "-1")
     this.appendChild(inputEl)
     this.inputEl = inputEl
-    let labelEl: HTMLLabelElement
-    if (this.checkBoxAttributes.label) {
-      labelEl = document.createElement("label")
-      labelEl.setAttribute("for", this.checkBoxAttributes.id)
-      this.appendChild(labelEl)
-      this.labelEl = labelEl
-    }
     this.svgId = id + "svg"
     let iconSVG = `
-    <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+    <svg height="24" viewBox="0 0 24 24"  xmlns="http://www.w3.org/2000/svg">
       <path id="${this.svgId +
         "checked"}" style="visibility: visible;" d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
       <path id="${this.svgId +
@@ -69,7 +74,6 @@ export class CheckBox extends OvlBaseElement {
 
     this.insertAdjacentHTML("afterbegin", iconSVG)
     this.addEventListener("click", this.handleChange)
-    //@ts-ignore
   }
   setUI() {
     let checkedVisibility = "hidden"
