@@ -1,13 +1,8 @@
 import { OvlBaseElement } from "../library/OvlBaseElement"
 import { MDCFormField } from "@material/form-field"
 
-import { Action } from "../index"
-
 import { OmcCheckbox } from "../library/OmcCheckbox/OmcCheckbox"
-customElements.define("omc-checkbox", OmcCheckbox)
-
 import { OmcTextbox } from "../library/OmcTextbox/OmcTextbox"
-customElements.define("omc-textbox", OmcTextbox)
 
 import { html } from "lit-html"
 

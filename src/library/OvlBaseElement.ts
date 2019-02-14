@@ -19,9 +19,8 @@ export class OvlBaseElement extends HTMLElement {
     return undefined
   }
 
-  setUI() {
-    // use this to directly use DOM to create/recreate element
-  }
+  // use this to create/update dom when not using lit-html
+  setUI() {}
 
   // can be overwritten in derived element
   init() {

@@ -77,3 +77,4 @@ export class OmcCheckbox extends OvlBaseElement {
     this.removeEventListener("change", this.handleChange)
   }
 }
+customElements.define("omc-checkbox", OmcCheckbox)

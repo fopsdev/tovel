@@ -1,9 +1,6 @@
 import { OvlBaseElement } from "../OvlBaseElement"
 import { MDCTextField } from "@material/textfield"
-import { MDCFormField } from "@material/form-field"
-
 import { Action } from "../../index"
-
 import { html } from "lit-html"
 
 type OmcTextBoxChangedParam = {
@@ -68,7 +65,7 @@ export class OmcTextbox extends OvlBaseElement {
   disconnectedCallback() {
     super.disconnectedCallback()
     this.mdcEl.destroy()
-
     this.removeEventListener("change", this.handleChange)
   }
 }
+customElements.define("omc-textbox", OmcTextbox)
