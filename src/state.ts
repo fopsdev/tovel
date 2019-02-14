@@ -1,5 +1,6 @@
 import { TApp } from "overmind"
-import { CheckBoxAttributes, TextBoxState } from "./components/comp_omc"
+import { CheckBoxAttributes } from "./library/OmcCheckbox/OmcCheckbox"
+import { TextBoxState } from "./library/OmcTextbox/OmcTextbox"
 
 let checkBox1: CheckBoxAttributes = {
   checkedState: { checked: true },
