@@ -12,6 +12,7 @@ export class CompOmc extends OvlBaseElement {
       <omc-checkbox .props=${state => state.checkBox1}></omc-checkbox>
       <omc-checkbox .props=${state => state.checkBox2}></omc-checkbox>
       <omc-textbox .props=${state => state.textBox1}></omc-textbox>
+      <omc-textbox .props=${state => state.textBox2}></omc-textbox>
     `
   }
 }

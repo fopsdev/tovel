@@ -1,16 +1,16 @@
-import { overmind, Config } from "../index"
-import { TApp, EventType } from "overmind"
+import { overmind, Config, Action } from "../index"
+import { EventType } from "overmind"
 import { render, TemplateResult } from "lit-html"
 import { ITrackStateTree } from "proxy-state-tree"
 
 export class OvlBaseElement extends HTMLElement {
   _id: number
   _flushId: number
-  state: TApp<Config>["state"]
+  state: Config["state"]
 
   name: string
   trackedTree: ITrackStateTree<object>
-  actions: TApp<Config>["actions"]
+  actions: Config["actions"]
   static _counter: number = 0
 
   // should be overwritten in derived element
@@ -40,8 +40,8 @@ export class OvlBaseElement extends HTMLElement {
     this._id = ++OvlBaseElement._counter
     this.name = this.localName + this._id.toString()
     this.trackedTree = overmind.getTrackStateTree()
-    this.actions = overmind.actions
-    this.state = <TApp<Config>["state"]>this.trackedTree.state
+    this.actions = <Config["actions"]>overmind.actions
+    this.state = <Config["state"]>this.trackedTree.state
   }
 
   doRender() {

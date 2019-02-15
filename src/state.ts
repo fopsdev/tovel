@@ -1,4 +1,3 @@
-import { TApp } from "overmind"
 import { CheckBoxAttributes } from "./library/OmcCheckbox/OmcCheckbox"
 import { TextBoxState } from "./library/OmcTextbox/OmcTextbox"
 
@@ -23,8 +22,16 @@ let textBox1: TextBoxState = {
   visible: true
 }
 
+let textBox2: TextBoxState = {
+  id: "mytextbox2",
+  valueState: { value: "jris" },
+  label: "pls some text",
+  visible: true
+}
+
 export const state = {
   checkBox1,
   checkBox2,
-  textBox1
+  textBox1,
+  textBox2
 }

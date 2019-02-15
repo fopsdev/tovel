@@ -21,10 +21,10 @@ type CheckboxCheckedParam = {
   checkedState: { checked: boolean }
   checked: boolean
 }
-export const OmcCheckBoxChecked: Action<CheckboxCheckedParam> = ({
-  value,
-  state
-}) => {
+export const OmcCheckBoxChecked: Action<CheckboxCheckedParam> = async (
+  { state },
+  value
+) => {
   console.log("new value(s) selected:")
   console.log(value)
   value.checkedState.checked = value.checked

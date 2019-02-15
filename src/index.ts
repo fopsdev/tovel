@@ -1,9 +1,8 @@
 import {
   Overmind,
   IAction,
-  TApp,
   IConfig,
-  TStateObject,
+  IState,
   IDerive,
   IOperator,
   IOnInitialize
@@ -20,14 +19,14 @@ const config = {
   actions
 }
 
-export type Config = IConfig<typeof config>
+export type Config = typeof config
 
-export interface Derive<Parent extends TStateObject, Output>
-  extends IDerive<Config, Parent, Output> {}
+export interface Derive<Parent extends IState, Value>
+  extends IDerive<Config, Parent, Value> {}
 
 export interface OnInitialize extends IOnInitialize<Config> {}
 
-export interface Action<Input = void> extends IAction<Config, Input> {}
+export interface Action<Value = void> extends IAction<Config, Value> {}
 
 export interface Operator<Input = void, Output = Input>
   extends IOperator<Config, Input, Output> {}
