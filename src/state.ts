@@ -1,5 +1,6 @@
 import { CheckBoxAttributes } from "./library/OmcCheckbox/OmcCheckbox"
 import { TextBoxState } from "./library/OmcTextbox/OmcTextbox"
+import { SnackbarState } from "./library/OmcSnackbar/OmcSnackbar"
 
 let checkBox1: CheckBoxAttributes = {
   checkedState: { checked: true },
@@ -29,9 +30,14 @@ let textBox2: TextBoxState = {
   visible: true
 }
 
+let snackBar1: SnackbarState = {
+  text: "Hello from snackbar"
+}
+
 export const state = {
   checkBox1,
   checkBox2,
   textBox1,
-  textBox2
+  textBox2,
+  snackBar1
 }

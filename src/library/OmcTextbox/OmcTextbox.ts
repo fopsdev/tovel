@@ -15,10 +15,10 @@ export type TextBoxState = {
   visible: boolean
 }
 
-export const OmcTextBoxValueChanged: Action<OmcTextBoxChangedParam> = ({
-  value,
-  state
-}) => {
+export const OmcTextBoxValueChanged: Action<OmcTextBoxChangedParam> = (
+  _,
+  value
+) => {
   console.log("new value(s) selected:")
   console.log(value)
   value.valueState.value = value.value
@@ -68,4 +68,3 @@ export class OmcTextbox extends OvlBaseElement {
     this.removeEventListener("change", this.handleChange)
   }
 }
-customElements.define("omc-textbox", OmcTextbox)

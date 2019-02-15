@@ -7,10 +7,9 @@ export class OvlBaseElement extends HTMLElement {
   _id: number
   _flushId: number
   state: Config["state"]
-
+  actions: typeof overmind.actions
   name: string
   trackedTree: ITrackStateTree<object>
-  actions: Config["actions"]
   static _counter: number = 0
 
   // should be overwritten in derived element
@@ -40,7 +39,7 @@ export class OvlBaseElement extends HTMLElement {
     this._id = ++OvlBaseElement._counter
     this.name = this.localName + this._id.toString()
     this.trackedTree = overmind.getTrackStateTree()
-    this.actions = <Config["actions"]>overmind.actions
+    this.actions = overmind.actions
     this.state = <Config["state"]>this.trackedTree.state
   }
 

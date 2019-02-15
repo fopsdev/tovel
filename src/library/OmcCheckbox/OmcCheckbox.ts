@@ -1,4 +1,4 @@
-import { OvlBaseElement } from "../../library/OvlBaseElement"
+import { OvlBaseElement } from "../OvlBaseElement"
 import { MDCCheckbox } from "@material/checkbox"
 import { MDCFormField } from "@material/form-field"
 
@@ -21,12 +21,9 @@ type CheckboxCheckedParam = {
   checkedState: { checked: boolean }
   checked: boolean
 }
-export const OmcCheckBoxChecked: Action<CheckboxCheckedParam> = async (
-  { state },
-  value
-) => {
+export const OmcCheckBoxChecked: Action<CheckboxCheckedParam> = (_, value) => {
   console.log("new value(s) selected:")
-  console.log(value)
+  //  console.log(state.)
   value.checkedState.checked = value.checked
 }
 
@@ -77,4 +74,3 @@ export class OmcCheckbox extends OvlBaseElement {
     this.removeEventListener("change", this.handleChange)
   }
 }
-customElements.define("omc-checkbox", OmcCheckbox)
