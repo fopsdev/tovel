@@ -25,7 +25,7 @@ export class OmcSnackbar extends OvlBaseElement {
   queue: any[]
   openSnack = newState => {
     console.log("handleOoopen")
-    let text = JSON.parse(JSON.stringify(this.state.snackBar1.text))
+    let text = this.state.snackBar1.text
     this.queue.push(() => {
       this.mdcEl.labelText = text
       this.mdcEl.timeoutMs = 4000
