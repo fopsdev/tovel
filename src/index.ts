@@ -14,10 +14,14 @@ import { CompOmc } from "./components/comp_omc"
 import { OmcSnackbar } from "./library/OmcSnackbar/OmcSnackbar"
 import { OmcCheckbox } from "./library/OmcCheckbox/OmcCheckbox"
 import { OmcTextbox } from "./library/OmcTextbox/OmcTextbox"
+import { OmcDialog } from "./library/OmcDialog/OmcDialog"
+
 customElements.define("comp-omc", CompOmc)
 customElements.define("omc-snackbar", OmcSnackbar)
 customElements.define("omc-textbox", OmcTextbox)
 customElements.define("omc-checkbox", OmcCheckbox)
+customElements.define("omc-dialog", OmcDialog)
+
 export const config = {
   state,
   actions
@@ -32,7 +36,7 @@ export interface OnInitialize extends IOnInitialize<Config> {}
 
 export interface Action<Input = void> extends IAction<Config, Input> {}
 
-interface Operator<Input = void, Output = Input>
+export interface Operator<Input = void, Output = Input>
   extends IOperator<Config, Input, Output> {}
 
 export const overmind = new Overmind(config, {

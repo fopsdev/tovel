@@ -18,7 +18,9 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
+    "@material/button": "^0.44.0",
     "@material/checkbox": "^0.44.0",
+    "@material/dialog": "^0.44.0",
     "@material/form-field": "^0.44.0",
     "@material/snackbar": "^0.44.0",
     "@material/textfield": "^0.44.0",

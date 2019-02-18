@@ -2,6 +2,8 @@ import { CheckBoxAttributes } from "./library/OmcCheckbox/OmcCheckbox"
 import { TextBoxState } from "./library/OmcTextbox/OmcTextbox"
 import { SnackbarState } from "./library/OmcSnackbar/OmcSnackbar"
 
+import { DialogState } from "./library/OmcDialog/OmcDialog"
+
 let checkBox1: CheckBoxAttributes = {
   checkedState: { checked: true },
   id: "myCheckbox1",
@@ -34,10 +36,19 @@ let snackBar1: SnackbarState = {
   text: "Hello from snackbar"
 }
 
+let dialog: DialogState = {
+  cancelText: "Cancel",
+  okText: "Ok",
+  text: "This is a dialog",
+  visible: false,
+  result: undefined
+}
+
 export const state = {
   checkBox1,
   checkBox2,
   textBox1,
   textBox2,
-  snackBar1
+  snackBar1,
+  dialog
 }
