@@ -1,6 +1,7 @@
 import { CheckBoxAttributes } from "./library/OmcCheckbox/OmcCheckbox"
 import { TextBoxState } from "./library/OmcTextbox/OmcTextbox"
 import { SnackbarState } from "./library/OmcSnackbar/OmcSnackbar"
+import { IndicatorState } from "./library/OmcIndicator/OmcIndicator"
 
 import { DialogState } from "./library/OmcDialog/OmcDialog"
 
@@ -32,6 +33,17 @@ let textBox2: TextBoxState = {
   visible: true
 }
 
+let fileUpload1: TextBoxState = {
+  id: "fileUpload1",
+  valueState: { value: "" },
+  label: "",
+  visible: true
+}
+
+let indicator1: IndicatorState = {
+  open: true
+}
+
 let snackBar1: SnackbarState = {
   text: "Hello from snackbar"
 }
@@ -49,6 +61,8 @@ export const state = {
   checkBox2,
   textBox1,
   textBox2,
+  fileUpload1,
   snackBar1,
+  indicator1,
   dialog
 }
