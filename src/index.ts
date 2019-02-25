@@ -17,6 +17,7 @@ import { OmcTextbox } from "./library/OmcTextbox/OmcTextbox"
 import { OmcFileupload } from "./library/OmcFileupload/OmcFileupload"
 import { OmcDialog } from "./library/OmcDialog/OmcDialog"
 import { OmcIndicator } from "./library/OmcIndicator/OmcIndicator"
+import { OmcTab } from "./library/OmcTab/OmcTab"
 
 customElements.define("comp-omc", CompOmc)
 customElements.define("omc-snackbar", OmcSnackbar)
@@ -25,6 +26,7 @@ customElements.define("omc-fileupload", OmcFileupload)
 customElements.define("omc-checkbox", OmcCheckbox)
 customElements.define("omc-dialog", OmcDialog)
 customElements.define("omc-indicator", OmcIndicator)
+customElements.define("omc-tab", OmcTab)
 
 export const config = {
   state,

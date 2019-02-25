@@ -22,6 +22,7 @@ export const OmcTextBoxValueChanged: Action<OmcTextBoxChangedParam> = (
   console.log("new value(s) selected:")
   console.log(value)
   value.valueState.value = value.value
+  _.state.tab1.activeTab = "tab2"
 }
 
 export class OmcTextbox extends OvlBaseElement {

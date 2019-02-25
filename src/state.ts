@@ -2,7 +2,7 @@ import { CheckBoxAttributes } from "./library/OmcCheckbox/OmcCheckbox"
 import { TextBoxState } from "./library/OmcTextbox/OmcTextbox"
 import { SnackbarState } from "./library/OmcSnackbar/OmcSnackbar"
 import { IndicatorState } from "./library/OmcIndicator/OmcIndicator"
-
+import { TabState } from "./library/OmcTab/OmcTab"
 import { DialogState } from "./library/OmcDialog/OmcDialog"
 
 let checkBox1: CheckBoxAttributes = {
@@ -56,6 +56,14 @@ let dialog: DialogState = {
   result: undefined
 }
 
+let tab1: TabState = {
+  tabs: [
+    { id: "tab1", enabled: true, name: "Tab1" },
+    { id: "tab2", enabled: true, name: "Tab2" }
+  ],
+  activeTab: "tab1"
+}
+
 export const state = {
   checkBox1,
   checkBox2,
@@ -64,5 +72,6 @@ export const state = {
   fileUpload1,
   snackBar1,
   indicator1,
-  dialog
+  dialog,
+  tab1
 }

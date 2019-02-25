@@ -47,6 +47,7 @@ export class OvlBaseElement extends HTMLElement {
     console.log(this.name + " startRender")
     // from here now this.state.xy will be tracked
     let res = this.getUI()
+
     if (res !== undefined) {
       render(res, this)
     }

@@ -3,6 +3,7 @@ import { OmcCheckBoxChecked } from "./library/OmcCheckbox/OmcCheckbox"
 import { OmcTextBoxValueChanged } from "./library/OmcTextbox/OmcTextbox"
 import { OmcSnackbarChange } from "./library/OmcSnackbar/OmcSnackbar"
 import { OmcDialogChanged, OmcDialogOpen } from "./library/OmcDialog/OmcDialog"
+import { OmcTabChanged } from "./library/OmcTab/OmcTab"
 
 import { pipe, forEach, action } from "overmind"
 import { Operator } from "./index"
@@ -12,5 +13,6 @@ export {
   OmcTextBoxValueChanged,
   OmcSnackbarChange,
   OmcDialogChanged,
-  OmcDialogOpen
+  OmcDialogOpen,
+  OmcTabChanged
 }

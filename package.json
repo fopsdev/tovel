@@ -24,6 +24,7 @@
     "@material/form-field": "^0.44.0",
     "@material/linear-progress": "^0.43.0",
     "@material/snackbar": "^0.44.0",
+    "@material/tab-bar": "^0.44.1",
     "@material/textfield": "^0.44.0",
     "lit-html": "^1.0.0",
     "overmind": "^16.0.0"

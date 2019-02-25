@@ -31,6 +31,7 @@ export class CompOmc extends OvlBaseElement {
       <omc-textbox .props=${state => state.textBox2}></omc-textbox>
       <omc-fileupload .props=${state => state.fileUpload1}></omc-fileupload>
       <omc-indicator .props=${state => state.indicator1}></omc-indicator>
+      <omc-tab .props=${state => state.tab1}></omc-tab>
     `
   }
 }
