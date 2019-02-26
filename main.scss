@@ -9,3 +9,15 @@
 @import "@material/tab-scroller/mdc-tab-scroller.scss";
 @import "@material/tab-indicator/mdc-tab-indicator.scss";
 @import "@material/tab/mdc-tab.scss";
+@import "@material/top-app-bar/mdc-top-app-bar.scss";
+@import "@material/typography/mdc-typography.scss";
+
+.mdc-top-app-bar {
+  @include mdc-top-app-bar-fill-color(rgb(232, 234, 246));
+  @include mdc-top-app-bar-icon-ink-color(black);
+  @include mdc-top-app-bar-ink-color(black);
+}
+button:disabled {
+  cursor: not-allowed;
+  pointer-events: all !important;
+}

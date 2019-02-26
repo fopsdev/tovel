@@ -74,5 +74,8 @@ export const state = {
   snackBar1,
   indicator1,
   dialog,
-  tab1
+  tab1,
+  isMobile: false
 }
+//@ts-ignore
+state.isMobile = window.isMobile.phone

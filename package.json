@@ -26,6 +26,8 @@
     "@material/snackbar": "^0.44.0",
     "@material/tab-bar": "^0.44.1",
     "@material/textfield": "^0.44.0",
+    "@material/top-app-bar": "^0.44.1",
+    "@material/typography": "^0.44.1",
     "lit-html": "^1.0.0",
     "overmind": "^16.0.0"
   },
