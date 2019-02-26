@@ -59,7 +59,8 @@ let dialog: DialogState = {
 let tab1: TabState = {
   tabs: [
     { id: "tab1", enabled: true, name: "Tab1" },
-    { id: "tab2", enabled: true, name: "Tab2" }
+    { id: "tab2", enabled: false, name: "Tab2" },
+    { id: "tab3", enabled: true, name: "Tab3" }
   ],
   activeTab: "tab1"
 }

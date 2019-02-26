@@ -63,6 +63,7 @@ export class OmcTab extends OvlBaseElement {
                   }
                   return html`
                     <button
+                      ?disabled=${!t.enabled}
                       class="mdc-tab ${active}"
                       role="tab"
                       aria-selected="true"
@@ -76,7 +77,6 @@ export class OmcTab extends OvlBaseElement {
                       ><span class="mdc-tab-indicator ${indicatorActive}"
                         ><span
                           class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"
-                          style=""
                         ></span></span
                       ><span
                         class="mdc-tab__ripple mdc-ripple-upgraded"
@@ -97,6 +97,21 @@ export class OmcTab extends OvlBaseElement {
   afterRender() {
     if (!this.mdcEl) {
       this.mdcEl = new MDCTabBar(this.querySelector(".mdc-tab-bar"))
+    }
+
+    //disable tabs
+    var buttons = document.querySelectorAll(".button")
+    for (var i = 0, len = buttons.length; i < len; i++) {
+      //@ts-ignore
+      buttons[i].disabled = !this.tab.tabs[i].enabled
+    }
+
+    // find index of activated tab
+    let index = this.tab.tabs.findIndex(s => {
+      return s.id === this.tab.activeTab && s.enabled
+    })
+    if (index > -1) {
+      this.mdcEl.activateTab(index)
     }
   }
   disconnectedCallback() {
