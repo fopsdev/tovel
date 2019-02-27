@@ -60,7 +60,8 @@ let tab1: TabState = {
   tabs: [
     { id: "tab1", enabled: true, name: "Tab1" },
     { id: "tab2", enabled: false, name: "Tab2" },
-    { id: "tab3", enabled: true, name: "Tab3" }
+    { id: "tab3", enabled: true, name: "Tab3" },
+    { id: "tab4", enabled: true, name: "Tab4" }
   ],
   activeTab: "tab1"
 }

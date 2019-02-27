@@ -46,10 +46,9 @@ export class CompOmc extends OvlBaseElement {
               </section>
 
               <section
-                style="margin-top:1.8em;"
                 class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end"
               >
-                <div style="margin-top:-1.8em; margin-right:2vw">
+                <div style=" margin-right:2vw">
                   <p
                     class="mdc-typography--caption"
                     style="font-size:1em;font-weight:100; "
@@ -58,19 +57,24 @@ export class CompOmc extends OvlBaseElement {
                   </p>
                 </div>
 
-                <button
-                  class="material-icons mdc-top-app-bar__action-item mdc-ripple-upgraded--unbounded mdc-ripple-upgraded"
-                  aria-label="Print this page"
-                  style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;"
-                >
-                  help_outline</button
-                ><button
-                  class="material-icons mdc-top-app-bar__action-item mdc-ripple-upgraded--unbounded mdc-ripple-upgraded"
-                  aria-label="Bookmark this page"
-                  style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;"
-                >
-                  power_settings_new
-                </button>
+                <div class="c-tooltip c-tooltip--bottom" aria-label="help">
+                  <button
+                    class="material-icons mdc-top-app-bar__action-item mdc-ripple-upgraded--unbounded mdc-ripple-upgraded "
+                    aria-label="help"
+                    style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;"
+                  >
+                    help_outline
+                  </button>
+                </div>
+                <div class="c-tooltip c-tooltip--bottom" aria-label="logout">
+                  <button
+                    class="material-icons mdc-top-app-bar__action-item mdc-ripple-upgraded--unbounded mdc-ripple-upgraded"
+                    aria-label="logout"
+                    style="--mdc-ripple-fg-size:28px; --mdc-ripple-fg-scale:1.71429; --mdc-ripple-left:10px; --mdc-ripple-top:10px;"
+                  >
+                    power_settings_new
+                  </button>
+                </div>
               </section>
             </div>
           </header>
